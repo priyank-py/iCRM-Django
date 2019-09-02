@@ -1,0 +1,22 @@
+Models of DB / Field:
+
+Leads:
+id: INT
+Assigned_to: INT Foreign Key [Employees]
+
+
+dm team's lead data:
+    date <>
+    name <>
+    phone no <>
+    email
+    source
+    education background
+    year of passing
+    %age
+    looking_for <>
+
+Marketing Team:    
+    remarks <>
+    follow_up_date <>
+    status <>
