@@ -2,6 +2,7 @@ from django.db import models
 import datetime
 from employees.models import Employee
 from django.utils import timezone
+from taggit.managers import TaggableManager
 
 # Create your models here.
 available_status = (('leadclose', 'Lead Closed'), ('leadwalkin', 'Lead walked in'), ('leadfollowup', 'Leads follow up'), ('walkinfollowup', 'Walk in follow up'), ('walkinreg', 'Walk in registered'), ('walkinclose', 'Walk in closed'))
@@ -15,6 +16,7 @@ class Lead(models.Model):
     lead_phone = models.CharField(max_length=20)
     campaign_remarks = models.TextField(null=True, blank=True)
     enquired_for = models.CharField(max_length=250, null=True, blank=True)
+    skills_known = TaggableManager()
     counselor_name = models.CharField(max_length=100, null=True, blank=True)
     course_fee = models.IntegerField(null=True, blank=True, default=0)
     status = models.CharField(max_length=200, choices=available_status, default='', null=True, blank=True)
@@ -42,4 +44,4 @@ class LeadRemarks(models.Model):
     remarks = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return self.lead.name
+        return self.lead.lead_name

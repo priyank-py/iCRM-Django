@@ -50,7 +50,7 @@
           
           <div class="card-body">
             <div class="listing-heading text-center">
-              <h4 class="text-primary" style="float: top">{{ lead.student_name }}</h4>
+              <h4 class="text-primary" style="float: top">{{ lead.lead_name }}</h4>
               <p>
                 <i class="fas fa-map-marker text-secondary"></i> {{ lead.location }}</p>
             </div>
@@ -65,7 +65,7 @@
               <div class="col-6">
                 <i class="fa fa-calendar" aria-hidden="true"></i> Followup on: <span id="leaddetail" style="color:#2980b9"> {{lead.next_follow_up_date}} </span></div>
               <div class="col-6">
-                <i class="fa fa-phone" aria-hidden="true"></i> Phone: <span id="leaddetail" style="color:#2980b9"> {{ lead.student_phone }}</span></div>
+                <i class="fa fa-phone" aria-hidden="true"></i> Phone: <span id="leaddetail" style="color:#2980b9"> {{ lead.lead_phone }}</span></div>
             </div>
             <hr>
             <div class="row py-2 text-secondary">
@@ -77,7 +77,7 @@
                 <i class="fas fa-clock"></i> {{lead.generation_at|naturaltime}}</div>
             </div>
             <hr>
-            <a href="{% url 'admin:leads_lead_change' lead.student_id %}" class="btn btn-primary btn-block">Add Report</a>
+            <a href="{% url 'admin:leads_lead_change' lead.lead_id %}" class="btn btn-primary btn-block">Add Report</a>
           </div>
         </div>
       </div>
@@ -86,7 +86,7 @@
         
       {% else %}
         <div class="col-md-12">
-          <p>No Leads Available</p>
+          <p style="text-align: center; background-color:azure; ">No New Leads Available</p>
         </div>
       {% endif %}
 

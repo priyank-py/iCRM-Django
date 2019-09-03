@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from .models import Lead
 # from .forms import LeadForm, RemarksModelFormset
@@ -46,3 +46,11 @@ def search(request):
 #         form = RemarksModelFormset()
 #     return render(response, 'pages/generation.html', {'form':form})
 
+def single_lead(request, lead_id):
+    lead = get_object_or_404(Lead, pk=lead_id)
+
+    context = {
+        'lead': lead,
+    }
+
+    return render(request, 'leads/listing.html', context)

@@ -10,7 +10,7 @@ local_settings.py
 db.sqlite3
 /media
 /djangovenv
-/migrations/
+/migrations
 /static
 unrefined_resources
 employees/migrations/
