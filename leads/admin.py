@@ -38,6 +38,7 @@ class LeadAdmin(admin.ModelAdmin):
     class Meta:
         model = Lead
         fields = '__all__'
-    inlines = [LeadRemarksTabularInline]
-    
+    inlines = (LeadRemarksTabularInline, )
+
+ 
 admin.site.register(Lead, LeadAdmin)

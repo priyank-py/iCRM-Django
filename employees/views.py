@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from .models import Employee
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -26,3 +27,8 @@ def update_profile(request):
         'user_form': user_form,
         'profile_form': profile_form
     })
+
+
+# def employee_of_month(request):
+#     eom = Employee.objects.filter(is_eom=True)
+#     return render(request, 'pages/about.html',{'eom':eom})

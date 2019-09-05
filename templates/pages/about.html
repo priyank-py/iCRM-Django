@@ -1,7 +1,8 @@
+
 {% extends 'base.html' %} 
+{% load static %}
 {% block content %}
 
-{% load static %}
 
 <link rel="stylesheet" href="{% static 'css/_client_testimony.css' %}">
 
@@ -26,17 +27,19 @@
             <div class="col-md-8">
               <h2>We Make Perfect Work Environment</h2>
               <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sunt, pariatur!</p>
-              <img src= "{% static 'img/about.jpg' %}" alt="">
+              {% comment %} <img src= "" alt=""> {% endcomment %}
               <p class="mt-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis esse officia repudiandae ad saepe ex, amet
                 neque quod accusamus rem quia magnam magni dolorum facilis ullam minima perferendis? Exercitationem at quaerat
                 commodi id libero eveniet harum perferendis laborum molestias quia.</p>
             </div>
             <div class="col-md-4">
               <div class="card">
-                <img class="card-img-top" src="{% static 'img/realtors/kyle.jpg' %}" alt="Seller of the month">
+                {% if eom.photo %}
+                <img class="card-img-top" src="{{eom.photo.url}}" alt="Seller of the month">
+                {% endif %}
                 <div class="card-body">
                   <h5 class="card-title">Seller Of The Month</h5>
-                  <h6 class="text-secondary">Kyle Brown</h6>
+                  <h6 class="text-secondary">{{eom.name}}</h6>
                   <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis nesciunt amet, illo itaque similique repellat.
                     content.
                   </p>
@@ -67,7 +70,9 @@
                     {% for emp in emps %}
 
                         <div class="col-md-4">
+                        {% if emp.photo %}
                               <img src="{{ emp.photo.url }}" alt="" class="rounded-circle mb-3">
+                        {% endif %}
                               <h4> {{emp.name}}</h4>
                               <p class="text-success">
                                 <i class="fas fa-award text-success mb-3"></i> {{emp.position}}</p>
@@ -86,35 +91,6 @@
                 </div>
               {% endif %}
 
-
-
-
-<!-- employee 2 -->
-
-<!--            <div class="col-md-4">-->
-<!--              <img src="{% static 'img/realtors/mark.jpg' %}" alt="" class="rounded-circle mb-3">-->
-<!--              <h4>Mark Hudson</h4>-->
-<!--              <p class="text-success">Realtor</p>-->
-<!--              <hr>-->
-<!--              <p>-->
-<!--                <i class="fas fa-phone"></i> (444)-444-4444</p>-->
-<!--              <p>-->
-<!--                <i class="fas fa-envelope-open"></i> mark@btrealestate.co</p>-->
-<!--            </div>-->
-
-
-<!--    employee 3-->
-
-<!--            <div class="col-md-4">-->
-<!--              <img src="{% static 'img/realtors/jenny.jpg' %}" alt="" class="rounded-circle mb-3">-->
-<!--              <h4>Jenny Johnson</h4>-->
-<!--              <p class="text-success">Realtor</p>-->
-<!--              <hr>-->
-<!--              <p>-->
-<!--                <i class="fas fa-phone"></i> (333)-333-3333</p>-->
-<!--              <p>-->
-<!--                <i class="fas fa-envelope-open"></i> jenny@btrealestate.co</p>-->
-<!--            </div>-->
           </div>
         </div>
       </section>

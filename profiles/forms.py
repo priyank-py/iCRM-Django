@@ -15,6 +15,7 @@ class RegisterForm(UserCreationForm):
     helper = FormHelper()
     helper.form_class = 'form-horizontal'
     helper.layout = Layout(
+        Div(
         Field('username', css_class='input-xlarge'),
         Field('email', css_class='input-xlarge'),
         'password1',
@@ -27,6 +28,7 @@ class RegisterForm(UserCreationForm):
         FormActions(
             Submit('register', 'register', css_class="btn-primary"),
             # Submit('cancel', 'Cancel'),
+        ), css_class="container form-horizontal"
         )
     )
 

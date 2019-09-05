@@ -13,9 +13,9 @@
 <div style="margin-left: 100px;background: #fff;display: inline-block;width:800px;">
     <div  class="container form-horizontal">
     {% csrf_token %}
-    {{form | crispy}}
-    <!-- {% crispy form %} -->
-    <button type="submit" class="btn btn-success" name="register">Register</button>
+    {% comment %} {{form | crispy}} {% endcomment %}
+     {% crispy form %}
+    {% comment %} <button type="submit" class="btn btn-success" name="register">Register</button> {% endcomment %}
 
     </div>
     </div>

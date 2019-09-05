@@ -35,7 +35,6 @@
     <div class="row">
 
       {% if leads %}
-
       {% for lead in leads %}
 
       <div class="col-md-6 col-lg-4 mb-4">
@@ -74,11 +73,11 @@
                 <i class="fas fa-user"></i> {{ lead.assigned_to }}</div>
             </div>
             <div class="row text-secondary pb-2">
-              <div class="col-6">
+              <div class="col-12">
                 <i class="fas fa-clock"></i> {{lead.generation_at|naturaltime}}</div>
             </div>
             <hr>
-            <a href="{% url 'admin:leads_lead_change' lead.lead_id %}" class="btn btn-primary btn-block">More info</a>
+            <a href="{% url 'single_lead' lead.lead_id %}" class="btn btn-primary btn-block">More info</a>
             <a href="{% url 'admin:leads_lead_change' lead.lead_id %}" class="btn btn-primary btn-block">Add Report</a>
           </div>
         </div>
@@ -88,7 +87,7 @@
         
       {% else %}
         <div class="col-md-12">
-          <p>No Leads Available</p>
+          <p style="text-align: center; background-color:azure;">No Leads Available</p>
         </div>
       {% endif %}
 

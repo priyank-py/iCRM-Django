@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from .models import Lead
+
 # from .forms import LeadForm, RemarksModelFormset
 
 # Create your views here.
@@ -17,8 +18,8 @@ def new_leads(request):
     return render(request, 'leads/listings.html', context)
 
 def all_leads(request):
+    # leads = Lead.objects.all().filter(assigned_to_id=request.user.profile.id)
     leads = Lead.objects.all()
-
     paginator = Paginator(leads, 3)
     page = request.GET.get('page')
     paged_leads = paginator.get_page(page)
@@ -54,3 +55,5 @@ def single_lead(request, lead_id):
     }
 
     return render(request, 'leads/listing.html', context)
+
+

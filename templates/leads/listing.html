@@ -37,7 +37,7 @@
   <!-- Listing -->
   <section id="listing" class="py-4">
     <div class="container">
-      <a href="listings.html" class="btn btn-light mb-4">Back To Leads</a>
+      <a href="{% url 'all_leads' %}" class="btn btn-light mb-4">Back To Leads</a>
       <div class="row">
         <div class="col-md-9">
           <!-- Home Main Image -->
@@ -83,64 +83,76 @@
               <ul class="list-group list-group-flush">
                 <li class="list-group-item text-secondary">
                   <i class="fas fa-money-bill-alt"></i> Course Price:
-                  <span class="float-right">${{lead.course_fee}}</span>
+                  <span class="float-right">₹ {{lead.course_fee}}</span>
                 </li>
                 <li class="list-group-item text-secondary">
-                  <i class="fas fa-bed"></i> Bedrooms:
-                  <span class="float-right">3</span>
+                  <i class="fas fa-bed"></i> Enquired For:
+                  <span class="float-right">{{lead.enquired_for}}</span>
                 </li>
                 <li class="list-group-item text-secondary">
-                  <i class="fas fa-bath"></i> Bathrooms:
-                  <span class="float-right">2</span>
+                  <i class="fas fa-bath"></i> Location:
+                  <span class="float-right">{{lead.location}}</span>
                 </li>
                 <li class="list-group-item text-secondary">
-                  <i class="fas fa-car"></i> Garage:
-                  <span class="float-right">2
+                  <i class="fas fa-car"></i> Pass out in:
+                  <span class="float-right">{{lead.Year_of_passing}}
                   </span>
                 </li>
+                <li class="list-group-item text-secondary">
+                  <i class="fas fa-bed"></i> next follow up:
+                  <span class="float-right">{{lead.next_follow_up_date}}
+                  </span>
+                </li>
+
               </ul>
             </div>
             <div class="col-md-6">
               <ul class="list-group list-group-flush">
                 <li class="list-group-item text-secondary">
                   <i class="fas fa-th-large"></i> Skill:
-                  <span class="float-right">3200</span>
+                {% if lead.skills_known != 'leads.Lead.None' %}
+                  <span class="float-right">{{lead.skills_known}}</span>
+                {% else %}
+                  <span class="float-right">-</span>
+                {% endif %}
                 </li>
                 <li class="list-group-item text-secondary">
-                  <i class="fas fa-square"></i> Lot Size:
-                  <span class="float-right">2.5 Acres
+                  <i class="fas fa-square"></i> Highest Qualification:
+                  <span class="float-right">{{lead.highest_qualification}}
                   </span>
                 </li>
                 <li class="list-group-item text-secondary">
-                  <i class="fas fa-calendar"></i> Listing Date:
-                  <span class="float-right">8/30/2018</span>
+                  <i class="fas fa-calendar"></i> Generation Date:
+                  <span class="float-right">{{lead.generation_at}}</span>
                 </li>
                 <li class="list-group-item text-secondary">
-                  <i class="fas fa-bed"></i> Realtor:
-                  <span class="float-right">Kyle Brown
+                  <i class="fas fa-bed"></i> Counselor:
+                  <span class="float-right">{{lead.assigned_to}}
                   </span>
                 </li>
-
+                <li class="list-group-item text-secondary">
+                  <i class="fas fa-bed"></i> Status:
+                  <span class="float-right">{{lead.status}}
+                  </span>
+                </li>
 
               </ul>
             </div>
           </div>
 
           <!-- Description -->
-          <div class="row mb-5">
+          <div class="row mb-5" style="background-color: #eef5db; border: 2px solid; border-radius:5px;padding:4px;">
             <div class="col-md-12">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia recusandae esse reiciendis officia omnis non rerum dicta
-              cupiditate nostrum molestias deserunt aut minus inventore animi atque, consequuntur ad fugit. Possimus culpa
-              blanditiis repellendus ipsa similique ullam, natus error dolor harum.
+              Campaign-remarks: {{lead.campaign_remarks}}
             </div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="card mb-3">
-            <img class="card-img-top" src="assets/img/realtors/kyle.jpg" alt="Seller of the month">
+            <img class="card-img-top" src="{{lead.assigned_to.photo.url}}" alt="Seller of the month">
             <div class="card-body">
-              <h5 class="card-title">Property Realtor</h5>
-              <h6 class="text-secondary">Kyle Brown</h6>
+              <h5 class="card-title">{{lead.assigned_to.postion}}</h5>
+              <h6 class="text-secondary">{{ lead.assigned_to}}</h6>
             </div>
           </div>
           <button class="btn-primary btn-block btn-lg" data-toggle="modal" data-target="#inquiryModal">Make An Inquiry</button>

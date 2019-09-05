@@ -11,10 +11,12 @@ def index(request):
 
 def about(request):
     emps = Employee.objects.order_by('-hire_date')[:3]
-    emp_of_month = Employee.objects.all()
+ 
+    eom = Employee.objects.filter(is_eom=True)
+    
     context = {
         'emps': emps,
-        'emp_of_month': emp_of_month,
+        'eom': eom,
     }
     return render(request, 'pages/about.html', context)
 

@@ -32,17 +32,20 @@
               <li class="nav-item dropdown">
                 <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">notifications</i>
-                  <span class="notification">{{ new_leads|length }}</span>
+                  <span class="notification">{{ follow_leads|length }} </span>
                   <p class="d-lg-none d-md-block">
                     Some Actions
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Mike John responded to your email</a>
+                {% for new in follow_leads%}
+                <a class="dropdown-item" href="{% url 'admin:leads_lead_change' new.lead_id %}">Follow up date with {{new.lead_name}} today</a>
+                {% endfor %}
+                  {% comment %} <a class="dropdown-item" href="#">Mike John responded to your email</a>
                   <a class="dropdown-item" href="#">You have 5 new tasks</a>
                   <a class="dropdown-item" href="#">You're now friend with Andrew</a>
                   <a class="dropdown-item" href="#">Another Notification</a>
-                  <a class="dropdown-item" href="#">Another One</a>
+                  <a class="dropdown-item" href="#">Another One</a> {% endcomment %}
                 </div>
               </li>
               <li class="nav-item dropdown">
