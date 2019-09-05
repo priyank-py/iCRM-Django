@@ -3,6 +3,7 @@
 {% load humanize %}
 {% block content %}
 
+
 <div class="content">
         <div class="container-fluid">
           <div class="row">
@@ -78,7 +79,9 @@
             <div class="col-md-4">
               <div class="card card-chart">
                 <div class="card-header card-header-success">
-                  <div class="ct-chart" id="dailySalesChart"></div>
+                  <div class="container">
+                  <div class="ct-chart" id="dailyrecordChart"></div>
+                </div>
                 </div>
                 <div class="card-body">
                   <h4 class="card-title">Daily Sales</h4>
@@ -95,7 +98,9 @@
             <div class="col-md-4">
               <div class="card card-chart">
                 <div class="card-header card-header-warning">
-                  <div class="ct-chart" id="websiteViewsChart"></div>
+ 
+                  <div class="ct-chart" id="website1ViewsChart"></div>
+          
                 </div>
                 <div class="card-body">
                   <h4 class="card-title">Leads Registered</h4>
@@ -127,6 +132,10 @@
           </div>
 
           
+          
+
+
+
           <div class="row">
 
           <!-- dts -->
@@ -408,30 +417,7 @@
                             </tr>
                         {% endfor %}
 
-                      <!-- <tr>
-                        <td>1</td>
-                        <td>Dakota Rice</td>
-                        <td>$36,738</td>
-                        <td>Niger</td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Minerva Hooper</td>
-                        <td>$23,789</td>
-                        <td>Curaçao</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Sage Rodriguez</td>
-                        <td>$56,142</td>
-                        <td>Netherlands</td>
-                      </tr>
-                      <tr>
-                        <td>4</td>
-                        <td>Philip Chaney</td>
-                        <td>$38,735</td>
-                        <td>Korea, South</td>
-                      </tr> -->
+                     
                     </tbody>
                   </table>
                 </div>
@@ -440,4 +426,119 @@
           </div>
         </div>
       </div>
+
+  
+      <script>
+       window.addEventListener("load", myInit, true); function myInit(){
+            graphs();
+            graph2();
+            graph3();
+          };
+
+        dataDailySalesChart = {
+            labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+            series: [
+              [99, 17, 7, 17, 23, 18, 99]
+            ]
+          };
+    
+          optionsDailySalesChart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+              tension: 0
+            }),
+            low: 0,
+            high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+            chartPadding: {
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0
+            },
+          }
+          var dailySalesChart = new Chartist.Line('#dailyrecordChart', dataDailySalesChart, optionsDailySalesChart);
+
+        dataCompletedTasksChart = {
+            labels: ['12p', '3p', '6p', '9p', '12p', '3a', '6a', '9a'],
+            series: [
+              [230, 750, 450, 300, 280, 240, 200, 190]
+            ]
+          };
+    
+          optionsCompletedTasksChart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+              tension: 0
+            }),
+            low: 0,
+            high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+            chartPadding: {
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0
+            }
+          }
+    
+          var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
+
+          var dataWebsiteViewsChart = {
+            labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+            series: [
+              [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
+    
+            ]
+          };
+          var optionsWebsiteViewsChart = {
+            axisX: {
+              showGrid: false
+            },
+            low: 0,
+            high: 1000,
+            chartPadding: {
+              top: 0,
+              right: 5,
+              bottom: 0,
+              left: 0
+            }
+          };
+          var responsiveOptions = [
+            ['screen and (max-width: 640px)', {
+              seriesBarDistance: 5,
+              axisX: {
+                labelInterpolationFnc: function(value) {
+                  return value[0];
+                }
+              }
+            }]
+          ];
+          var websiteViewsChart = Chartist.Bar('#website1ViewsChart', dataWebsiteViewsChart, optionsWebsiteViewsChart, responsiveOptions);
+    
+
+
+        function graphs(){
+          
+    
+          md.startAnimationForLineChart(dailySalesChart);
+        }
+    
+    
+          /* ----------==========     Completed Tasks Chart initialization    ==========---------- */
+    
+          function graph2(){
+
+              
+          // start animation for the Completed Tasks Chart - Line Chart
+          md.startAnimationForLineChart(completedTasksChart);
+        }
+    
+          /* ----------==========     Emails Subscription Chart initialization    ==========---------- */
+          function graph3(){
+                    //start animation for the Emails Subscription Chart
+          md.startAnimationForBarChart(websiteViewsChart);
+          }
+
+         
+      </script>
+
       {% endblock %}
+
+      

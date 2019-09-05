@@ -300,7 +300,7 @@ md = {
       dataDailySalesChart = {
         labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
         series: [
-          [12, 17, 7, 17, 23, 18, 38]
+          [99, 17, 7, 17, 23, 18, 99]
         ]
       };
 
@@ -645,14 +645,14 @@ md = {
           title: 'Click for Creative Tim',
           start: new Date(y, m, 21),
           end: new Date(y, m, 22),
-          url: 'http://www.creative-tim.com/',
+          url: '#',
           className: 'event-orange'
         },
         {
           title: 'Click for Google',
           start: new Date(y, m, 21),
           end: new Date(y, m, 22),
-          url: 'http://www.creative-tim.com/',
+          url: '#',
           className: 'event-orange'
         }
       ]
