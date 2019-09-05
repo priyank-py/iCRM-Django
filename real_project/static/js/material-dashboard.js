@@ -1,19 +1,4 @@
-/*!
 
- =========================================================
- * Material Dashboard - v2.1.1
- =========================================================
-
- * Product Page: https://www.creative-tim.com/product/material-dashboard
- * Copyright 2018 Creative Tim (http://www.creative-tim.com)
-
- * Designed by www.invisionapp.com Coded by www.creative-tim.com
-
- =========================================================
-
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
- */
 
 (function() {
   isWindows = navigator.platform.indexOf('Win') > -1 ? true : false;

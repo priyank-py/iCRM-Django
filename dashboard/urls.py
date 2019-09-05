@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from records.views import daily_record
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
@@ -9,4 +10,5 @@ urlpatterns = [
     path('logout', views.logout_view, name='logout'),
     path('notifications', views.notifications, name='notifications'),
     path('seven', views.sales_last_seven_days, name='seven'),
+    path('record', daily_record, name='record'),
 ]

@@ -1,0 +1,111 @@
+{% extends 'dash_base.html' %}
+
+{% block content %}
+
+<div class="content">
+    <div class="container-fluid">
+        
+        <form method="post" class="form-group" novalidate>
+            {% csrf_token %}
+          
+            {{ form.non_field_errors }}
+          
+            {{ form.source }}
+          
+            <div class="row">
+            
+                <div class="col-md-12">
+                  <div class="card card-plain">
+                    <div class="card-header card-header-primary">
+                      <h4 class="card-title mt-0"> Total Collection </h4>
+                      <p class="card-category"> All leads registered </p>
+                    </div>
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table class="table table-hover">
+                          <thead class="">
+                            <th>
+                                <tr>
+                                    <td>
+                                {{ form.employee.label_tag }}
+                                    </td>
+                                    <td>
+                                {{ form.employee }}
+                                    </td>
+                                </tr>
+                            </th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                {{ form.mails.label_tag }}
+                            </td>
+                                <td>
+                                    {{ form.mails }}
+                                  </td>
+                            </tr>
+                            <tr>
+                            <td>
+                                {{ form.messages.label_tag }}
+                            </td>
+                            <td>
+                                    {{ form.messages }}
+                                  </td>
+                            </tr>
+                            <tr>
+                            <td>                       
+                                {{ form.calls.label_tag }}
+                            </td>
+                            <td>
+                                    {{ form.calls }}
+                                  </td>
+                            </tr>
+                            <tr>
+                            <td>                         
+                                {{ form.online_submissions.label_tag }}
+                            </td>
+                            <td>
+                                    {{ form.online_submissions }}
+                                  </td>
+                            </tr>
+                            <tr>
+                            <td>                         
+                                {{ form.follow_ups.label_tag }}
+                            </td>
+                            <td>
+                                    {{ form.follow_ups }}
+                                </td>
+                            </tr>
+                            <tr>
+                            <td>                          
+                                {{ form.submitted_on.label_tag }}
+                            </td>
+                            <td>
+                            
+                                {{ dt }}
+                                    
+                            </td>
+                            </tr>
+                        </tbody>
+                          
+                        <script type="text/javascript">
+                            $(function () {
+                                $('#datetimepicker2').datetimepicker({
+                                    locale: 'ru'
+                                });
+                            });
+                        </script>
+                          
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <button type="submit">Submit</button>
+          </form>
+
+        </div>
+    </div>
+
+{% endblock %}
