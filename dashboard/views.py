@@ -8,7 +8,9 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='admin:login')
 def dashboard(request):
-    emps = Employee.objects.all()
+    # emps = Employee.objects.all()
+    emp = request.user
+    emps = emp.profile.get_children()
     leads = Lead.objects.all()
     total_col = 0
     for i in leads:
@@ -26,6 +28,14 @@ def dashboard(request):
         'follow_leads': follow_leads,
     }
     return render(request, 'pages/my_panel.html', context)
+
+
+# def notification(request):
+#     follow_leads = Lead.objects.all().filter(is_counseled=True).filter(next_follow_up_date__lte=datetime.date.today())
+    
+#     context = {'follow_leads': follow_leads,}
+
+#     return render(request, 'partials/_dash_navbar.html', context)
 
 
 @login_required
