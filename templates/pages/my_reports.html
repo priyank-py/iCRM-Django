@@ -89,6 +89,10 @@
                         <th>
                           Amount
                         </th>
+                        <th>
+                          Assigned To
+                        </th>
+
                       </thead>
                       <tbody>
 
@@ -109,6 +113,9 @@
                           <td>
                             {{registered_lead.course_fee}}
                           </td>
+                          <td>
+                            {{registered_lead.assigned_to}}
+                          </td>
                         </tr>
                           {% endfor %}
                         
@@ -122,7 +129,7 @@
 
         </div>
     </div>  
-    {{registered_leads}}
+
     <script>
       window.addEventListener("load", myInit, true); function myInit(){
            graphs();

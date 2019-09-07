@@ -13,6 +13,7 @@ def dashboard(request):
     emp = request.user
     emps = emp.profile.get_descendants(include_self=False)
     leads = Lead.objects.all()
+    seven = Lead.objects.order_by('-registration_date').filter(~Q(registration_date=None))[:7]
     total_col = 0
     for i in leads:
         if i.course_fee:
@@ -27,6 +28,7 @@ def dashboard(request):
         'leads': leads,
         'total_col': total_col,
         'follow_leads': follow_leads,
+        'leads_seven': leads_seven,
     }
     return render(request, 'pages/my_panel.html', context)
 
@@ -56,7 +58,9 @@ def profile(request):
 
 @login_required
 def my_reports(request):
-    registered_leads = Lead.objects.order_by('-generation_at').filter(~Q(registration_date=None))
+    emp = request.user
+    emps = emp.profile.get_descendants(include_self=True)
+    registered_leads = Lead.objects.order_by('-generation_at').filter(~Q(registration_date=None)).filter(assigned_to__in=emps)
     context = {
         'registered_leads': registered_leads,
     }
