@@ -94,7 +94,9 @@
               <div class="card card-profile">
                 <div class="card-avatar">
                   <a href="#pablo">
+                  {% if user.profile.photo %}
                     <img class="img" src="{{user.profile.photo.url}}" />
+                  {% endif %}
                   </a>
                 </div>
                 <div class="card-body">

@@ -9,14 +9,16 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 # Create your models here.
 class Employee(MPTTModel):
-
+    
     STANDARD = 'STD'
+    TEAM_LEADER = 'TL'
     MANAGER = 'MGR'
     SR_MANAGER = 'SRMGR'
     PRESIDENT = 'PRES'
 
     EMPLOYEE_TYPES = (
         (STANDARD, 'base employee'),
+        (TEAM_LEADER, 'team leader'),
         (MANAGER, 'manager'),
         (SR_MANAGER, 'senior manager'),
         (PRESIDENT, 'president'))

@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 def dashboard(request):
     # emps = Employee.objects.all()
     emp = request.user
-    emps = emp.profile.get_children()
+    emps = emp.profile.get_descendants(include_self=False)
     leads = Lead.objects.all()
     total_col = 0
     for i in leads:
