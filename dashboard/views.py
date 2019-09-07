@@ -5,6 +5,7 @@ import datetime
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 @login_required(login_url='admin:login')
 def dashboard(request):
@@ -55,7 +56,11 @@ def profile(request):
 
 @login_required
 def my_reports(request):
-    return render(request, 'pages/my_reports.html')
+    registered_leads = Lead.objects.order_by('-generation_at').filter(~Q(registration_date=None))
+    context = {
+        'registered_leads': registered_leads,
+    }
+    return render(request, 'pages/my_reports.html', context)
 
 
 @login_required

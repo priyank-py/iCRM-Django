@@ -30,9 +30,9 @@ class Lead(models.Model):
     lead_image = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True)
     is_counseled = models.BooleanField(default=False)
     # user = models.ForeignKey(User,related_name='lead',related_query_name='lead',on_delete=models.CASCADE)
-    generation_at = models.DateTimeField(default=timezone.now, blank=True, null=True)    
+    generation_at = models.DateTimeField(blank=True, null=True)    
     assigned_to = models.ForeignKey(Employee, related_name='counselor', on_delete=models.DO_NOTHING, blank=True, null=True)
-    registration_date = models.DateTimeField(default=timezone.now, blank=True, null=True)
+    registration_date = models.DateTimeField(blank=True, null=True)
     
 
     def __str__(self):

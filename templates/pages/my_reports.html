@@ -81,118 +81,37 @@
                           Name
                         </th>
                         <th>
-                          Country
+                          Location
                         </th>
                         <th>
-                          City
+                          Course
                         </th>
                         <th>
-                          Salary
+                          Amount
                         </th>
                       </thead>
                       <tbody>
-                        <tr>
+
+                          {% for registered_lead in registered_leads %}
+                        <tr>                          
                           <td>
-                            1
+                            {{registered_lead.id}}
                           </td>
                           <td>
-                            Dakota Rice
+                            {{registered_lead.lead_name}}
                           </td>
                           <td>
-                            Niger
+                            {{registered_lead.location}}
                           </td>
                           <td>
-                            Oud-Turnhout
+                            {{registered_lead.enquired_for}}
                           </td>
                           <td>
-                            $36,738
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            2
-                          </td>
-                          <td>
-                            Minerva Hooper
-                          </td>
-                          <td>
-                            Curaçao
-                          </td>
-                          <td>
-                            Sinaai-Waas
-                          </td>
-                          <td>
-                            $23,789
+                            {{registered_lead.course_fee}}
                           </td>
                         </tr>
-                        <tr>
-                          <td>
-                            3
-                          </td>
-                          <td>
-                            Sage Rodriguez
-                          </td>
-                          <td>
-                            Netherlands
-                          </td>
-                          <td>
-                            Baileux
-                          </td>
-                          <td>
-                            $56,142
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            4
-                          </td>
-                          <td>
-                            Philip Chaney
-                          </td>
-                          <td>
-                            Korea, South
-                          </td>
-                          <td>
-                            Overland Park
-                          </td>
-                          <td>
-                            $38,735
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            5
-                          </td>
-                          <td>
-                            Doris Greene
-                          </td>
-                          <td>
-                            Malawi
-                          </td>
-                          <td>
-                            Feldkirchen in Kärnten
-                          </td>
-                          <td>
-                            $63,542
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            6
-                          </td>
-                          <td>
-                            Mason Porter
-                          </td>
-                          <td>
-                            Chile
-                          </td>
-                          <td>
-                            Gloucester
-                          </td>
-                          <td>
-                            $78,615
-                          </td>
-                        </tr>
+                          {% endfor %}
+                        
                       </tbody>
                     </table>
                   </div>
@@ -203,7 +122,7 @@
 
         </div>
     </div>  
-    
+    {{registered_leads}}
     <script>
       window.addEventListener("load", myInit, true); function myInit(){
            graphs();
