@@ -6,7 +6,7 @@ from taggit.managers import TaggableManager
 
 # Create your models here.
 available_status = (('leadclose', 'Lead Closed'), ('leadwalkin', 'Lead walked in'), ('leadfollowup', 'Leads follow up'), ('walkinfollowup', 'Walk in follow up'), ('walkinreg', 'Walk in registered'), ('walkinclose', 'Walk in closed'))
-YEAR_CHOICES = [(i, i) for i in range(1980, (int(datetime.datetime.now().year)+4))]
+YEAR_CHOICES = [(i, i) for i in range(2000, (int(datetime.datetime.now().year)+4))]
 
 
 class Lead(models.Model):

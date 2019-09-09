@@ -427,7 +427,8 @@
           </div>
         </div>
       </div>
-
+  
+  
   
       <script>
        window.addEventListener("load", myInit, true); function myInit(){
@@ -435,25 +436,28 @@
             graph2();
             graph3();
           };
-
+        days_of_week = Array.from({{ seven_days|safe }});
+        data_for_day = Array.from({{ seven_data|safe }});
+        min_value = {{min_data}};
+        max_value = {{max_data}};
         dataDailySalesChart = {
-            labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+            labels: days_of_week,
             series: [
-              [99, 17, 7, 17, 23, 18, 99]
+              data_for_day
             ]
           };
-    
+    console.log(data_for_day);
           optionsDailySalesChart = {
             lineSmooth: Chartist.Interpolation.cardinal({
               tension: 0
             }),
-            low: 0,
-            high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+            low: min_value,
+            high: max_value, // set the high sa the biggest value + something for a better look
             chartPadding: {
               top: 0,
               right: 0,
               bottom: 0,
-              left: 0
+              left: 3
             },
           }
           var dailySalesChart = new Chartist.Line('#dailyrecordChart', dataDailySalesChart, optionsDailySalesChart);
@@ -470,7 +474,7 @@
               tension: 0
             }),
             low: 0,
-            high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+            high: 1000, // set the high sa the biggest value + something for a better look
             chartPadding: {
               top: 0,
               right: 0,
@@ -478,13 +482,16 @@
               left: 0
             }
           }
-    
+          courses = {{ month_course|safe }}
+          collection_per_course = {{ month_collection|safe }}
+          min_collection = {{ min_col|safe }}
+          max_collection = {{ max_col|safe }}
           var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
 
           var dataWebsiteViewsChart = {
-            labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+            labels: courses,
             series: [
-              [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
+              collection_per_course
     
             ]
           };
@@ -492,13 +499,13 @@
             axisX: {
               showGrid: false
             },
-            low: 0,
-            high: 1000,
+            low: min_collection,
+            high: max_collection,
             chartPadding: {
               top: 0,
               right: 5,
               bottom: 0,
-              left: 0
+              left: 3
             }
           };
           var responsiveOptions = [

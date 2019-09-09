@@ -9,11 +9,11 @@ class LeadRemarksTabularInline(admin.TabularInline):
 
 # Register your models here.
 class LeadAdmin(admin.ModelAdmin):
-    list_display = ('lead_id', 'lead_name', 'enquired_for')
+    list_display = ('lead_id', 'lead_name', 'enquired_for', 'is_counseled', 'next_follow_up_date',)
     list_display_links = ('lead_id', 'lead_name', 'enquired_for')
     list_filter = ('assigned_to', 'status', 'Year_of_passing')
-    # list_editable = ('is_counseled', 'next_follow_up_date',)
-    search_fields = ('lead_id', 'lead_name', 'enquired_for', 'counselor_name')
+    list_editable = ('is_counseled', 'next_follow_up_date',)
+    search_fields = ('lead_id', 'lead_name', 'enquired_for', 'counselor_name', 'Year_of_passing')
 
     
     actions = ["export_as_csv"]
@@ -33,7 +33,7 @@ class LeadAdmin(admin.ModelAdmin):
 
         return response
 
-    export_as_csv.short_description = "Export Selected"
+    export_as_csv.short_description = "Export Selected as csv"
 
     class Meta:
         model = Lead

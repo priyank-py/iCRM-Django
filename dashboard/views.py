@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
 from employees.models import Employee
 from leads.models import Lead
-import datetime
+# import datetime
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.db.models import Sum
+from datetime import datetime, timedelta, date
+import calendar
 
 @login_required(login_url='admin:login')
 def dashboard(request):
@@ -13,13 +16,35 @@ def dashboard(request):
     emp = request.user
     emps = emp.profile.get_descendants(include_self=False)
     leads = Lead.objects.all()
-    seven = Lead.objects.order_by('-registration_date').filter(~Q(registration_date=None))[:7]
+    # seven = Lead.objects.order_by('-registration_date').filter(~Q(registration_date=None))[:7]
     total_col = 0
+    last_week = datetime.now() - timedelta(days=7)
+    weekly_data = Lead.objects.filter(registration_date__gt=last_week).extra(select={'day': 'date(registration_date)'}).values('day').annotate(sum=Sum('course_fee'))
+    
+    # seven_days = []
+    # seven_data = []
+    for dates in weekly_data:
+        dates['day'] = datetime.strptime(dates['day'], '%Y-%m-%d')
+        days = datetime.strftime(dates['day'], '%a')
+        dates['day'] = days
+    seven_days = [i['day'] for i in weekly_data]
+    seven_data = [j['sum'] for j in weekly_data]
+    min_data = min(seven_data) - 1000
+    max_data = max(seven_data) + 1000
+
+    last_month = datetime.now() - timedelta(days=30)
+    tech_data = Lead.objects.filter(registration_date__gt=last_month).extra(select={'tech': 'enquired_for'}).values('tech').annotate(sum=Sum('course_fee'))
+    
+    month_course = [i['tech'] for i in tech_data]
+    month_collection = [j['sum'] for j in tech_data]
+    min_col = min(month_collection) - 1000
+    max_col = max(month_collection) + 1000
+    print(weekly_data)
     for i in leads:
         if i.course_fee:
             total_col += i.course_fee
 
-    follow_leads = Lead.objects.all().filter(is_counseled=True).filter(next_follow_up_date__lte=datetime.date.today())
+    follow_leads = Lead.objects.all().filter(is_counseled=True).filter(next_follow_up_date__lte=date.today())
 
     # total_new = len(new_leads)
 
@@ -28,7 +53,15 @@ def dashboard(request):
         'leads': leads,
         'total_col': total_col,
         'follow_leads': follow_leads,
-        'leads_seven': leads_seven,
+        # 'leads_seven': leads_seven,
+        'seven_days': seven_days,
+        'seven_data': seven_data,
+        'min_data': min_data,
+        'max_data': max_data,
+        'month_course': month_course,
+        'month_collection': month_collection,
+        'min_col': min_col,
+        'max_col': max_col,
     }
     return render(request, 'pages/my_panel.html', context)
 
@@ -96,7 +129,7 @@ def logout_view(request):
 
 def sales_last_seven_days(request):
     delta = 0
-    todays_day = datetime.date.today().weekday()
+    todays_day = date.today().weekday()
     registered_leads = [i if not i==None or i==0 else 0 for i in Lead.objects.values_list('course_fee', flat=True).filter(status='Walk in registered')]   
     context = {
 
