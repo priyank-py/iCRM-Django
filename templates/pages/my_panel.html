@@ -139,8 +139,13 @@
           <div class="row">
 
           <!-- dts -->
+          
             <div class="col-lg-6 col-md-12">
               <div class="card">
+
+                <form action="" method="POST">
+                  {% csrf_token %}
+
                 <div class="card-header card-header-tabs card-header-primary">
                   <div class="nav-tabs-navigation">
                     <div class="nav-tabs-wrapper">
@@ -173,7 +178,7 @@
                   <div class="tab-content">
                     <div class="tab-pane active" id="profile">
                       <table class="table">
-                        <tbody>
+                        <tbody id="addtarget">
                           <tr>
                             <td>
                               <div class="form-check">
@@ -185,80 +190,56 @@
                                 </label>
                               </div>
                             </td>
-                            <td><input class="form-control" type="text" m></td>
-                            <td class="td-actions text-right">
-                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
-                                <i class="material-icons">edit</i>
-                              </button>
-                              <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                                <i class="material-icons">close</i>
-                              </button>
-                            </td>
+                            <td><input class="form-control" type="text"  value="" name="target1"></td>
+                            
                           </tr>
                           <tr>
                             <td>
                               <div class="form-check">
                                 <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="">
+                                  <input class="form-check-input" type="checkbox" value="" name="">
                                   <span class="form-check-sign">
                                     <span class="check"></span>
                                   </span>
                                 </label>
                               </div>
                             </td>
-                            <td><input class="form-control" type="text"></td>
-                            <td class="td-actions text-right">
-                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
-                                <i class="material-icons">edit</i>
-                              </button>
-                              <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                                <i class="material-icons">close</i>
-                              </button>
-                            </td>
+                            <td><input class="form-control" type="text" value="" name="target2"></td>
+                            
                           </tr>
                           <tr>
                             <td>
                               <div class="form-check">
                                 <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="">
+                                  <input class="form-check-input" type="checkbox" value="" name="">
                                   <span class="form-check-sign">
                                     <span class="check"></span>
                                   </span>
                                 </label>
                               </div>
                             </td>
-                            <td><input class="form-control" type="text"></td>
-                            <td class="td-actions text-right">
-                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
-                                <i class="material-icons">edit</i>
-                              </button>
-                              <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                                <i class="material-icons">close</i>
-                              </button>
-                            </td>
+                            <td><input class="form-control" type="text" value="" name="target3"></td>
+                            
                           </tr>
                           <tr>
                             <td>
                               <div class="form-check">
                                 <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="" checked>
+                                  <input class="form-check-input" type="checkbox" value="" name="">
                                   <span class="form-check-sign">
                                     <span class="check"></span>
                                   </span>
                                 </label>
                               </div>
                             </td>
-                            <td><input class="form-control" type="text"></td>
-                            <td class="td-actions text-right">
-                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
-                                <i class="material-icons">edit</i>
-                              </button>
-                              <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                                <i class="material-icons">close</i>
-                              </button>
-                            </td>
+                            <td><input class="form-control" type="text" value="" name="target4"></td>
+                            
                           </tr>
+                          
                         </tbody>
+                        <button type="button" class="btn btn-warning" onclick="addtarget()">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                          </button>
                       </table>
                     </div> 
 
@@ -266,50 +247,69 @@
 
                     <div class="tab-pane" id="messages">
                       <table class="table">
-                        <tbody>
+                        <tbody id="addachieved">
                           <tr>
                             <td>
                               <div class="form-check">
                                 <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="" checked>
+                                  <input class="form-check-input" type="checkbox" value="" name="">
                                   <span class="form-check-sign">
                                     <span class="check"></span>
                                   </span>
                                 </label>
                               </div>
                             </td>
-                            <td><input class="form-control" type="text"></td>
-                            <td class="td-actions text-right">
-                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
-                                <i class="material-icons">edit</i>
-                              </button>
-                              <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                                <i class="material-icons">close</i>
-                              </button>
-                            </td>
+                            <td><input class="form-control" type="text" value="" name="complete1"></td>
+                            
                           </tr>
                           <tr>
                             <td>
                               <div class="form-check">
                                 <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="">
+                                  <input class="form-check-input" type="checkbox" value="" name="">
                                   <span class="form-check-sign">
                                     <span class="check"></span>
                                   </span>
                                 </label>
                               </div>
                             </td>
-                            <td><input class="form-control" type="text"></td>
-                            <td class="td-actions text-right">
-                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
-                                <i class="material-icons">edit</i>
-                              </button>
-                              <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                                <i class="material-icons">close</i>
-                              </button>
-                            </td>
+                            <td><input class="form-control" type="text" value="" name="complete2"></td>
+                            
                           </tr>
+
+                          <tr>
+                              <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" value="" name="">
+                                    <span class="form-check-sign">
+                                      <span class="check"></span>
+                                    </span>
+                                  </label>
+                                </div>
+                              </td>
+                              <td><input class="form-control" type="text" value="" name="complete3"></td>
+                              
+                            </tr>
+
+                            <tr>
+                                <td>
+                                  <div class="form-check">
+                                    <label class="form-check-label">
+                                      <input class="form-check-input" type="checkbox" value="" name="">
+                                      <span class="form-check-sign">
+                                        <span class="check"></span>
+                                      </span>
+                                    </label>
+                                  </div>
+                                </td>
+                                <td><input class="form-control" type="text" value="" name="complete4"></td>
+                              </tr>
+                          
                         </tbody>
+                        <button type="button" class="btn btn-warning" onclick="addachieved()">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                          </button>
                       </table>
                     </div>
 
@@ -318,77 +318,102 @@
 
                     <div class="tab-pane" id="settings">
                       <table class="table">
+                        <tbody id="addremark">
+                          <tr>
+                            <td>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="checkbox" value="" name="">
+                                  <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                </label>
+                              </div>
+                            </td>
+                            <td><input class="form-control" type="text" value="" name="remark1"></td>
+                            
+                          </tr>
+                          <tr>
+                            <td>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="checkbox" value="" name="">
+                                  <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                </label>
+                              </div>
+                            </td>
+                            <td><input class="form-control" type="text" value="" name="remark2"></td>
+                            
+                          </tr>
+                          <tr>
+                            <td>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="checkbox" value="" name="">
+                                  <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                </label>
+                              </div>
+                            </td>
+                            <td><input class="form-control" type="text" value="" name="remark3"></td>
+                            
+                          </tr>
+                          <tr>
+                              <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" value="" name="">
+                                    <span class="form-check-sign">
+                                      <span class="check"></span>
+                                    </span>
+                                  </label>
+                                </div>
+                              </td>
+                              <td><input class="form-control" type="text" value="" name="remark4"></td>
+                              
+                            </tr>
+             
+                            
+                        </tbody>
+                        <button type="button" class="btn btn-warning" onclick="addremark()">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                          </button>
+                      </table>
+                    </div>
+                  </div>
+                      <table>
                         <tbody>
+
+                          
+                           
                           <tr>
-                            <td>
-                              <div class="form-check">
-                                <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="">
-                                  <span class="form-check-sign">
-                                    <span class="check"></span>
-                                  </span>
-                                </label>
+                            <td class="col-lg-8"></td>
+                            <td><div class="input-group-prepend">
+                                <input type="submit" value="POST" class="btn btn-outline-secondary">
+                                <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu">
+                                  <a class="dropdown-item" href="{% url 'dts' %}">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                  <div role="separator" class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#">Separated link</a>
+                                </div>
                               </div>
-                            </td>
-                            <td><input class="form-control" type="text"></td>
-                            <td class="td-actions text-right">
-                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
-                                <i class="material-icons">edit</i>
-                              </button>
-                              <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                                <i class="material-icons">close</i>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div class="form-check">
-                                <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="" checked>
-                                  <span class="form-check-sign">
-                                    <span class="check"></span>
-                                  </span>
-                                </label>
-                              </div>
-                            </td>
-                            <td><input class="form-control" type="text"></td>
-                            <td class="td-actions text-right">
-                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
-                                <i class="material-icons">edit</i>
-                              </button>
-                              <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                                <i class="material-icons">close</i>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div class="form-check">
-                                <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="" checked>
-                                  <span class="form-check-sign">
-                                    <span class="check"></span>
-                                  </span>
-                                </label>
-                              </div>
-                            </td>
-                            <td><input class="form-control" type="text"></td>
-                            <td class="td-actions text-right">
-                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
-                                <i class="material-icons">edit</i>
-                              </button>
-                              <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                                <i class="material-icons">close</i>
-                              </button>
+                           
                             </td>
                           </tr>
                         </tbody>
                       </table>
-                    </div>
-                  </div>
                 </div>
+                </form>
               </div>
             </div>
+          <!-- </form> -->
           <!-- dts ends -->
 
 
@@ -436,10 +461,80 @@
             graph2();
             graph3();
           };
+        
+          
+          function addachieved()
+          {
+            let countBox = 1;
+            var boxName = 0;
+           
+              var boxName="textBox"+countBox; 
+          document.getElementById('addachieved').innerHTML+=`<tr>
+              <td>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" value="" name="">
+                    <span class="form-check-sign">
+                      <span class="check"></span>
+                    </span>
+                  </label>
+                </div>
+              </td>
+              <td><input class="form-control" type="text" value="" name="achieved${countBox+4}"></td>
+              
+            </tr>`;
+              countBox += 1;
+          }
+          function addremark()
+          {
+            let countBox = 1;
+            var boxName = 0;
+              var boxName="textBox"+countBox; 
+          document.getElementById('addremark').innerHTML+=`<tr>
+              <td>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" value="" name="">
+                    <span class="form-check-sign">
+                      <span class="check"></span>
+                    </span>
+                  </label>
+                </div>
+              </td>
+              <td><input class="form-control" type="text" value="" name="target${countBox+4}"></td>
+              
+            </tr>`;
+              countBox += 1;
+          }
+
+          function addtarget()
+          {
+            let countBox = 1;
+            var boxName = 0;
+              var boxName="textBox"+countBox; 
+          document.getElementById('addtarget').innerHTML+=`<tr>
+              <td>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" value="" name="">
+                    <span class="form-check-sign">
+                      <span class="check"></span>
+                    </span>
+                  </label>
+                </div>
+              </td>
+              <td><input class="form-control" type="text" value="" name="target${countBox+4}"></td>
+              
+            </tr>`;
+              countBox += 1;
+          }
+
+
+
         days_of_week = Array.from({{ seven_days|safe }});
         data_for_day = Array.from({{ seven_data|safe }});
-        min_value = {{min_data}};
-        max_value = {{max_data}};
+        min_value = {{min_data|safe}};
+        max_value = {{max_data|safe}};
         dataDailySalesChart = {
             labels: days_of_week,
             series: [
@@ -482,10 +577,10 @@
               left: 0
             }
           }
-          courses = {{ month_course|safe }}
-          collection_per_course = {{ month_collection|safe }}
-          min_collection = {{ min_col|safe }}
-          max_collection = {{ max_col|safe }}
+          courses = {{ month_course|safe }};
+          collection_per_course = {{ month_collection|safe }};
+          min_collection = {{ min_col|safe }};
+          max_collection = {{ max_col|safe }};
           var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
 
           var dataWebsiteViewsChart = {

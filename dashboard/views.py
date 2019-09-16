@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.db.models import Sum
 from datetime import datetime, timedelta, date
 import calendar
+from records.models import DTS
 
 @login_required(login_url='admin:login')
 def dashboard(request):
@@ -23,22 +24,31 @@ def dashboard(request):
     
     # seven_days = []
     # seven_data = []
+    min_data = 0
+    max_data = 1000
     for dates in weekly_data:
         dates['day'] = datetime.strptime(dates['day'], '%Y-%m-%d')
         days = datetime.strftime(dates['day'], '%a')
         dates['day'] = days
     seven_days = [i['day'] for i in weekly_data]
     seven_data = [j['sum'] for j in weekly_data]
-    min_data = min(seven_data) - 1000
-    max_data = max(seven_data) + 1000
+    
+    if any(seven_data):
+        min_data = min(seven_data) - 1000
+        max_data = max(seven_data) + 1000
 
     last_month = datetime.now() - timedelta(days=30)
     tech_data = Lead.objects.filter(registration_date__gt=last_month).extra(select={'tech': 'enquired_for'}).values('tech').annotate(sum=Sum('course_fee'))
     
+
+    min_col = 0
+    max_col = 1000
     month_course = [i['tech'] for i in tech_data]
+    month_course = [''.join([i[0] for i in j.split()]) if len(j.split())>1 else j for j in month_course]
     month_collection = [j['sum'] for j in tech_data]
-    min_col = min(month_collection) - 1000
-    max_col = max(month_collection) + 1000
+    if any(month_collection):
+        min_col = min(month_collection) - 1000
+        max_col = max(month_collection) + 1000
     print(weekly_data)
     for i in leads:
         if i.course_fee:
@@ -74,7 +84,7 @@ def dashboard(request):
 #     return render(request, 'partials/_dash_navbar.html', context)
 
 
-@login_required
+@login_required(login_url='admin:login')
 def profile(request):
     emps = Employee.objects.all()
 
@@ -89,7 +99,7 @@ def profile(request):
     return render(request, 'pages/myprofile.html', context)
 
 
-@login_required
+@login_required(login_url='admin:login')
 def my_reports(request):
     emp = request.user
     emps = emp.profile.get_descendants(include_self=True)
@@ -100,7 +110,7 @@ def my_reports(request):
     return render(request, 'pages/my_reports.html', context)
 
 
-@login_required
+@login_required(login_url='admin:login')
 def notifications(request):
     info = Lead.objects.all().order_by('-generation_at').filter(assigned_to_id=request.user.id).filter(is_counseled=False)
     success = Lead.objects.filter(is_counseled=True).filter(status='Walk in registered')
@@ -113,15 +123,29 @@ def notifications(request):
     return render(request, 'pages/notifications.html', context)
 
 
-@login_required
+@login_required(login_url='admin:login')
 def icons(request):
     return render(request, 'pages/icons.html')
 
 
-@login_required
+@login_required(login_url='admin:login')
 def logout_view(request):
     logout(request)
     return render(request, 'pages/index.html')
+
+def dts(request):
+    if request.method == 'POST':
+        report = TargetDTS()
+        report.task = ''
+        for i in range(1, 9):
+            if request.POST.get('target{i}') :
+                report.task += request.POST.get('target{i}')
+               
+                report.save()               
+                return render(request, 'pages/my_panel.html')  
+
+    else:
+            return render(request,'pages/about.html')
 
 
 

@@ -1,6 +1,9 @@
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
+from employees.models import Employee
+from django.utils import timezone
+
 
 class EmpRecord(models.Model):
     
@@ -25,4 +28,29 @@ class EmpRecord(models.Model):
     #     return reverse("EmpRecord_detail", kwargs={"pk": self.pk})
 
 
+class DTS(models.Model):
+
+    employee = models.ForeignKey(Employee, related_name='reporter', on_delete=models.DO_NOTHING, blank=True, null=True)
+    submitted_on = models.DateTimeField(unique=True, default=timezone.now, blank=True)
+
+    def __str__(self):
+        return self.emp
+
+class TargetData(models.Model):
+    emp = models.ForeignKey(DTS, on_delete=models.CASCADE, blank=True, null=True)
+    start = models.TimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
+    end = models.TimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
+    task = models.CharField(max_length=200,blank=True, null=True)
+    remark = models.CharField(max_length=50, blank=True, null=True)
+
+    # def __str__(self):
+    #     return self.emp.employee
+
+class AchievedData(models.Model):
+    emp = models.ForeignKey(DTS, on_delete=models.CASCADE, blank=True, null=True)
+    start = models.TimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
+    end = models.TimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
+    task = models.CharField(max_length=200,blank=True, null=True)
+    remark = models.CharField(max_length=50, blank=True, null=True)
+    
 

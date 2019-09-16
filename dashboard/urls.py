@@ -11,4 +11,5 @@ urlpatterns = [
     path('notifications', views.notifications, name='notifications'),
     path('seven', views.sales_last_seven_days, name='seven'),
     path('record', daily_record, name='record'),
+    path('#', views.dts, name='dts')
 ]
