@@ -40,7 +40,7 @@ def dashboard(request):
     last_month = datetime.now() - timedelta(days=30)
     tech_data = Lead.objects.filter(registration_date__gt=last_month).extra(select={'tech': 'enquired_for'}).values('tech').annotate(sum=Sum('course_fee'))
     
-
+  
     min_col = 0
     max_col = 1000
     month_course = [i['tech'] for i in tech_data]
@@ -57,6 +57,7 @@ def dashboard(request):
     follow_leads = Lead.objects.all().filter(is_counseled=True).filter(next_follow_up_date__lte=date.today())
 
     # total_new = len(new_leads)
+    morning_report = DTS.objects.all().filter(dated=date.today()).filter(employee=request.user.profile)
 
     context = {
         'emps': emps,
@@ -72,6 +73,7 @@ def dashboard(request):
         'month_collection': month_collection,
         'min_col': min_col,
         'max_col': max_col,
+        'morning_report': morning_report,
     }
     return render(request, 'pages/my_panel.html', context)
 

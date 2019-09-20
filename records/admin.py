@@ -41,14 +41,15 @@ class AchievedDataTabularInline(admin.TabularInline):
     extra = 1
 
 class DTSAdmin(admin.ModelAdmin):
-    # list_display = ('start', 'end', 'task')
+    list_display = ('employee', 'dated')
+    search_fields = ('employee', 'dated')
+    list_filter = (('employee'), ('dated', DateTimeRangeFilter))
    
     class Meta:
         model = DTS
         fields = '__all__'
     inlines = (TargetDataTabularInline, AchievedDataTabularInline,)
-
-
+    
 
 admin.site.register(EmpRecord, EmpRecordAdmin)
 admin.site.register(DTS, DTSAdmin)

@@ -31,13 +31,13 @@ class EmpRecord(models.Model):
 class DTS(models.Model):
 
     employee = models.ForeignKey(Employee, related_name='reporter', on_delete=models.DO_NOTHING, blank=True, null=True)
-    submitted_on = models.DateTimeField(unique=True, default=timezone.now, blank=True)
+    dated = models.DateTimeField(unique=True, default=timezone.now, blank=True)
 
     def __str__(self):
-        return self.emp
+        return self.employee.name
 
 class TargetData(models.Model):
-    emp = models.ForeignKey(DTS, on_delete=models.CASCADE, blank=True, null=True)
+    emp = models.ForeignKey(DTS, related_name='start_data', on_delete=models.CASCADE, blank=True, null=True)
     start = models.TimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
     end = models.TimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
     task = models.CharField(max_length=200,blank=True, null=True)
@@ -47,7 +47,7 @@ class TargetData(models.Model):
     #     return self.emp.employee
 
 class AchievedData(models.Model):
-    emp = models.ForeignKey(DTS, on_delete=models.CASCADE, blank=True, null=True)
+    emp = models.ForeignKey(DTS, related_name='final_data', on_delete=models.CASCADE, blank=True, null=True)
     start = models.TimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
     end = models.TimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
     task = models.CharField(max_length=200,blank=True, null=True)
