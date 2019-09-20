@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from employees.models import Employee
-from leads.models import Lead
+from leads.models import Lead, LeadRemarks
 # import datetime
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
@@ -54,7 +54,10 @@ def dashboard(request):
         if i.course_fee:
             total_col += i.course_fee
 
-    follow_leads = Lead.objects.all().filter(is_counseled=True).filter(next_follow_up_date__lte=date.today())
+    follow_leads = LeadRemarks.objects.all().filter(next_follow_up_date__lte=date.today())
+    unregistered_leads = [l.id for l in follow_leads if l.lead.status!='walkinreg' or l.lead.status!='leadreg']
+    print(unregistered_leads)
+    follow_leads = follow_leads.filter(id__in=unregistered_leads)
 
     # total_new = len(new_leads)
     morning_report = DTS.objects.all().filter(dated=date.today()).filter(employee=request.user.profile)

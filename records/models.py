@@ -24,6 +24,28 @@ class EmpRecord(models.Model):
     def __str__(self):
         return self.employee.username
 
+class MonthlyTarget(models.Model):
+    positions_available = (
+        ('telecaller', 'Telecaller'),
+        ('frontdesk', 'Front Desk'),
+        ('counselor', 'Counselor'),
+        ('bde', 'BDE'),
+        ('admin', 'Admin'),
+        ('developer', 'Developer'),
+        ('manager', 'Manager'),
+        ('seniormanager', 'Senior Manager'),
+    )
+    position = models.CharField(choices=positions_available, max_length=100)
+    month = models.CharField(default=datetime.now().strftime('%B'), max_length=50)
+    mails = models.IntegerField(default=0)
+    messages = models.IntegerField(default=0)
+    calls = models.IntegerField(default=0)
+    online_submissions = models.IntegerField(default=0)
+    follow_ups = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.position    
+
     # def get_absolute_url(self):
     #     return reverse("EmpRecord_detail", kwargs={"pk": self.pk})
 

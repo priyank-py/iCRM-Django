@@ -9,13 +9,16 @@ class LeadRemarksTabularInline(admin.TabularInline):
 
 # Register your models here.
 class LeadAdmin(admin.ModelAdmin):
-    list_display = ('lead_id', 'lead_name', 'enquired_for', 'is_counseled', 'next_follow_up_date',)
-    list_display_links = ('lead_id', 'lead_name', 'enquired_for')
-    list_filter = ('assigned_to', 'status', 'Year_of_passing')
-    list_editable = ('is_counseled', 'next_follow_up_date',)
-    search_fields = ('lead_id', 'lead_name', 'enquired_for', 'counselor_name', 'Year_of_passing')
+    list_display = ('id', 'lead_name', 'enquired_for', 'is_counseled',)
+    list_display_links = ('id', 'lead_name', 'enquired_for')
+    list_filter = ('assigned_to', 'status', 'year_of_passing_UG')
+    list_editable = ('is_counseled',)
+    search_fields = ('id', 'lead_name', 'enquired_for', 'technology_based', 'counselor_name', 'year_of_passing_UG')
 
-    
+    # def get_next_follow_up(self, lead):
+    #     follow_date = lead.lead_remarks.next_follow_up_date
+    #     return follow_date
+
     actions = ["export_as_csv"]
 
     def export_as_csv(self, request, queryset):

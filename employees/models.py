@@ -22,11 +22,23 @@ class Employee(MPTTModel):
         (MANAGER, 'manager'),
         (SR_MANAGER, 'senior manager'),
         (PRESIDENT, 'president'))
+
+    positions_available = (
+        ('telecaller', 'Telecaller'),
+        ('frontdesk', 'Front Desk'),
+        ('counselor', 'Counselor'),
+        ('bde', 'BDE'),
+        ('admin', 'Admin'),
+        ('developer', 'Developer'),
+        ('manager', 'Manager'),
+        ('seniormanager', 'Senior Manager'),
+    )
+
     our_locations = (('Bangalore', 'Bangalore'), ('Coimbatore', 'Coimbatore'))
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=200, blank=True, null=True)
     photo = models.ImageField(max_length=1000, upload_to='photos/%Y/%m/%d/', blank=True, null=True) 
-    postion = models.CharField(max_length=100, blank=True, null=True)
+    postion = models.CharField(max_length=100, choices=positions_available, blank=True, null=True)
     role = models.CharField(max_length=25, choices=EMPLOYEE_TYPES, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)

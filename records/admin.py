@@ -1,9 +1,16 @@
 from django.contrib import admin
 from django.http import HttpResponse
-from .models import EmpRecord
-from .models import DTS, TargetData, AchievedData
+from .models import *
 import csv
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
+
+
+class MonthlyTargetAdmin(admin.ModelAdmin):
+    list_display = ('position',)
+    list_display_links = ('position',)
+    list_filter = ('position',)
+    readonly_fields = ('month',)
+
 
 class EmpRecordAdmin(admin.ModelAdmin):
     list_display = ('employee', 'mails', 'messages', 'calls', 'online_submissions', 'follow_ups', 'submitted_on')
@@ -11,6 +18,7 @@ class EmpRecordAdmin(admin.ModelAdmin):
     list_filter = (('employee'), ('submitted_on', DateTimeRangeFilter))
     # # list_editable = ('is_counseled', 'next_follow_up_date',)
     search_fields = ('employee', 'submitted_on')
+    
 
     actions = ["export_as_csv"]
 
@@ -53,3 +61,4 @@ class DTSAdmin(admin.ModelAdmin):
 
 admin.site.register(EmpRecord, EmpRecordAdmin)
 admin.site.register(DTS, DTSAdmin)
+admin.site.register(MonthlyTarget, MonthlyTargetAdmin)
