@@ -71,6 +71,31 @@ def dashboard(request):
     # total_new = len(new_leads)
     morning_report = DTS.objects.all().filter(dated=date.today()).filter(employee=request.user.profile)
 
+    leadclose = [i.lead for i in my_list if i.status == 'leadclose']
+    leadwalkin = [i.lead for i in my_list if i.status == 'leadwalkin']
+    leadfollowup = [i.lead for i in my_list if i.status == 'leadfollowup']
+    leadreg = [i.lead for i in my_list if i.status == 'leadreg']
+    walkinfollowup = [i.lead for i in my_list if i.status == 'walkinfollowup']
+    walkinreg = [i.lead for i in my_list if i.status == 'walkinreg']
+    walkindeclaration = [i.lead for i in my_list if i.status == 'walkindeclaration']
+    walkinclose = [i.lead for i in my_list if i.status == 'walkinclose']
+
+    category_data = [leadclose,
+    leadwalkin,
+    leadfollowup,
+    leadreg,
+    walkinfollowup,
+    walkinreg,
+    walkindeclaration,
+    walkinclose]
+
+    category_names = ['leadclose', 'leadwalkin', 'leadfollowup', 'leadreg', 'walkinfollowup', 'walkinreg', 'walkindeclaration', 'walkinclose']
+
+    category_count = [len(i) if any(i) else 0 for i in category_data]
+
+    print('Number of student in by category',category_count)
+
+
     context = {
         'emps': emps,
         'leads': leads,
@@ -86,6 +111,8 @@ def dashboard(request):
         'min_col': min_col,
         'max_col': max_col,
         'morning_report': morning_report,
+        'category_names': category_names,
+        'category_count': category_count,
     }
     # if any(follow_leads):
     #     context['follow_leads'] = follow_leads

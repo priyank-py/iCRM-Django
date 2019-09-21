@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from employees.models import Employee
 from django.utils import timezone
 
+
 class MonthlyTarget(models.Model):
     positions_available = (
         ('telecaller', 'Telecaller'),

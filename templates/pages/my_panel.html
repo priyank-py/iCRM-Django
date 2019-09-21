@@ -131,6 +131,29 @@
             </div>
           </div>
 
+
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+
+                <div class="card card-chart">
+                    <div class="card-header card-header-danger">
+
+                      <div class="ct-chart" id="leadsbycategory"></div>
+              
+                    </div>
+                    <div class="card-body">
+                      <h4 class="card-title">All leads by Category</h4>
+                      <p class="card-category">Last Campaign Performance</p>
+                    </div>
+                    <div class="card-footer">
+                      <div class="stats">
+                        <i class="material-icons">access_time</i> campaign sent x days ago
+                      </div>
+                    </div>
+                  </div>
+
+            </div>
+          </div>
           
           
 
@@ -465,6 +488,7 @@
             graphs();
             graph2();
             graph3();
+            graph4()
           };
         
           
@@ -620,7 +644,33 @@
           ];
           var websiteViewsChart = Chartist.Bar('#website1ViewsChart', dataWebsiteViewsChart, optionsWebsiteViewsChart, responsiveOptions);
     
+        //categrory wise graph
+        leadsbycategory = {
+          labels: {{category_names|safe}},
+          series: [
+            {{category_count|safe}}
+          ]
+        };
+  
+        optionsleadsbycategory = {
+          lineSmooth: Chartist.Interpolation.cardinal({
+            tension: 0
+          }),
+          low: 0,
+          high: 10, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          },
+        };
+  
+        var dailySalesChart = Chartist.Bar('#leadsbycategory', leadsbycategory, optionsleadsbycategory);
+  
+        
 
+        //ends category graph
 
         function graphs(){
           
@@ -642,6 +692,10 @@
           function graph3(){
                     //start animation for the Emails Subscription Chart
           md.startAnimationForBarChart(websiteViewsChart);
+          }
+
+          function graph4(){
+            md.startAnimationForLineChart(leadsbycategory);
           }
 
          
