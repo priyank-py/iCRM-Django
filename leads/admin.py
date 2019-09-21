@@ -4,14 +4,16 @@ from .models import Lead, LeadRemarks
 import csv
 
 class LeadRemarksTabularInline(admin.TabularInline):
+    
     model = LeadRemarks
     extra = 1
+
 
 # Register your models here.
 class LeadAdmin(admin.ModelAdmin):
     list_display = ('id', 'lead_name', 'enquired_for', 'is_counseled',)
     list_display_links = ('id', 'lead_name', 'enquired_for')
-    list_filter = ('assigned_to', 'status', 'year_of_passing_UG')
+    list_filter = ('assigned_to', 'year_of_passing_UG')
     list_editable = ('is_counseled',)
     search_fields = ('id', 'lead_name', 'enquired_for', 'technology_based', 'counselor_name', 'year_of_passing_UG')
 

@@ -22,7 +22,7 @@ class Lead(models.Model):
     skills_known = TaggableManager(verbose_name='technologies known', blank=True)
     
     course_fee = models.IntegerField(null=True, blank=True, default=0)
-    status = models.CharField(max_length=200, choices=available_status, default='', null=True, blank=True)
+    
     # assigned_to = models.CharField(max_length=200, choices=available_status, default='')
     under_graduation = models.CharField(blank=True, max_length=200)
     year_of_passing_UG = models.IntegerField(null=True, blank=True, choices=YEAR_CHOICES, default=datetime.datetime.now().year)
@@ -52,9 +52,12 @@ class LeadRemarks(models.Model):
     lead = models.ForeignKey(Lead, related_name='lead_remarks', on_delete=models.CASCADE)
     remarks = models.CharField(max_length=200, blank=True, null=True)
     next_follow_up_date = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=200, choices=available_status, default='', null=True, blank=True)
+
 
     def current_status(self):
         return self.lead.status
 
     def __str__(self):
         return self.lead.lead_name
+

@@ -50,14 +50,23 @@ def dashboard(request):
         min_col = min(month_collection) - 1000
         max_col = max(month_collection) + 1000
     print(weekly_data)
+
     for i in leads:
         if i.course_fee:
             total_col += i.course_fee
 
-    follow_leads = LeadRemarks.objects.all().filter(next_follow_up_date__lte=date.today())
-    unregistered_leads = [l.id for l in follow_leads if l.lead.status!='walkinreg' or l.lead.status!='leadreg']
-    print(unregistered_leads)
-    follow_leads = follow_leads.filter(id__in=unregistered_leads)
+    # follow_leads = LeadRemarks.objects.all().filter(next_follow_up_date__lte=date.today()).latest('next_follow_up_date')
+    # unregistered_leads = [l.lead.id for l in follow_leads if l.status !='walkinreg' or l.status !='leadreg']
+    # print(unregistered_leads)
+    # follow_leads = Lead.objects.filter(id__in=unregistered_leads)
+
+    all_lead = Lead.objects.all()
+    my_list = [i.lead_remarks.last() for i in all_lead]
+    for data in my_list:
+        print('This the what i looking for: ',data.next_follow_up_date)
+    # unregistered_leads = [l.lead.id for l in follow_lead if l.status !='walkinreg' or l.status !='leadreg']
+    # print(unregistered_leads)
+    # follow_leads = Lead.objects.filter(id__in=unregistered_leads)
 
     # total_new = len(new_leads)
     morning_report = DTS.objects.all().filter(dated=date.today()).filter(employee=request.user.profile)
@@ -66,7 +75,7 @@ def dashboard(request):
         'emps': emps,
         'leads': leads,
         'total_col': total_col,
-        'follow_leads': follow_leads,
+        # 'follow_leads': follow_leads,
         # 'leads_seven': leads_seven,
         'seven_days': seven_days,
         'seven_data': seven_data,
@@ -78,6 +87,9 @@ def dashboard(request):
         'max_col': max_col,
         'morning_report': morning_report,
     }
+    # if any(follow_leads):
+    #     context['follow_leads'] = follow_leads
+
     return render(request, 'pages/my_panel.html', context)
 
 

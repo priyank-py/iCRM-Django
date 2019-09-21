@@ -7,8 +7,8 @@ from .forms import UserForm, ProfileForm
 from django.utils.translation import ugettext as _
 
 # Create your views here.
-# @login_required
-# @transaction.atomic
+@login_required
+@transaction.atomic
 def update_profile(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
