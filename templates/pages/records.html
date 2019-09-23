@@ -24,68 +24,97 @@
                       <div class="table-responsive">
                         <table class="table table-hover">
                           <thead class="">
-                            <th>
+                            {% comment %} <th>
                                 <tr>
-                                    <td>
+                                    <td> {% endcomment %}
+                                    <th>
                                 {{ form.employee.label_tag }}
-                                    </td>
-                                    <td>
+                                    </th>
+                                    {% comment %} </td>
+                                    <td> {% endcomment %}
+                                    <th>
                                 {{ user.username}}
-                                    </td>
+                                    {% comment %} </td>
+                                    <td> {% endcomment %}
+                                    </th>
+                                    <th>
+                                <h5>Target</h5>
+                                </th>
+                                    {% comment %} </td>
                                 </tr>
-                            </th>
+                            </th> {% endcomment %}
                             </thead>
                             <tbody>
+                            {% for target in targets %}
                                 <tr>
                                     <td>
-                                {{ form.mails.label_tag }}
-                            </td>
-                                <td>
-                                    {{ form.mails }}
-                                  </td>
-                            </tr>
-                            <tr>
-                            <td>
-                                {{ form.messages.label_tag }}
-                            </td>
-                            <td>
-                                    {{ form.messages }}
-                                  </td>
-                            </tr>
-                            <tr>
-                            <td>                       
-                                {{ form.calls.label_tag }}
-                            </td>
-                            <td>
-                                    {{ form.calls }}
-                                  </td>
-                            </tr>
-                            <tr>
-                            <td>                         
-                                {{ form.online_submissions.label_tag }}
-                            </td>
-                            <td>
-                                    {{ form.online_submissions }}
-                                  </td>
-                            </tr>
-                            <tr>
-                            <td>                         
-                                {{ form.follow_ups.label_tag }}
-                            </td>
-                            <td>
-                                    {{ form.follow_ups }}
-                                </td>
-                            </tr>
-                            <tr>
-                            <td>                          
-                                {{ form.submitted_on.label_tag }}
-                            </td>
-                            <td>
-                            
-                                {{ dt }}
+                                        {{ form.mails.label_tag }}
+                                    </td>
+                                    <td>
+                                        {{ form.mails }}
+                                    </td>
+                                    <td>
+                                            {{target.mails}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        {{ form.messages.label_tag }}
+                                    </td>
+                                    <td>
+                                        {{ form.messages }}
+                                    </td>
+                                    <td>
+                                        {{target.messages}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>                       
+                                        {{ form.calls.label_tag }}
+                                    </td>
+                                    <td>
+                                        {{ form.calls }}
+                                    </td>
+                                    <td>
+                                        {{target.calls}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>                         
+                                        {{ form.online_submissions.label_tag }}
+                                    </td>
+                                    <td>
+                                        {{ form.online_submissions }}
+                                    </td>
+                                    <td>
+                                        {{target.online_submissions}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>                         
+                                        {{ form.follow_ups.label_tag }}
+                                    </td>
+                                    <td>
+                                        {{ form.follow_ups }}
+                                    </td>
+                                    <td>
+                                        {{target.follow_ups}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>                          
+                                        {{ form.submitted_on.label_tag }}
+                                    </td>
+                                    <td>
                                     
-                            </td>
-                            </tr>
+                                        {{ dt }}
+                                            
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                </tr>
+                                {% endfor %}
                         </tbody>
                           
                         <script type="text/javascript">

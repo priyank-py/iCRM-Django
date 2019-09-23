@@ -136,7 +136,7 @@
             <div class="col-lg-12 col-md-12">
 
                 <div class="card card-chart">
-                    <div class="card-header card-header-danger">
+                    <div class="card-header card-header-success">
 
                       <div class="ct-chart" id="leadsbycategory"></div>
               
@@ -647,8 +647,9 @@
         //categrory wise graph
         leadsbycategory = {
           labels: {{category_names|safe}},
-          series: [
-            {{category_count|safe}}
+          series: [      
+          {{category_count|safe}},
+           [25, 25, 25, 25, 25, 25, 25, 25]
           ]
         };
   
@@ -657,7 +658,7 @@
             tension: 0
           }),
           low: 0,
-          high: 10, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
             right: 0,

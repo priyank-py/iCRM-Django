@@ -5,6 +5,53 @@ from employees.models import Employee
 from django.utils import timezone
 
 
+# class MyMonthlyTarget(models.Model):
+#     positions_available = (
+#         ('telecaller', 'Telecaller'),
+#         ('frontdesk', 'Front Desk'),
+#         ('counselor', 'Counselor'),
+#         ('bde', 'BDE'),
+#         ('admin', 'Admin'),
+#         ('developer', 'Developer'),
+#         ('manager', 'Manager'),
+#         ('seniormanager', 'Senior Manager'),
+#     )
+#     user = models.ForeignKey(User , on_delete=models.CASCADE, blank=True, null=True)
+#     position = models.CharField(choices=positions_available, max_length=100)
+#     month = models.CharField(default=datetime.now().strftime('%B'), max_length=50)
+#     mails = models.IntegerField(default=0)
+#     messages = models.IntegerField(default=0)
+#     calls = models.IntegerField(default=0)
+#     online_submissions = models.IntegerField(default=0)
+#     follow_ups = models.IntegerField(default=0)
+
+#     def __str__(self):
+#         return f'{self.position} <{self.month}>'   
+
+    # def get_absolute_url(self):
+    #     return reverse("EmpRecord_detail", kwargs={"pk": self.pk})
+
+
+class EmpRecord(models.Model):
+    
+    employee = models.ForeignKey(User, related_name='user_profile', on_delete=models.DO_NOTHING, blank=True, null=True)
+    mails = models.IntegerField(blank=True, null=True, default=0)
+    messages = models.IntegerField(blank=True, null=True, default=0)
+    calls = models.IntegerField(blank=True, null=True, default=0)
+    online_submissions = models.IntegerField(blank=True, null=True, default=0)
+    follow_ups = models.IntegerField(blank=True, null=True, default=0)
+    submitted_on = models.DateTimeField(blank=True, null=True, default=datetime.now)
+    
+
+    # class Meta:
+    #     verbose_name = _("EmpRecord")
+    #     verbose_name_plural = _("EmpRecords")
+
+    def __str__(self):
+        return self.employee.username
+
+
+
 class MonthlyTarget(models.Model):
     positions_available = (
         ('telecaller', 'Telecaller'),
@@ -23,34 +70,10 @@ class MonthlyTarget(models.Model):
     calls = models.IntegerField(default=0)
     online_submissions = models.IntegerField(default=0)
     follow_ups = models.IntegerField(default=0)
+    employee =  models.ForeignKey(EmpRecord, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.position} <{self.month}>'   
-
-    # def get_absolute_url(self):
-    #     return reverse("EmpRecord_detail", kwargs={"pk": self.pk})
-
-
-
-class EmpRecord(models.Model):
-    
-    employee = models.ForeignKey(User, related_name='user_profile', on_delete=models.DO_NOTHING, blank=True, null=True)
-    mails = models.IntegerField(blank=True, null=True, default=0)
-    messages = models.IntegerField(blank=True, null=True, default=0)
-    calls = models.IntegerField(blank=True, null=True, default=0)
-    online_submissions = models.IntegerField(blank=True, null=True, default=0)
-    follow_ups = models.IntegerField(blank=True, null=True, default=0)
-    submitted_on = models.DateTimeField(blank=True, null=True, default=datetime.now)
-    targets = models.ForeignKey(MonthlyTarget, related_name='my_target' , on_delete=models.DO_NOTHING, blank=True, null=True)
-
-    
-
-    # class Meta:
-    #     verbose_name = _("EmpRecord")
-    #     verbose_name_plural = _("EmpRecords")
-
-    def __str__(self):
-        return self.employee.username
+        return f'{self.position} <{self.month}>'
 
 
 

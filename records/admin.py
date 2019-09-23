@@ -12,6 +12,16 @@ class MonthlyTargetAdmin(admin.ModelAdmin):
     readonly_fields = ('month',)
 
 
+
+class EmployeeTargetInline(admin.StackedInline):
+    model = EmpRecord
+    
+    can_delete = False
+    fk_name='targets'
+    extra = 1
+    max_num = 1
+    min_num = 1
+
 class EmpRecordAdmin(admin.ModelAdmin):
     list_display = ('employee', 'mails', 'messages', 'calls', 'online_submissions', 'follow_ups', 'submitted_on')
     # list_display_links = ('lead_id', 'lead_name', 'enquired_for')
@@ -21,6 +31,8 @@ class EmpRecordAdmin(admin.ModelAdmin):
     
 
     actions = ["export_as_csv"]
+
+    # inlines = (EmployeeTargetInline,)
 
     def export_as_csv(self, request, queryset):
 
