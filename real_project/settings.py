@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # 'dal',
     # 'dal_select2',
+    'admin_numeric_filter',
     'profiles.apps.ProfilesConfig',
     'dashboard.apps.DashboardConfig',
     'pages.apps.PagesConfig',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'rangefilter',
     'taggit',
     'mptt',
+    
 
 ]
 

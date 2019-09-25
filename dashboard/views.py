@@ -18,27 +18,40 @@ def dashboard(request):
     emps = emp.profile.get_descendants(include_self=False)
     leads = Lead.objects.all()
     # seven = Lead.objects.order_by('-registration_date').filter(~Q(registration_date=None))[:7]
+
+    latest_lead_remark = [i.lead_remarks.last() for i in leads]
+    registered_lead_ids = [i.lead.id for i in latest_lead_remark if i.status == 'walkinreg']
+    registered_lead_ids_past_seven_days = [i.lead for i in latest_lead_remark if i.status == 'walkinreg' and i.next_follow_up_date > date.today() - timedelta(days=7)]
+    past_seven_days = [calendar.day_name[(date.today() - timedelta(days=i)).weekday()] for i in range(6, -1, -1)]
+    registered_each_days = [sum([i.course_fee for i in registered_lead_ids_past_seven_days if i.lead_remarks.last().next_follow_up_date == date.today() - timedelta(days=j)]) for j in range(6, -1, -1)]
     total_col = 0
     last_week = datetime.now() - timedelta(days=7)
-    weekly_data = Lead.objects.filter(registration_date__gt=last_week).extra(select={'day': 'date(registration_date)'}).values('day').annotate(sum=Sum('course_fee'))
+
+    # weekly_data = Lead.objects.filter(id__in=registered_lead_ids).extra(select={'day': 'date(lead_remarks.last().next_follow_up_date)'}).values('day').annotate(sum=Sum('course_fee'))
     
+    weekly_data = Lead.objects.filter(id__in=registered_lead_ids).filter()
+
     # seven_days = []
     # seven_data = []
     min_data = 0
     max_data = 1000
-    for dates in weekly_data:
-        dates['day'] = datetime.strptime(dates['day'], '%Y-%m-%d')
-        days = datetime.strftime(dates['day'], '%a')
-        dates['day'] = days
-    seven_days = [i['day'] for i in weekly_data]
-    seven_data = [j['sum'] for j in weekly_data]
+    # for dates in weekly_data:
+    #     dates['day'] = datetime.strptime(dates['day'], '%Y-%m-%d')
+    #     days = datetime.strftime(dates['day'], '%a')
+    #     dates['day'] = days
+    # seven_days = [i['day'] for i in weekly_data]
+    # seven_data = [j['sum'] for j in weekly_data]
     
+    seven_days = [i[:3] for i in past_seven_days]
+    seven_data = registered_each_days
+
+
     if any(seven_data):
         min_data = min(seven_data) - 1000
         max_data = max(seven_data) + 1000
 
     last_month = datetime.now() - timedelta(days=30)
-    tech_data = Lead.objects.filter(registration_date__gt=last_month).extra(select={'tech': 'enquired_for'}).values('tech').annotate(sum=Sum('course_fee'))
+    tech_data = Lead.objects.filter(id__in=registered_lead_ids).extra(select={'tech': 'enquired_for'}).values('tech').annotate(sum=Sum('course_fee'))
     
   
     min_col = 0
@@ -60,9 +73,9 @@ def dashboard(request):
     # print(unregistered_leads)
     # follow_leads = Lead.objects.filter(id__in=unregistered_leads)
 
-    all_lead = Lead.objects.all()
-    my_list = [i.lead_remarks.last() for i in all_lead]
-    for data in my_list:
+    # all_lead = Lead.objects.all()
+    # latest_lead_remark = [i.lead_remarks.last() for i in all_lead]
+    for data in latest_lead_remark:
         print('This the what i looking for: ',data.next_follow_up_date)
     # unregistered_leads = [l.lead.id for l in follow_lead if l.status !='walkinreg' or l.status !='leadreg']
     # print(unregistered_leads)
@@ -71,14 +84,14 @@ def dashboard(request):
     # total_new = len(new_leads)
     morning_report = DTS.objects.all().filter(dated=date.today()).filter(employee=request.user.profile)
 
-    leadclose = [i.lead for i in my_list if i.status == 'leadclose']
-    leadwalkin = [i.lead for i in my_list if i.status == 'leadwalkin']
-    leadfollowup = [i.lead for i in my_list if i.status == 'leadfollowup']
-    leadreg = [i.lead for i in my_list if i.status == 'leadreg']
-    walkinfollowup = [i.lead for i in my_list if i.status == 'walkinfollowup']
-    walkinreg = [i.lead for i in my_list if i.status == 'walkinreg']
-    walkindeclaration = [i.lead for i in my_list if i.status == 'walkindeclaration']
-    walkinclose = [i.lead for i in my_list if i.status == 'walkinclose']
+    leadclose = [i.lead for i in latest_lead_remark if i.status == 'leadclose']
+    leadwalkin = [i.lead for i in latest_lead_remark if i.status == 'leadwalkin']
+    leadfollowup = [i.lead for i in latest_lead_remark if i.status == 'leadfollowup']
+    leadreg = [i.lead for i in latest_lead_remark if i.status == 'leadreg']
+    walkinfollowup = [i.lead for i in latest_lead_remark if i.status == 'walkinfollowup']
+    walkinreg = [i.lead for i in latest_lead_remark if i.status == 'walkinreg']
+    walkindeclaration = [i.lead for i in latest_lead_remark if i.status == 'walkindeclaration']
+    walkinclose = [i.lead for i in latest_lead_remark if i.status == 'walkinclose']
 
     category_data = [leadclose,
     leadwalkin,

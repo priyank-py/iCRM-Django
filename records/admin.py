@@ -5,22 +5,22 @@ import csv
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 
 
-class MonthlyTargetAdmin(admin.ModelAdmin):
-    list_display = ('position',)
-    list_display_links = ('position',)
-    list_filter = ('position',)
-    readonly_fields = ('month',)
-
-
-
 class EmployeeTargetInline(admin.StackedInline):
     model = EmpRecord
     
     can_delete = False
-    fk_name='targets'
+    fk_name='employee'
     extra = 1
     max_num = 1
     min_num = 1
+
+class MonthlyTargetAdmin(admin.ModelAdmin):
+    list_display = ('position', 'month')
+    list_display_links = ('position',)
+    list_filter = ('position',)
+    readonly_fields = ('month',)
+    
+
 
 class EmpRecordAdmin(admin.ModelAdmin):
     list_display = ('employee', 'mails', 'messages', 'calls', 'online_submissions', 'follow_ups', 'submitted_on')

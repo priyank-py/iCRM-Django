@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.http import HttpResponse
 from .models import Lead, LeadRemarks
+from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
+from admin_numeric_filter.admin import NumericFilterModelAdmin, SingleNumericFilter, RangeNumericFilter, SliderNumericFilter
 import csv
 
 class LeadRemarksTabularInline(admin.TabularInline):
@@ -10,11 +12,17 @@ class LeadRemarksTabularInline(admin.TabularInline):
 
 
 # Register your models here.
-class LeadAdmin(admin.ModelAdmin):
-    list_display = ('id', 'lead_name', 'enquired_for', 'is_counseled',)
-    list_display_links = ('id', 'lead_name', 'enquired_for')
-    list_filter = ('assigned_to', 'year_of_passing_UG')
-    list_editable = ('is_counseled',)
+class LeadAdmin(NumericFilterModelAdmin):
+
+    def latest_followup_date(self, instance):
+        # return instance.lead_remarks.current_follow_up_date
+        return instance.lead_remarks.last().next_follow_up_date
+
+    SliderNumericFilter.MAX_DECIMALS = 2
+    list_display = ('id', 'lead_name', 'enquired_for', 'is_counseled', 'latest_followup_date', )
+    list_display_links = ('id', 'lead_name', 'enquired_for', 'latest_followup_date')
+    list_filter = ('assigned_to', ('course_fee', SliderNumericFilter), ('marks_UG', SliderNumericFilter), ('marks_PG', SliderNumericFilter),)
+    list_editable = ('is_counseled', )
     search_fields = ('id', 'lead_name', 'enquired_for', 'technology_based', 'counselor_name', 'year_of_passing_UG')
 
     # def get_next_follow_up(self, lead):
@@ -26,6 +34,7 @@ class LeadAdmin(admin.ModelAdmin):
     def export_as_csv(self, request, queryset):
 
         meta = self.model._meta
+        self.save_as = True
         field_names = [field.name for field in meta.fields]
 
         response = HttpResponse(content_type='text/csv')

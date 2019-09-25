@@ -37,11 +37,11 @@ class Lead(models.Model):
     lead_image = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True)
     is_counseled = models.BooleanField(default=False)
     # user = models.ForeignKey(User,related_name='lead',related_query_name='lead',on_delete=models.CASCADE)
-    generation_at = models.DateTimeField(default=timezone.now, blank=True, null=True)    
+    generation_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)    
     counselor_name = models.CharField(max_length=100, null=True, blank=True)
     assigned_to = models.ForeignKey(Employee, related_name='counselor', on_delete=models.DO_NOTHING, blank=True, null=True)
-    registration_date = models.DateTimeField(blank=True, null=True)
-    
+     
+
 
     def __str__(self):
         return self.lead_name
@@ -54,6 +54,8 @@ class LeadRemarks(models.Model):
     next_follow_up_date = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=200, choices=available_status, default='', null=True, blank=True)
 
+    def current_follow_up_date(self, instance):
+        return self.instance.next_follow_up_date.last()
 
     def current_status(self):
         return self.lead.status
