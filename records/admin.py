@@ -19,7 +19,17 @@ class MonthlyTargetAdmin(admin.ModelAdmin):
     list_display_links = ('position',)
     list_filter = ('position',)
     readonly_fields = ('month',)
+
+    # class Meta:
+    #     model = MonthlyTarget
+    #     fields = '__all__'
+    #     exclude = 'submitted_on'
     
+
+class EmpCustomRecordAdmin(admin.TabularInline):
+    model = EmpCustomRecord
+    extra = 1
+
 
 
 class EmpRecordAdmin(admin.ModelAdmin):
@@ -31,8 +41,12 @@ class EmpRecordAdmin(admin.ModelAdmin):
     
 
     actions = ["export_as_csv"]
+    
+    class meta:
+        model = EmpRecord
+        fields = '__all__'
 
-    # inlines = (EmployeeTargetInline,)
+    inlines = ( EmpCustomRecordAdmin,)
 
     def export_as_csv(self, request, queryset):
 
@@ -73,4 +87,4 @@ class DTSAdmin(admin.ModelAdmin):
 
 admin.site.register(EmpRecord, EmpRecordAdmin)
 admin.site.register(DTS, DTSAdmin)
-admin.site.register(MonthlyTarget, MonthlyTargetAdmin)
+admin.site.register(MonthlyTargetAdmin)

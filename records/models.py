@@ -50,9 +50,12 @@ class EmpRecord(models.Model):
     def __str__(self):
         return self.employee.username
 
+class EmpCustomRecord(models.Model):
+    emp_record = models.ForeignKey(EmpRecord, related_name="custom_record", on_delete=models.DO_NOTHING)
+    field_name = models.CharField(max_length=60, blank=True, null=True, verbose_name="Custom Records")
+    value = models.IntegerField(blank=True, null=True, default=0)
 
-
-class MonthlyTarget(models.Model):
+class MonthlyTarget(EmpRecord):
     positions_available = (
         ('telecaller', 'Telecaller'),
         ('frontdesk', 'Front Desk'),
@@ -65,12 +68,14 @@ class MonthlyTarget(models.Model):
     )
     position = models.CharField(choices=positions_available, max_length=100)
     month = models.CharField(default=datetime.now().strftime('%B'), max_length=50)
-    mails = models.IntegerField(default=0)
-    messages = models.IntegerField(default=0)
-    calls = models.IntegerField(default=0)
-    online_submissions = models.IntegerField(default=0)
-    follow_ups = models.IntegerField(default=0)
-    employee =  models.ForeignKey(EmpRecord, on_delete=models.CASCADE, blank=True, null=True)
+
+    # submitted_on = models.DateTimeField(blank=True, null=True, default=datetime.now, verbose_name="Created On")
+    # mails = models.IntegerField(default=0)
+    # messages = models.IntegerField(default=0)
+    # calls = models.IntegerField(default=0)
+    # online_submissions = models.IntegerField(default=0)
+    # follow_ups = models.IntegerField(default=0)
+    # employee =  models.ForeignKey(EmpRecord, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f'{self.position} <{self.month}>'

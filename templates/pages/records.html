@@ -4,6 +4,25 @@
 
 <div class="content">
     <div class="container-fluid">
+
+            <div class="col-md-12">
+              <div class="card card-chart">
+                <div class="card-header card-header-warning">
+ 
+                  <div class="ct-chart" id="website1ViewsChart"></div>
+          
+                </div>
+                <div class="card-body">
+                  <h4 class="card-title">Record Status</h4>
+                  <p class="card-category">Campaign Performance</p>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">access_time</i> campaign sent x days ago
+                  </div>
+                </div>
+              </div>
+            </div>        
         
         <form method="post" class="form-group" novalidate>
             {% csrf_token %}
@@ -45,7 +64,9 @@
                             </th> {% endcomment %}
                             </thead>
                             <tbody>
+                               
                             {% for target in targets %}
+                                
                                 <tr>
                                     <td>
                                         {{ form.mails.label_tag }}
@@ -114,7 +135,10 @@
                                         -
                                     </td>
                                 </tr>
+                                
+                            
                                 {% endfor %}
+                                 
                         </tbody>
                           
                         <script type="text/javascript">
