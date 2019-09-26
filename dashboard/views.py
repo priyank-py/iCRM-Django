@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from employees.models import Employee
 from leads.models import Lead, LeadRemarks
+from records.models import MonthlyTarget, EmpRecord
 # import datetime
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
@@ -13,6 +14,7 @@ from records.models import DTS
 
 @login_required(login_url='admin:login')
 def dashboard(request):
+
     # emps = Employee.objects.all()
     emp = request.user
     emps = emp.profile.get_descendants(include_self=False)
@@ -42,8 +44,23 @@ def dashboard(request):
     # seven_days = [i['day'] for i in weekly_data]
     # seven_data = [j['sum'] for j in weekly_data]
     
+    current_month = int(datetime.now().strftime('%m'))
+    current_year = int(datetime.now().strftime('%Y'))
+    first_day, last_day = calendar.monthrange(current_year, current_month)
+    start_month_date = datetime.today().replace(day=1)
+    end_month_date = datetime.today().replace(day=last_day)
+
     seven_days = [i[:3] for i in past_seven_days]
     seven_data = registered_each_days
+
+    try:
+        month_targets = MonthlyTarget.objects.all().filter(month=datetime.now().strftime('%B')).filter(position=emp.profile.postion)
+    except:
+        month_targets = MonthlyTarget.objects.none()
+        print('Targets Not Added Yet!')
+    
+    emp_monthly_records = EmpRecord.objects.all().filter(submitted_on__gte=start_month_date).filter(submitted_on__lte=end_month_date)
+
 
 
     if any(seven_data):
@@ -126,6 +143,8 @@ def dashboard(request):
         'morning_report': morning_report,
         'category_names': category_names,
         'category_count': category_count,
+        'month_targets': month_targets,
+        'emp_monthly_records': emp_monthly_records,
     }
     # if any(follow_leads):
     #     context['follow_leads'] = follow_leads

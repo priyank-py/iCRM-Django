@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+
 from django.contrib.auth.models import User
 from employees.models import Employee
 from django.utils import timezone
@@ -53,9 +54,9 @@ class EmpRecord(models.Model):
 class EmpCustomRecord(models.Model):
     emp_record = models.ForeignKey(EmpRecord, related_name="custom_record", on_delete=models.DO_NOTHING)
     field_name = models.CharField(max_length=60, blank=True, null=True, verbose_name="Custom Records")
-    value = models.IntegerField(blank=True, null=True, default=0)
+    value = models.IntegerField(blank=True, null=True, default=0, help_text="Integers only, no decimals")
 
-class MonthlyTarget(EmpRecord):
+class MonthlyTarget(models.Model):
     positions_available = (
         ('telecaller', 'Telecaller'),
         ('frontdesk', 'Front Desk'),
@@ -66,26 +67,32 @@ class MonthlyTarget(EmpRecord):
         ('manager', 'Manager'),
         ('seniormanager', 'Senior Manager'),
     )
-    position = models.CharField(choices=positions_available, max_length=100)
+    position = models.CharField(choices=positions_available, max_length=100, default="")
     month = models.CharField(default=datetime.now().strftime('%B'), max_length=50)
 
-    # submitted_on = models.DateTimeField(blank=True, null=True, default=datetime.now, verbose_name="Created On")
-    # mails = models.IntegerField(default=0)
-    # messages = models.IntegerField(default=0)
-    # calls = models.IntegerField(default=0)
-    # online_submissions = models.IntegerField(default=0)
-    # follow_ups = models.IntegerField(default=0)
-    # employee =  models.ForeignKey(EmpRecord, on_delete=models.CASCADE, blank=True, null=True)
+    submitted_on = models.DateTimeField(blank=True, null=True, default=datetime.now, verbose_name="Created On")
+    mails = models.IntegerField(default=0)
+    messages = models.IntegerField(default=0)
+    calls = models.IntegerField(default=0)
+    online_submissions = models.IntegerField(default=0)
+    follow_ups = models.IntegerField(default=0)
+    employee =  models.ForeignKey(EmpRecord, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f'{self.position} <{self.month}>'
+
+class MonthlyCustomTarget(models.Model):
+    monthly_target = models.ForeignKey(MonthlyTarget, related_name="custom_target", on_delete=models.DO_NOTHING)
+    field_name = models.CharField(max_length=60, blank=True, null=True, verbose_name="Custom Target")
+    value = models.IntegerField(blank=True, null=True, default=0, help_text="Integers only, no decimals")
 
 
 
 class DTS(models.Model):
 
     employee = models.ForeignKey(Employee, related_name='reporter', on_delete=models.DO_NOTHING, blank=True, null=True)
-    dated = models.DateTimeField(unique=True, default=timezone.now, blank=True)
+    dated = models.DateField(unique=True, default=timezone.now, primary_key=True)
+    timed = models.TimeField(default=datetime.now().time())
 
     def __str__(self):
         return self.employee.name

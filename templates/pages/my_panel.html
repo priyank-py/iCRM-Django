@@ -7,6 +7,9 @@
 <div class="content">
         <div class="container-fluid">
           <div class="row">
+            {% if month_targets %}
+            {% for target in month_targets %}
+            <!-- 1st one -->
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
                 <div class="card-header card-header-warning card-header-icon">
@@ -21,11 +24,13 @@
                 <div class="card-footer">
                   <div class="stats">
                     <i class="material-icons text-danger">warning</i>
-                    <a href="#pablo">Get More Informaition...</a>
+                    <a href="#pablo">{{target.mails}}</a>
                   </div>
                 </div>
               </div>
             </div>
+
+            <!-- 2nd one -->
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
                 <div class="card-header card-header-success card-header-icon">
@@ -42,6 +47,8 @@
                 </div>
               </div>
             </div>
+
+            <!-- 3rd one -->
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
                 <div class="card-header card-header-danger card-header-icon">
@@ -58,6 +65,8 @@
                 </div>
               </div>
             </div>
+
+            <!-- 4th one -->
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
                 <div class="card-header card-header-info card-header-icon">
@@ -74,6 +83,82 @@
                 </div>
               </div>
             </div>
+
+            <!-- 5th one -->
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-info card-header-icon">
+                  <div class="card-icon">
+                    <i class="fa fa-twitter"></i>
+                  </div>
+                  <p class="card-category">Leads</p>
+                  <h3 class="card-title">+{{ leads|length }} </h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">update</i> Just Updated
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 6th one -->
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-info card-header-icon">
+                  <div class="card-icon">
+                    <i class="fa fa-twitter"></i>
+                  </div>
+                  <p class="card-category">Leads</p>
+                  <h3 class="card-title">+{{ leads|length }} </h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">update</i> Just Updated
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 7th one -->
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-info card-header-icon">
+                  <div class="card-icon">
+                    <i class="fa fa-twitter"></i>
+                  </div>
+                  <p class="card-category">Leads</p>
+                  <h3 class="card-title">+{{ leads|length }} </h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">update</i> Just Updated
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 8th one -->
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-info card-header-icon">
+                  <div class="card-icon">
+                    <i class="fa fa-twitter"></i>
+                  </div>
+                  <p class="card-category">Leads</p>
+                  <h3 class="card-title">+{{ leads|length }} </h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">update</i> Just Updated
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            
+              {{emp_monthly_records}}
+
           </div>
           <div class="row">
             <div class="col-md-4">

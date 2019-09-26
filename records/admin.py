@@ -23,7 +23,7 @@ class MonthlyTargetAdmin(admin.ModelAdmin):
     # class Meta:
     #     model = MonthlyTarget
     #     fields = '__all__'
-    #     exclude = 'submitted_on'
+        # exclude = 'submitted_on'
     
 
 class EmpCustomRecordAdmin(admin.TabularInline):
@@ -87,4 +87,4 @@ class DTSAdmin(admin.ModelAdmin):
 
 admin.site.register(EmpRecord, EmpRecordAdmin)
 admin.site.register(DTS, DTSAdmin)
-admin.site.register(MonthlyTargetAdmin)
+admin.site.register(MonthlyTarget, MonthlyTargetAdmin)

@@ -21,7 +21,7 @@ class LeadAdmin(NumericFilterModelAdmin):
     SliderNumericFilter.MAX_DECIMALS = 2
     list_display = ('id', 'lead_name', 'enquired_for', 'is_counseled', 'latest_followup_date', )
     list_display_links = ('id', 'lead_name', 'enquired_for', 'latest_followup_date')
-    list_filter = ('assigned_to', ('course_fee', SliderNumericFilter), ('marks_UG', SliderNumericFilter), ('marks_PG', SliderNumericFilter),)
+    list_filter = ('assigned_to', ('course_fee', SliderNumericFilter), ('marks_UG', SliderNumericFilter), ('marks_PG', SliderNumericFilter), ('year_of_passing_UG', SliderNumericFilter), ('year_of_passing_PG', SliderNumericFilter))
     list_editable = ('is_counseled', )
     search_fields = ('id', 'lead_name', 'enquired_for', 'technology_based', 'counselor_name', 'year_of_passing_UG')
 
@@ -34,8 +34,10 @@ class LeadAdmin(NumericFilterModelAdmin):
     def export_as_csv(self, request, queryset):
 
         meta = self.model._meta
+        # print(self.model.lead_remarks._meta)
         self.save_as = True
         field_names = [field.name for field in meta.fields]
+        print(field_names)
 
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)

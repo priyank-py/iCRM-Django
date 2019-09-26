@@ -19,7 +19,11 @@ def daily_record(request):
         form = EmpRecordForm()
     dt = datetime.now()
     current_user = request.user
-    targets = MonthlyTarget.objects.all().filter(position=current_user.profile.postion).filter(month=datetime.now().strftime('%B'))
+    try:
+        targets = MonthlyTarget.objects.all().filter(position=current_user.profile.postion).filter(month=datetime.now().strftime('%B'))
+    
+    except:
+        targets = MonthlyTarget()
     # print(target)
 
     return render(request, 'pages/records.html', {'form':form, 'dt':dt, 'targets': targets})

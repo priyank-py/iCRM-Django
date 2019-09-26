@@ -18,7 +18,7 @@ class Lead(models.Model):
     lead_phone = models.CharField(max_length=20)
     campaign_remarks = models.CharField(max_length=255, null=True, blank=True)
     enquired_for = models.CharField(max_length=250, choices=enquired_choices, default='', null=True, blank=True)
-    technology_based = models.CharField(max_length=250, choices=tech_choices, default='', null=True, blank=True)
+    technology_based = models.CharField(max_length=250, null=True, blank=True)
     skills_known = TaggableManager(verbose_name='technologies known', blank=True)
     
     course_fee = models.IntegerField(null=True, blank=True, default=0)
