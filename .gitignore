@@ -12,7 +12,7 @@ db.sqlite3
 /djangovenv
 /migrations
 /static
-unrefined_resources
+/unrefined_resources
 employees/migrations/
 leads/migrations/
 records/migrations/

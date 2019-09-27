@@ -59,9 +59,17 @@ def dashboard(request):
         month_targets = MonthlyTarget.objects.none()
         print('Targets Not Added Yet!')
     
-    emp_monthly_records = EmpRecord.objects.all().filter(submitted_on__gte=start_month_date).filter(submitted_on__lte=end_month_date)
+    emp_monthly_records = EmpRecord.objects.all().filter(submitted_on__gte=start_month_date).filter(submitted_on__lte=end_month_date).filter(employee=emp)
+    # print('these are emp records', emp_monthly_records)
 
-
+    # total_mails_monthly = [i.mails for i in emp_monthly_records]
+    
+    total_mails_monthly = sum([i.mails for i in emp_monthly_records])
+    total_messages_monthly = sum([i.messages for i in emp_monthly_records])
+    total_calls_monthly = sum([i.calls for i in emp_monthly_records])
+    total_online_submissions_monthly = sum([i.online_submissions for i in emp_monthly_records])
+    total_follow_ups_monthly = sum([i.follow_ups for i in emp_monthly_records])
+    print('total mails sent are: ', total_mails_monthly)
 
     if any(seven_data):
         min_data = min(seven_data) - 1000
@@ -145,6 +153,11 @@ def dashboard(request):
         'category_count': category_count,
         'month_targets': month_targets,
         'emp_monthly_records': emp_monthly_records,
+        'total_mails_monthly': total_mails_monthly,
+        'total_messages_monthly': total_messages_monthly,
+        'total_calls_monthly': total_calls_monthly,
+        'total_online_submissions_monthly': total_online_submissions_monthly,
+        'total_follow_ups_monthly': total_follow_ups_monthly,
     }
     # if any(follow_leads):
     #     context['follow_leads'] = follow_leads
