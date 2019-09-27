@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import datetime
+from datetime import datetime, date
 
 from django.contrib.auth.models import User
 from employees.models import Employee
@@ -41,7 +41,9 @@ class EmpRecord(models.Model):
     calls = models.IntegerField(blank=True, null=True, default=0)
     online_submissions = models.IntegerField(blank=True, null=True, default=0)
     follow_ups = models.IntegerField(blank=True, null=True, default=0)
-    submitted_on = models.DateTimeField(blank=True, null=True, default=datetime.now)
+    submitted_on = models.DateField(default=date.today, primary_key=True)
+    submitted_at = models.TimeField(blank=True, null=True, auto_now=True, auto_now_add=False)
+
     
 
     # class Meta:

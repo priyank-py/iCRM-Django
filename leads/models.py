@@ -33,7 +33,7 @@ class Lead(models.Model):
     location = models.CharField(max_length=200, null=True, blank=True)
     # remarks = models.TextField(null=True, blank=True)
     
-    final_report = models.CharField(max_length=150, null=True, blank=True)
+    # final_report = models.CharField(max_length=150, null=True, blank=True)
     lead_image = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True)
     is_counseled = models.BooleanField(default=False)
     # user = models.ForeignKey(User,related_name='lead',related_query_name='lead',on_delete=models.CASCADE)

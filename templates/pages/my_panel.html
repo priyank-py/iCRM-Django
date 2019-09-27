@@ -2,7 +2,7 @@
 {% load static %}
 {% load humanize %}
 {% block content %}
-
+{% load mathfilters %}
 
 <div class="content">
         <div class="container-fluid">
@@ -51,16 +51,22 @@
             <!-- 3rd one -->
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
-                <div class="card-header card-header-danger card-header-icon">
+                <div class="card-header card-header-info card-header-icon">
                   <div class="card-icon">
-                    <i class="material-icons">info_outline</i>
+                    Mails
                   </div>
-                  <p class="card-category">Issues</p>
-              <h3 class="card-title">{{ total_mails_monthly }}</h3>
+                  <p class="card-category">More to go</p>
+                  <p class="card-category"  style="float: left;display:inline-block;padding: 10px;">Achived</p><h3 class="card-title" style="float: left;display:inline-block; ">{{ total_follow_ups_monthly }}</h3>
+              <h3 class="card-title">{{ target.mails|sub:total_mails_monthly }}</h3>
                 </div>
                 <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons">local_offer</i> {{target.mails}}
+                  <div class="stats"
+                  {% if target.mails >= total_mails_monthly %}
+                  style="color:red;"
+                  {% else %}
+                  style="color:green;"
+                  {% endif %} >
+                    <i class="material-icons fa fa-bullseye"></i> {{target.mails}}
                   </div>
                 </div>
               </div>
@@ -71,7 +77,8 @@
               <div class="card card-stats">
                 <div class="card-header card-header-info card-header-icon">
                   <div class="card-icon">
-                    <i class="fa fa-twitter"></i>
+                      <i class="fa fa-bullhorn" aria-hidden="true"></i>
+
                   </div>
                   <p class="card-category">Leads</p>
                   <h3 class="card-title">+{{ leads|length }} </h3>
@@ -89,14 +96,20 @@
               <div class="card card-stats">
                 <div class="card-header card-header-info card-header-icon">
                   <div class="card-icon">
-                    <i class="fa fa-twitter"></i>
+                    Calls
                   </div>
-                  <p class="card-category">Leads</p>
-                  <h3 class="card-title">+{{ leads|length }} </h3>
+                  <p class="card-category">More to go</p>
+                  <p class="card-category"  style="float: left;display:inline-block;padding: 10px;">Achived</p><h3 class="card-title" style="float: left;display:inline-block; ">{{ total_follow_ups_monthly }}</h3>
+                  <h3 class="card-title"> {{ target.calls|sub:total_calls_monthly }} </h3>
                 </div>
                 <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons">update</i> Just Updated
+                    <div class="stats"
+                    {% if target.calls >= total_calls_monthly %}
+                    style="color:red;"
+                    {% else %}
+                    style="color:green;"
+                    {% endif %} >
+                    <i class="material-icons fa fa-bullseye"></i> {{ target.calls }}
                   </div>
                 </div>
               </div>
@@ -107,14 +120,20 @@
               <div class="card card-stats">
                 <div class="card-header card-header-info card-header-icon">
                   <div class="card-icon">
-                    <i class="fa fa-twitter"></i>
+                    Messages
                   </div>
-                  <p class="card-category">Leads</p>
-                  <h3 class="card-title">+{{ leads|length }} </h3>
+                  <p class="card-category">More to go</p>
+                  <p class="card-category"  style="float: left;display:inline-block;padding: 10px;">Achived</p><h3 class="card-title" style="float: left;display:inline-block; ">{{ total_follow_ups_monthly }}</h3>
+                  <h3 class="card-title"> {{ target.messages|sub:total_messages_monthly }} </h3>
                 </div>
                 <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons">update</i> Just Updated
+                    <div class="stats"
+                    {% if target.messages >= total_messages_monthly %}
+                    style="color:red;"
+                    {% else %}
+                    style="color:green;"
+                    {% endif %} >
+                    <i class="material-icons fa fa-bullseye"></i> {{ target.messages }}
                   </div>
                 </div>
               </div>
@@ -125,14 +144,20 @@
               <div class="card card-stats">
                 <div class="card-header card-header-info card-header-icon">
                   <div class="card-icon">
-                    <i class="fa fa-twitter"></i>
+                    online subs
                   </div>
-                  <p class="card-category">Leads</p>
-                  <h3 class="card-title">+{{ leads|length }} </h3>
+                  <p class="card-category">More to go</p>
+                  <p class="card-category"  style="float: left;display:inline-block;padding: 10px;">Achived</p><h3 class="card-title" style="float: left;display:inline-block; ">212</h3>
+                  <h3 class="card-title" style="display:inline-block;"> {{ target.online_submissions|sub:total_online_submissions_monthly }} </h3>
                 </div>
                 <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons">update</i> Just Updated
+                    <div class="stats"
+                    {% if target.online_submissions >= total_online_submissions_monthly %}
+                    style="color:red;"
+                    {% else %}
+                    style="color:green;"
+                    {% endif %} >
+                    <i class="material-icons fa fa-bullseye"></i> {{ target.online_submissions }}
                   </div>
                 </div>
               </div>
@@ -142,14 +167,22 @@
               <div class="card card-stats">
                 <div class="card-header card-header-info card-header-icon">
                   <div class="card-icon">
-                    <i class="fa fa-twitter"></i>
+                    Follow ups
                   </div>
-                  <p class="card-category">Leads</p>
-                  <h3 class="card-title">+{{ leads|length }} </h3>
+                  <p class="card-category">More to go. </p>
+                  <p class="card-category"  style="float: left;display:inline-block;padding: 10px;">Achived</p><h3 class="card-title" style="float: left;display:inline-block; ">{{ total_follow_ups_monthly }}</h3>
+                  <h3 class="card-title"  style="display:inline-block;"> {{ target.follow_ups|sub:total_follow_ups_monthly }} </h3>
+                  
                 </div>
                 <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons">update</i> Just Updated
+                    <div class="stats"
+                    {% if target.follow_ups >= total_follow_ups_monthly %}
+                    style="color:red;"
+                    {% else %}
+                    style="color:green;"
+                    {% endif %} >
+                    <i class="material-icons fa fa-bullseye"></i> {{ target.follow_ups }}
+                    
                   </div>
                 </div>
               </div>
@@ -216,7 +249,7 @@
             </div>
           </div>
 
-
+<!-- graph for lead by category -->
           <div class="row">
             <div class="col-lg-12 col-md-12">
 
@@ -239,8 +272,32 @@
 
             </div>
           </div>
-          
-          
+
+
+<!-- graph of employees by their records      -->
+<div class="row">
+    <div class="col-lg-12 col-md-12">
+
+        <div class="card card-chart">
+            <div class="card-header card-header-info">
+
+              <div class="ct-chart" id="emprecordbycategory"></div>
+      
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">All Records by Category</h4>
+              <p class="card-category"> Performance</p>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">access_time</i> campaign sent x days ago
+              </div>
+            </div>
+          </div>
+
+    </div>
+  </div>
+  <!-- end of emp record graph -->
 
 
 
@@ -751,11 +808,40 @@
           },
         };
   
-        var dailySalesChart = Chartist.Bar('#leadsbycategory', leadsbycategory, optionsleadsbycategory);
+        var leadsregchart = Chartist.Bar('#leadsbycategory', leadsbycategory, optionsleadsbycategory);
   
         
 
         //ends category graph
+
+
+        //emp records graph
+
+        emprecordbycategory= {
+          labels: {{emp_record_categories|safe}},
+          series: [ 
+              
+          {{emp_records_by_category|safe}},
+          {{emp_targets_by_category|safe}}                   
+          ]
+        };
+  
+        optionsrecordbycategory = {
+          lineSmooth: Chartist.Interpolation.cardinal({
+            tension: 0
+          }),
+          low: 0,
+          high: 10000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          },
+        };
+  
+        var monthlyrecordschart = Chartist.Bar('#emprecordbycategory', emprecordbycategory, optionsrecordbycategory);
+
 
         function graphs(){
           
@@ -780,7 +866,11 @@
           }
 
           function graph4(){
-            md.startAnimationForLineChart(leadsbycategory);
+            md.startAnimationForLineChart(leadsregchart);
+          }
+
+          function graph5(){
+            md.startAnimationForLineChart(monthlyrecordschart);
           }
 
          

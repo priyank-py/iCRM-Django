@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # 'dal',
     # 'dal_select2',
     'admin_numeric_filter',
+    'mathfilters',
     'profiles.apps.ProfilesConfig',
     'dashboard.apps.DashboardConfig',
     'pages.apps.PagesConfig',
