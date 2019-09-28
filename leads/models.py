@@ -26,10 +26,10 @@ class Lead(models.Model):
     # assigned_to = models.CharField(max_length=200, choices=available_status, default='')
     under_graduation = models.CharField(blank=True, max_length=200)
     year_of_passing_UG = models.IntegerField(null=True, blank=True, choices=YEAR_CHOICES, default=datetime.datetime.now().year)
-    marks_UG = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    marks_UG = models.FloatField(null=True, blank=True, validators=[MinValueValidator(39.99), MaxValueValidator(100)])
     post_graduation = models.CharField(blank=True, max_length=200)
     year_of_passing_PG = models.IntegerField(null=True, blank=True, choices=YEAR_CHOICES, default=datetime.datetime.now().year)
-    marks_PG = models.FloatField(null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    marks_PG = models.FloatField(null=True, blank=True, validators=[MinValueValidator(39.99), MaxValueValidator(100)])
     location = models.CharField(max_length=200, null=True, blank=True)
     # remarks = models.TextField(null=True, blank=True)
     
