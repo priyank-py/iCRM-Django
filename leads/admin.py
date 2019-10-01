@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.http import HttpResponse
-from .models import Lead, LeadRemarks
+from .models import Lead, LeadRemarks, CorporateAndInstitutionLead, CorporateAndInstitutionLeadRemark
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from admin_numeric_filter.admin import NumericFilterModelAdmin, SingleNumericFilter, RangeNumericFilter, SliderNumericFilter
 import csv
@@ -16,7 +16,10 @@ class LeadAdmin(NumericFilterModelAdmin):
 
     def latest_followup_date(self, instance):
         # return instance.lead_remarks.current_follow_up_date
-        return instance.lead_remarks.last().next_follow_up_date
+        try:
+            return instance.lead_remarks.last().next_follow_up_date
+        except:
+            return None
 
     SliderNumericFilter.MAX_DECIMALS = 2
     list_display = ('id', 'lead_name', 'enquired_for', 'is_counseled', 'latest_followup_date', )
@@ -56,5 +59,21 @@ class LeadAdmin(NumericFilterModelAdmin):
         fields = '__all__'
     inlines = (LeadRemarksTabularInline, )
 
+
+class CorporateAndInstitutionLeadRemarkTabularInline(admin.TabularInline):
+    model = CorporateAndInstitutionLeadRemark
+    extra = 1
+
+class CorporateAndInstitutionLeadAdmin(NumericFilterModelAdmin):
+
+    class Meta:
+        model = CorporateAndInstitutionLead
+        fields = '__all__'
+    
+    inlines = (CorporateAndInstitutionLeadRemarkTabularInline, )
+
+
+
  
 admin.site.register(Lead, LeadAdmin)
+admin.site.register(CorporateAndInstitutionLead, CorporateAndInstitutionLeadAdmin)

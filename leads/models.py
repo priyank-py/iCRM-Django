@@ -3,6 +3,7 @@ import datetime
 from employees.models import Employee
 from django.utils import timezone
 from taggit.managers import TaggableManager
+from django.utils.translation import gettext as _
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
@@ -46,10 +47,11 @@ class Lead(models.Model):
     def __str__(self):
         return self.lead_name
 
+from .models import Lead
 
 class LeadRemarks(models.Model):
 
-    lead = models.ForeignKey(Lead, related_name='lead_remarks', on_delete=models.CASCADE)
+    lead = models.ForeignKey(Lead, related_name='lead_remarks', on_delete=models.DO_NOTHING)
     remarks = models.CharField(max_length=200, blank=True, null=True)
     next_follow_up_date = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=200, choices=available_status, default='', null=True, blank=True)
@@ -62,4 +64,33 @@ class LeadRemarks(models.Model):
 
     def __str__(self):
         return self.lead.lead_name
+
+class CorporateAndInstitutionLead(models.Model):
+
+    agreement_status = ((True, 'Signed'), (False, 'Not Signed'))
+
+    name = models.CharField(_("Corporate/Institution Name"), max_length=50)
+    contact_person = models.CharField(_("Contact Person Name"), max_length=50)
+    cp_designation = models.CharField(_("Contact Person Designation"), max_length=50, blank=True, null=True)
+    cp_phone = models.CharField(_("Contact Person Phone Number"), max_length=50, blank=True, null=True)
+    cp_alternative = models.CharField(_("Contact Person Alternative  Number"), max_length=50)
+    cp_email = models.EmailField(_("Contact Person Email"), max_length=254, blank=True, null=True)
+    institution_or_corporate_website = models.URLField(_("Website of Corporate/Institution"), max_length=200, blank=True, null=True)
+    enquired_for = models.CharField(max_length=50)
+    billing_amount = models.IntegerField(_("Collections Amount"), blank=True, null=True)
+    agreement_signed = models.BooleanField(choices=agreement_status, default="", blank=True, null=True)
+    agreement_copy = models.FileField(_("Agreement Copy"), upload_to='docs/%Y/%m/%d/', max_length=100, blank=True, null=True)
+    quotation = models.FileField(upload_to='quotes/%Y/%m/%d/', max_length=100, blank=True, null=True)
+    quotation_dated = models.DateField(_("Quotation preperation date"), auto_now=False, auto_now_add=False)
+
+class CorporateAndInstitutionLeadRemark(models.Model):
+
+    statuses = (('hot', 'Hot'), ('warm', 'Warm'), ('cold', 'Cold'), ('converted', 'Converted'), ('closed', 'Closed'))
+
+    corporate_or_institution_lead = models.ForeignKey(CorporateAndInstitutionLead, related_name='corp_lead_remark', on_delete=models.DO_NOTHING)
+    remark = models.CharField(_(""), max_length=200, blank=True, null=True)
+    follow_up_date = models.DateField(_(""), default=datetime.date.today, null=True, blank=True)
+    lead_status = models.CharField(_("lead status"), max_length=50, choices=statuses, blank=True, null=True)
+
+
 

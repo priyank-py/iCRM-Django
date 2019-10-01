@@ -8,7 +8,7 @@
         <div class="container-fluid">
           <div class="row">
 
-            {% for target in month_targets %}
+          
             <!-- 1st one -->
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
@@ -24,7 +24,7 @@
                 <div class="card-footer">
                   <div class="stats">
                     <i class="material-icons text-danger">warning</i>
-                    <a href="#pablo">{{target.mails}}</a>
+                    <a href="#pablo">DTS</a>
                   </div>
                 </div>
               </div>
@@ -56,17 +56,17 @@
                     Mails
                   </div>
                   <p class="card-category">More to go</p>
-                  <p class="card-category"  style="float: left;display:inline-block;padding: 10px;">Achived</p><h3 class="card-title" style="float: left;display:inline-block; ">{{ total_follow_ups_monthly }}</h3>
-              <h3 class="card-title">{{ target.mails|sub:total_mails_monthly }}</h3>
+                  <p class="card-category"  style="position:absolute;left:3px;bottom:0;display:inline-block;padding: 0 10px;">Achived {{ total_mails_monthly|intcomma }}</h4>   
+              <h3 class="card-title">{{ target_mails_monthly|sub:total_mails_monthly|intcomma }}</h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats"
-                  {% if target.mails >= total_mails_monthly %}
+                  {% if target_mails_monthly >= total_mails_monthly %}
                   style="color:red;"
                   {% else %}
                   style="color:green;"
                   {% endif %} >
-                    <i class="material-icons fa fa-bullseye"></i> {{target.mails}}
+                    <i class="material-icons fa fa-bullseye"></i> {{target_mails_monthly | intcomma}}
                   </div>
                 </div>
               </div>
@@ -99,17 +99,17 @@
                     Calls
                   </div>
                   <p class="card-category">More to go</p>
-                  <p class="card-category"  style="float: left;display:inline-block;padding: 10px;">Achived</p><h3 class="card-title" style="float: left;display:inline-block; ">{{ total_follow_ups_monthly }}</h3>
-                  <h3 class="card-title"> {{ target.calls|sub:total_calls_monthly }} </h3>
+                  <p class="card-category"  style="position:absolute;left:3px;bottom:0;display:inline-block;padding: 0 10px;">Achived {{ total_calls_monthly | intcomma }}</h3>
+                  <h3 class="card-title"> {{ target_calls_monthly|sub:total_calls_monthly | intcomma }} </h4>
                 </div>
                 <div class="card-footer">
                     <div class="stats"
-                    {% if target.calls >= total_calls_monthly %}
+                    {% if target_calls_monthly >= total_calls_monthly %}
                     style="color:red;"
                     {% else %}
                     style="color:green;"
                     {% endif %} >
-                    <i class="material-icons fa fa-bullseye"></i> {{ target.calls }}
+                    <i class="material-icons fa fa-bullseye"></i> {{ target_calls_monthly | intcomma }}
                   </div>
                 </div>
               </div>
@@ -123,17 +123,17 @@
                     Messages
                   </div>
                   <p class="card-category">More to go</p>
-                  <p class="card-category"  style="float: left;display:inline-block;padding: 10px;">Achived</p><h3 class="card-title" style="float: left;display:inline-block; ">{{ total_follow_ups_monthly }}</h3>
-                  <h3 class="card-title"> {{ target.messages|sub:total_messages_monthly }} </h3>
+                  <p class="card-category"  style="position:absolute;left:3px;bottom:0;display:inline-block;padding: 0 10px;">Achived {{ total_messages_monthly | intcomma }}</h4>
+                  <h3 class="card-title"> {{ target_messages_monthly|sub:total_messages_monthly | intcomma }} </h3>
                 </div>
                 <div class="card-footer">
                     <div class="stats"
-                    {% if target.messages >= total_messages_monthly %}
+                    {% if target_messages_monthly >= total_messages_monthly %}
                     style="color:red;"
                     {% else %}
                     style="color:green;"
                     {% endif %} >
-                    <i class="material-icons fa fa-bullseye"></i> {{ target.messages }}
+                    <i class="material-icons fa fa-bullseye"></i> {{ target_messages_monthly | intcomma }}
                   </div>
                 </div>
               </div>
@@ -147,17 +147,17 @@
                     online subs
                   </div>
                   <p class="card-category">More to go</p>
-                  <p class="card-category"  style="float: left;display:inline-block;padding: 10px;">Achived</p><h3 class="card-title" style="float: left;display:inline-block; ">212</h3>
-                  <h3 class="card-title" style="display:inline-block;"> {{ target.online_submissions|sub:total_online_submissions_monthly }} </h3>
+                  <p class="card-category"  style="position:absolute;left:3px;bottom:0;display:inline-block;padding: 0 10px;">Achived {{ total_online_submissions_monthly | intcomma }}</h4>
+                  <h3 class="card-title" style="display:inline-block;"> {{ target_online_submissions_monthly|sub:total_online_submissions_monthly | intcomma }} </h3>
                 </div>
                 <div class="card-footer">
                     <div class="stats"
-                    {% if target.online_submissions >= total_online_submissions_monthly %}
+                    {% if target_online_submissions_monthly >= total_online_submissions_monthly %}
                     style="color:red;"
                     {% else %}
                     style="color:green;"
                     {% endif %} >
-                    <i class="material-icons fa fa-bullseye"></i> {{ target.online_submissions }}
+                    <i class="material-icons fa fa-bullseye"></i> {{ target_online_submissions_monthly | intcomma }}
                   </div>
                 </div>
               </div>
@@ -170,27 +170,25 @@
                     Follow ups
                   </div>
                   <p class="card-category">More to go. </p>
-                  <p class="card-category"  style="float: left;display:inline-block;padding: 10px;">Achived</p><h3 class="card-title" style="float: left;display:inline-block; ">{{ total_follow_ups_monthly }}</h3>
-                  <h3 class="card-title"  style="display:inline-block;"> {{ target.follow_ups|sub:total_follow_ups_monthly }} </h3>
+                  <p class="card-category"  style="position:absolute;left:3px;bottom:0;display:inline-block;padding: 0 10px;">Achived {{ total_follow_ups_monthly | intcomma }}</p>
+                  <h3 class="card-title"  style="display:inline-block;"> {{ target_follow_ups_monthly|sub:total_follow_ups_monthly | intcomma }} </h3>
                   
                 </div>
                 <div class="card-footer">
                     <div class="stats"
-                    {% if target.follow_ups >= total_follow_ups_monthly %}
+                    {% if target_follow_ups_monthly >= total_follow_ups_monthly %}
                     style="color:red;"
                     {% else %}
                     style="color:green;"
                     {% endif %} >
-                    <i class="material-icons fa fa-bullseye"></i> {{ target.follow_ups }}
+                    <i class="material-icons fa fa-bullseye"></i> {{ target_follow_ups_monthly | intcomma }}
                     
                   </div>
                 </div>
               </div>
             </div>
-            {% endfor %}
       
             
-              {{emp_monthly_records}}
 
           </div>
           <div class="row">
