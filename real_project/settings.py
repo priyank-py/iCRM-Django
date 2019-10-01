@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'mathfilters',
     'profiles.apps.ProfilesConfig',
     'dashboard.apps.DashboardConfig',
+    'accounts.apps.AccountsConfig',
     'pages.apps.PagesConfig',
     'leads.apps.LeadsConfig',
     'employees.apps.EmployeesConfig',

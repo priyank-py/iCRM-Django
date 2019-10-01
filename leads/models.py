@@ -57,7 +57,10 @@ class LeadRemarks(models.Model):
     status = models.CharField(max_length=200, choices=available_status, default='', null=True, blank=True)
 
     def current_follow_up_date(self, instance):
-        return self.instance.next_follow_up_date.last()
+        try:
+            return self.instance.next_follow_up_date.last()
+        except:
+            return None
 
     def current_status(self):
         return self.lead.status
@@ -82,14 +85,15 @@ class CorporateAndInstitutionLead(models.Model):
     agreement_copy = models.FileField(_("Agreement Copy"), upload_to='docs/%Y/%m/%d/', max_length=100, blank=True, null=True)
     quotation = models.FileField(upload_to='quotes/%Y/%m/%d/', max_length=100, blank=True, null=True)
     quotation_dated = models.DateField(_("Quotation preperation date"), auto_now=False, auto_now_add=False)
+    bde_name = models.ForeignKey(Employee, verbose_name=_("BDE Name"), on_delete=models.CASCADE)
 
 class CorporateAndInstitutionLeadRemark(models.Model):
 
     statuses = (('hot', 'Hot'), ('warm', 'Warm'), ('cold', 'Cold'), ('converted', 'Converted'), ('closed', 'Closed'))
 
     corporate_or_institution_lead = models.ForeignKey(CorporateAndInstitutionLead, related_name='corp_lead_remark', on_delete=models.DO_NOTHING)
-    remark = models.CharField(_(""), max_length=200, blank=True, null=True)
-    follow_up_date = models.DateField(_(""), default=datetime.date.today, null=True, blank=True)
+    remark = models.CharField(_("remarks"), max_length=200, blank=True, null=True)
+    follow_up_date = models.DateField(_("Follow-up Date"), default='', null=True, blank=True)
     lead_status = models.CharField(_("lead status"), max_length=50, choices=statuses, blank=True, null=True)
 
 

@@ -1,0 +1,226 @@
+{% extends 'dash_base.html' %}
+
+{% block content %}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+              <div class="card card-plain">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title mt-0"> Total Collection </h4>
+                  <p class="card-category"> All leads registered </p>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-hover">
+                      <tr>
+                        <td><label for="prefix">Mr/Ms/Mrs</label></td>
+                        <td><input id="prefix" type="text" name="nm" value="" placeholder="Full Name"></td>
+                        </tr>
+                        <tr>
+                        <td><label for="studentid">Student ID</label></td>
+                        <td><input id="studentid" type="text" name="sid" value=""></td>
+                        </tr>
+                        <tr>
+                        <td><label for="course">Course Module</label></td>
+                        <td>
+                        <select class="" name="course">
+                        <option value="Python">Python</option>
+                        <option value="Php">Php</option>
+                        <option value="Java">Java</option>
+                        <!-- <option value="">Data Science</option>
+                        <option value="">Digital Marketing</option>
+                        <option value="">IOT</option> -->
+                        </select><br><br>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td><label for="course_fee">Course Fee</label></td>
+                        <td><input id="course_fee" type="text" name="cf" value=""></td>
+                    </tr>
+                    <tr>
+                        <td><label for="mobile">Mobile</label></td>
+                        <td><input id="mobile" type="text" name="mobile" value=""></td>
+                    </tr>
+                    <tr>
+                        <td><label for="email">Email ID</label></td>
+                        <td><input id="email" type="text" name="email" value=""></td>
+                        </tr>
+                        <tr>
+                        <td><label for="">Pay Option</label></td>
+                        <td>  <label for="cash">Cash</label>
+                    <input id="cash" type="checkbox" name="payoption1" value="Cash">
+
+                        <label for="cc">Credit Card</label>
+                        <input type="checkbox" name="payoption2" value="Credit_Card" >
+                        <label for="cc">Cheque</label>
+                        <input type="checkbox" name="payoption3" value="Cheque" checked>
+                        <label for="cc">DD</label>
+                        <input type="checkbox" name="payoption4" value="DD">
+                        <label for="cc">Online</label>
+                        <input type="checkbox" name="payoption5" value="Online"></td>
+                        </tr>
+                        <tr>
+                        <td><label for="date">Dated</label></td>
+                        <td><input id="date" type="text" name="dated" value=""></td>
+                        </tr>
+                        <tr>
+                        <td><label for="drawn">Drawn on</label></td>
+                        <td><input id="drawn" type="text" name="don" value=""></td>
+                        </tr>
+                        <tr>
+                        <td><label for="recvd">Amount Recieved up to reciept Rs.: </label></td>
+                        <td><input id="recvd" type="number" name="recvd" value="" placeholder="Only numbers"></td>
+                        </tr>
+                        <tr>
+                        <td><label for="balance">Balance Amount Rs.:</label></td>
+                        <td><input id="balance" type="number" name="bal" value=""></td>
+                        </tr>
+                        <tr>
+                        <td><label for="due">Due Date</label></td>
+                        <td><input id="due" type="text" name="dued" value=""></td>
+                        </tr>
+                        <tr>
+                        <td><label for="wordamt">Amount in words</label></td>
+                        <td><input id="wordamt" type="text" name="wrdamt" value=""></td>
+
+                        </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card card-plain">
+                  <div class="card-header card-header-primary">
+                    <h4 class="card-title mt-0"> Total Collection </h4>
+                    <p class="card-category"> All leads registered </p>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                            <th>No.</th>
+                            <th>Particular</th>
+                            <th>Amount</th>
+                          </thead>
+                          <tr>
+                            <td>1</td>
+                            <td>Admission Fee</td>
+                            <td><input class="vl" id="af" type="number" name="af" value=""></td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>Course Ware Fee</td>
+                            <td><input class="vl" id="cwf" type="number" name="cwf" value=""></td>
+                          </tr>
+                          <tr>
+                            <td>3</td>
+                            <td>Tution Fee</td>
+                            <td><input class="vl" id="tf" type="number" name="tf" value=""></td>
+                          </tr>
+                          <tr>
+                            <td>4</td>
+                            <td>Project Fee</td>
+                            <td><input class="vl" id="pf" type="number" name="pf" value=""></td>
+                          </tr>
+                          <tr>
+                            <td>5</td>
+                            <td>Late Fee</td>
+                            <td><input class="vl" id="lf" type="number" name="lf" value=""></td>
+                          </tr>
+                          <tr>
+                            <td>6</td>
+                            <td>Examination Fee</td>
+                            <td><input class="vl" id="ef" type="number" name="ef" value=""></td>
+                          </tr>
+                          <tr>
+                            <td>7</td>
+                            <td>Other (Pls Specify)</td>
+                            <td><input class="vl" id="other" type="number" name="other" value=""></td>
+                          </tr>
+                          <tr>
+                            <td>8</td>
+                            <td>Corporate GST no.</td>
+                            <td><input id="corpfield" type="text" name="cgst" value="" disabled/></td>
+                          </tr>
+                          <tr>
+                            <td>9</td>
+                            <td>Sub Total</td>
+                            <td><input id = "subt" type="number" name="subt" step="1" value="" readonly></td>
+                          </tr>
+                          <tr>
+                            <td>10</td>
+                            <td>GST</td>
+                            <td><input id="gst" type="number" name="gst" value="" step="1" readonly/></td>
+                          </tr>
+                          <tr>
+                            <td>11</td>
+                            <td>Grand Total Rs.</td>
+                            <td><input id="gt" type="number" name="gt" value="" readonly/></td>
+                          </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+          </div>
+
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function(){
+    
+    $("#corp").click(function(){
+    
+                        $("#corpfield").removeAttr("disabled","");
+    
+                      });
+    
+                      $("#coll").click(function(){
+    
+                      $("#corpfield").attr("disabled","");
+    
+                      });
+    
+                      $("#newreg").click(function(){
+                      $("#corpfield").attr("disabled","");
+                      });
+    
+
+    
+    $(".vl").keyup(function(){
+      var gt=0;
+      var ngt=0;
+      $(".vl").each(function(){
+    
+    
+          gt += Math.round(Number($(this).val()));
+          ngt = Math.round(gt/1.18);
+          $("#gt").val(gt);
+          $("#subt").val(ngt);
+          $("#gst").val(gt-ngt);
+    
+    
+    
+      });
+    
+    });
+    
+    
+    
+    $("#print").click(function(){
+      alert("Hello")
+      window.print();
+    });
+    
+    });
+    </script>
+
+
+{% endblock %}

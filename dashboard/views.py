@@ -212,7 +212,10 @@ def profile(request):
 def my_reports(request):
     emp = request.user
     emps = emp.profile.get_descendants(include_self=True)
-    registered_leads = Lead.objects.order_by('-generation_at').filter(~Q(registration_date=None)).filter(assigned_to__in=emps)
+    try:
+        registered_leads = Lead.objects.order_by('-generation_at').filter(~Q(registration_date=None)).filter(assigned_to__in=emps)
+    except:
+        registered_leads = Lead.objects.none()
     context = {
         'registered_leads': registered_leads,
     }
@@ -222,7 +225,10 @@ def my_reports(request):
 @login_required(login_url='admin:login')
 def notifications(request):
     info = Lead.objects.all().order_by('-generation_at').filter(assigned_to_id=request.user.id).filter(is_counseled=False)
-    success = Lead.objects.filter(is_counseled=True).filter(status='Walk in registered')
+    try:
+        success = Lead.objects.filter(is_counseled=True).filter(status='Walk in registered')
+    except:
+        success = Lead.objects.none()
     current_user = request.user.id
     context = {
         'info': info,
