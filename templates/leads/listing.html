@@ -149,7 +149,9 @@
         </div>
         <div class="col-md-3">
           <div class="card mb-3">
+          {% if lead.assigned_to.photo %}
             <img class="card-img-top" src="{{lead.assigned_to.photo.url}}" alt="Seller of the month">
+          {% endif %}
             <div class="card-body">
               <h5 class="card-title">{{lead.assigned_to.postion}}</h5>
               <h6 class="text-secondary">{{ lead.assigned_to}}</h6>

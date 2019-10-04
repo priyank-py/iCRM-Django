@@ -22,8 +22,8 @@ def dashboard(request):
     # seven = Lead.objects.order_by('-registration_date').filter(~Q(registration_date=None))[:7]
 
     latest_lead_remark = [i.lead_remarks.last() for i in leads]
-    registered_lead_ids = [i.lead.id for i in latest_lead_remark if i.status == 'walkinreg']
-    registered_lead_ids_past_seven_days = [i.lead for i in latest_lead_remark if i.status == 'walkinreg' and i.next_follow_up_date > date.today() - timedelta(days=7)]
+    registered_lead_ids = [i.lead.id for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinreg']
+    registered_lead_ids_past_seven_days = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinreg' and i.next_follow_up_date > date.today() - timedelta(days=7)]
     past_seven_days = [calendar.day_name[(date.today() - timedelta(days=i)).weekday()] for i in range(6, -1, -1)]
     registered_each_days = [sum([i.course_fee for i in registered_lead_ids_past_seven_days if i.lead_remarks.last().next_follow_up_date == date.today() - timedelta(days=j)]) for j in range(6, -1, -1)]
     total_col = 0
@@ -113,7 +113,8 @@ def dashboard(request):
     # all_lead = Lead.objects.all()
     # latest_lead_remark = [i.lead_remarks.last() for i in all_lead]
     for data in latest_lead_remark:
-        print('This the what i looking for: ',data.next_follow_up_date)
+        if hasattr(data, 'next_follow_up_date'):
+            print('This the what i looking for: ',data.next_follow_up_date)
     # unregistered_leads = [l.lead.id for l in follow_lead if l.status !='walkinreg' or l.status !='leadreg']
     # print(unregistered_leads)
     # follow_leads = Lead.objects.filter(id__in=unregistered_leads)
@@ -121,14 +122,14 @@ def dashboard(request):
     # total_new = len(new_leads)
     morning_report = DTS.objects.all().filter(dated=date.today()).filter(employee=request.user.profile)
 
-    leadclose = [i.lead for i in latest_lead_remark if i.status == 'leadclose']
-    leadwalkin = [i.lead for i in latest_lead_remark if i.status == 'leadwalkin']
-    leadfollowup = [i.lead for i in latest_lead_remark if i.status == 'leadfollowup']
-    leadreg = [i.lead for i in latest_lead_remark if i.status == 'leadreg']
-    walkinfollowup = [i.lead for i in latest_lead_remark if i.status == 'walkinfollowup']
-    walkinreg = [i.lead for i in latest_lead_remark if i.status == 'walkinreg']
-    walkindeclaration = [i.lead for i in latest_lead_remark if i.status == 'walkindeclaration']
-    walkinclose = [i.lead for i in latest_lead_remark if i.status == 'walkinclose']
+    leadclose = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'leadclose']
+    leadwalkin = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'leadwalkin']
+    leadfollowup = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'leadfollowup']
+    leadreg = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'leadreg']
+    walkinfollowup = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinfollowup']
+    walkinreg = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinreg']
+    walkindeclaration = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkindeclaration']
+    walkinclose = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinclose']
 
     category_data = [leadclose,
     leadwalkin,
@@ -212,10 +213,13 @@ def profile(request):
 def my_reports(request):
     emp = request.user
     emps = emp.profile.get_descendants(include_self=True)
-    try:
-        registered_leads = Lead.objects.order_by('-generation_at').filter(~Q(registration_date=None)).filter(assigned_to__in=emps)
-    except:
-        registered_leads = Lead.objects.none()
+    leads = Lead.objects.all()
+    latest_lead_remark = [i.lead_remarks.last() for i in leads]
+    registered_lead_ids = [i.lead.id for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinreg']
+    # try:
+    registered_leads = Lead.objects.all().filter(id__in=registered_lead_ids).filter(assigned_to__in=emps)
+    # except:
+    #     registered_leads = Lead.objects.none()
     context = {
         'registered_leads': registered_leads,
     }
