@@ -17,7 +17,10 @@ def dashboard(request):
 
     # emps = Employee.objects.all()
     emp = request.user
-    emps = emp.profile.get_descendants(include_self=False)
+    try:
+        emps = emp.profile.get_descendants(include_self=False)
+    except:
+        emps = Employee.objects.none()
     leads = Lead.objects.all()
     # seven = Lead.objects.order_by('-registration_date').filter(~Q(registration_date=None))[:7]
 
@@ -120,7 +123,10 @@ def dashboard(request):
     # follow_leads = Lead.objects.filter(id__in=unregistered_leads)
 
     # total_new = len(new_leads)
-    morning_report = DTS.objects.all().filter(dated=date.today()).filter(employee=request.user.profile)
+    try:
+        morning_report = DTS.objects.all().filter(dated=date.today()).filter(employee=request.user.profile)
+    except:
+        morning_report = DTS.objects.none()
 
     leadclose = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'leadclose']
     leadwalkin = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'leadwalkin']
@@ -212,7 +218,10 @@ def profile(request):
 @login_required(login_url='admin:login')
 def my_reports(request):
     emp = request.user
-    emps = emp.profile.get_descendants(include_self=True)
+    try:
+        emps = emp.profile.get_descendants(include_self=True)
+    except:
+        emps = Employee.objects.none()
     leads = Lead.objects.all()
     latest_lead_remark = [i.lead_remarks.last() for i in leads]
     registered_lead_ids = [i.lead.id for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinreg']

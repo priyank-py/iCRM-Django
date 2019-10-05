@@ -4,6 +4,8 @@
 {% block content %}
 {% load mathfilters %}
 
+{% if user.profile %}
+
 <div class="content">
         <div class="container-fluid">
           <div class="row">
@@ -873,6 +875,8 @@
 
          
       </script>
+
+      {% endif %}
 
       {% endblock %}
 

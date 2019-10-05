@@ -23,10 +23,12 @@ def daily_record(request):
         targets = MonthlyTarget.objects.all().filter(position=current_user.profile.postion).filter(month=datetime.now().strftime('%B'))
     
     except:
-        targets = MonthlyTarget()
+        targets = MonthlyTarget.objects.none()
     # print(target)
 
-    return render(request, 'pages/records.html', {'form':form, 'dt':dt, 'targets': targets})
+    context = {'form':form, 'dt':dt, 'targets': targets}
+
+    return render(request, 'pages/records.html', context)
 
 class DTSCreate(CreateView):
     model = DTS
