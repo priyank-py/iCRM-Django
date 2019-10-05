@@ -83,6 +83,10 @@ def dashboard(request):
     emp_record_categories = ['mails', 'messages', 'calls', 'online_submissions', 'follow_ups']
     emp_records_by_category = [total_mails_monthly, total_messages_monthly, total_calls_monthly, total_online_submissions_monthly, total_follow_ups_monthly]
     emp_targets_by_category = [target_mails_monthly, target_messages_monthly, target_calls_monthly, target_online_submissions_monthly, target_follow_ups_monthly]
+    
+    max_records_by_category = max(emp_records_by_category + emp_targets_by_category) + 100
+    min_records_by_category = 0
+    
     print('targets are: ', emp_targets_by_category)
 
 
@@ -146,10 +150,14 @@ def dashboard(request):
     walkindeclaration,
     walkinclose]
 
+    
+
     category_names = ['leadclose', 'leadwalkin', 'leadfollowup', 'leadreg', 'walkinfollowup', 'walkinreg', 'walkindeclaration', 'walkinclose']
 
     category_count = [len(i) if any(i) else 0 for i in category_data]
 
+    max_cat_data = max(category_count) + 5
+    # min_cat_data = min(category_count) 
     print('Number of student in by category',category_count)
 
 
@@ -170,6 +178,8 @@ def dashboard(request):
         'morning_report': morning_report,
         'category_names': category_names,
         'category_count': category_count,
+        'max_cat_data': max_cat_data,
+        # 'min_cat_data': min_cat_data,
         'month_targets': month_targets,
         'target_mails_monthly': target_mails_monthly,
         'target_messages_monthly': target_messages_monthly,
@@ -177,6 +187,8 @@ def dashboard(request):
         'target_online_submissions_monthly': target_online_submissions_monthly,
         'target_follow_ups_monthly': target_follow_ups_monthly,
         'emp_monthly_records': emp_monthly_records,
+        'max_records_by_category': max_records_by_category,
+        'min_records_by_category': min_records_by_category,
         'total_mails_monthly': total_mails_monthly,
         'total_messages_monthly': total_messages_monthly,
         'total_calls_monthly': total_calls_monthly,
