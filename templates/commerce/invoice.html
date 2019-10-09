@@ -65,6 +65,15 @@
                     <td class="meta-head">Amount Due</td>
                     <td><div class="due">₹{{invoice.bal_amount}} </div></td>
                 </tr>
+				<tr>
+				<td colspan="2" style="text-align: center;">All Installments</td>
+				</tr>
+				{% for installment in installments %}
+                  <tr>
+                    <td class="meta-head">{{installment.installment_date}}</td>
+                    <td><div class="due">₹{{installment.installment_amount}} </div></td>
+                </tr>
+                {% endfor %}
 
             </table>
 		
@@ -78,7 +87,7 @@
 		      
 		      <th>Price</th>
 		  </tr>
-		  {% for bill in bills %}
+		  
 
           <tr class="item-row" style="background-color:#ccc">
 		      <td class="item-name" ><div class="delete-wpr">{{invoice.lead.technology_based | capfirst }}<a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
@@ -165,7 +174,7 @@
 		      <td colspan="1" class="total-line balance">Balance Due</td>
 		      <td class="total-value balance"><div class="due">$875.00</div></td>
 		  </tr> {% endcomment %}
-		{% endfor %}
+		
 		</table>
 		
 		<div id="terms" style="page-break-before: always;">

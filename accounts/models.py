@@ -28,33 +28,6 @@ class Invoice(models.Model):
     gst = models.CharField(max_length=50,blank=True,null=True)
     g_total = models.IntegerField(_("Grand Total"), blank=True,null=True)
     amount_words = models.CharField(_("Amount in word"), max_length=200, blank=True, null=True)
-    # amount_words = models.CharField(max_length=200,blank=True,null=True)
-    # client = models.CharField(max_length=30,blank=True,null=True)
-    # payment_option = models.BooleanField(_("Pay Option"), choices=pay_options)
-    # pay_option1 = models.CharField(max_length=50,blank=True,null=True,default=None)
-    # pay_option2 = models.CharField(max_length=50,blank=True,null=True,default=None)
-    # pay_option3 = models.CharField(max_length=50,blank=True,null=True,default=None)
-    # pay_option4 = models.CharField(max_length=50,blank=True,null=True,default=None)
-    # pay_option5 = models.CharField(max_length=50,blank=True,null=True,default=None)
-    # add_fee = models.IntegerField(blank=True,null=True)
-    # course_ware_fee = models.IntegerField(blank=True,null=True)
-    # tution_fee = models.IntegerField(blank=True,null=True)
-    # project_fee = models.IntegerField(blank=True,null=True)
-    # late_fee = models.IntegerField(blank=True,null=True)
-    # exam_fee = models.IntegerField(blank=True,null=True)
-    # other = models.IntegerField(blank=True,null=True)
-    # coorporate_gst = models.CharField(max_length=50,blank=True,null=True)
-    # sub_total = models.IntegerField(blank=True,null=True)
-    # gst = models.CharField(max_length=50,blank=True,null=True)
-    # g_total = models.IntegerField(blank=True,null=True)
-
-    #crdname=models.CharField(max_length=200)
-    # crdno = models.CharField(blank=True,null=True,default=None,max_length=20)
-    # ddno = models.CharField(blank=True,null=True,max_length=20,default=None)
-    # checkno = models.CharField(blank=True,null=True,max_length=20,default=None)
-    # on = models.CharField(blank=True,null=True,max_length=20,default=None)
-    # batchstartdate = models.DateField(blank=True,null=True,default=None)
-    # counselor = models.CharField(max_length=100,blank=True,null=True)
 
     def save(self, *args, **kwargs):
         def num2words(num):
@@ -85,6 +58,15 @@ class Invoice(models.Model):
 
     def __str__(self):
         return f'{self.lead}'
+
+
+class InstallmentData(models.Model):
+    payment_status = ((True, 'Paid'), (False, 'Unpaid'))
+    invoice = models.ForeignKey(Invoice, verbose_name=_(""), on_delete=models.CASCADE)
+    installment_date = models.DateField(_("Date"), auto_now=False, auto_now_add=False, blank=True, null=True)
+    installment_amount = models.IntegerField(_("Amount"), blank=True, null=True)
+    paid = models.BooleanField(_("Payment Status"), choices=payment_status, default=False, blank=True, null=True)
+
 
 class Bill(models.Model):
     

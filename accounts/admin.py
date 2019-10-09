@@ -1,8 +1,13 @@
 from django.contrib import admin
-from .models import Invoice, Bill
+from .models import Invoice, Bill, InstallmentData
 # from admin_numeric_filter.admin import NumericFilterModelAdmin, SingleNumericFilter, RangeNumericFilter, SliderNumericFilter
 
 # Register your models here.
+
+class InstallmentDataInline(admin.StackedInline):
+    model = InstallmentData
+    extra = 1
+    fields = ('installment_date', 'installment_amount', 'paid')
 
 
 class BillsInline(admin.StackedInline):
@@ -23,7 +28,7 @@ class InvoiceAdmin(admin.ModelAdmin):
     class Meta:
         model = Invoice
         fields = '__all__'
-    inlines = (BillsInline,)
+    inlines = (InstallmentDataInline, BillsInline,)
 
 # admin.site.register(Bill, BillsAdmin)
 admin.site.register(Invoice, InvoiceAdmin)

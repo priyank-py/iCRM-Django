@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Invoice, Bill
+from .models import Invoice, Bill, InstallmentData
 
 # Create your views here.
 def invoices(request):
@@ -12,11 +12,13 @@ def invoices(request):
 
 def lead_invoice(request, id):
     invoice = get_object_or_404(Invoice, pk=id)
+    installments = InstallmentData.objects.order_by('-id').filter(invoice=invoice)
     bills = Bill.objects.order_by('-id').filter(invoice=invoice)
 
     context = {
         'invoice': invoice,
         'bills': bills,
+        'installments': installments,
     }
 
     return render(request, 'commerce/invoice.html', context)

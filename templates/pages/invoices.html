@@ -68,6 +68,10 @@
                           <td>
                             {{registered_lead.assigned_to}}
                           </td>
+                          <td>
+                            <a class="btn btn-success" href="{% url 'invoice' invoice.id %}">generate <i class="fa fa-external-link"></i></a>
+</button>
+                          </td>
                          </tr>
                         {% for bill in bills %} 
                             <tr class="datarow" style="display:none;background:#ccc;">                    

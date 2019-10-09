@@ -54,6 +54,13 @@ Phone: (555) 555-5555</div>
                     <td class="meta-head">Amount Due</td>
                     <td><div class="due">₹{{invoice.bal_amount}} </div></td>
                 </tr>
+               
+                {% for installment in installments %}
+                  <tr>
+                    <td class="meta-head">{{installment.installment_date}}</td>
+                    <td><div class="due">₹{{installment.installment_amount}} </div></td>
+                </tr>
+                {% endfor %}
 
             </table>
 		
