@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from .models import Lead
+from .models import Lead, CorporateAndInstitutionLead
 
 # from .forms import LeadForm, RemarksModelFormset
 
 # Create your views here.
 def new_leads(request):
-    leads = Lead.objects.order_by('-generation_at').filter(is_counseled=False)
+    leads = Lead.objects.all().filter(is_counseled=False)
 
     paginator = Paginator(leads, 3)
     page = request.GET.get('page')
@@ -47,8 +47,8 @@ def search(request):
 #         form = RemarksModelFormset()
 #     return render(response, 'pages/generation.html', {'form':form})
 
-def single_lead(request, lead_id):
-    lead = get_object_or_404(Lead, pk=lead_id)
+def single_lead(request, id):
+    lead = get_object_or_404(Lead, pk=id)
 
     context = {
         'lead': lead,
@@ -57,3 +57,9 @@ def single_lead(request, lead_id):
     return render(request, 'leads/listing.html', context)
 
 
+def show_quotation(request, id):
+    quotation = get_object_or_404(CorporateAndInstitutionLead, pk=id)
+
+    context = {
+        'quotation': quotation
+    }

@@ -17,13 +17,16 @@ def dashboard(request):
 
     # emps = Employee.objects.all()
     emp = request.user
-    emps = emp.profile.get_descendants(include_self=False)
+    try:
+        emps = emp.profile.get_descendants(include_self=False)
+    except:
+        emps = Employee.objects.none()
     leads = Lead.objects.all()
     # seven = Lead.objects.order_by('-registration_date').filter(~Q(registration_date=None))[:7]
 
     latest_lead_remark = [i.lead_remarks.last() for i in leads]
-    registered_lead_ids = [i.lead.id for i in latest_lead_remark if i.status == 'walkinreg']
-    registered_lead_ids_past_seven_days = [i.lead for i in latest_lead_remark if i.status == 'walkinreg' and i.next_follow_up_date > date.today() - timedelta(days=7)]
+    registered_lead_ids = [i.lead.id for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinreg']
+    registered_lead_ids_past_seven_days = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinreg' and i.next_follow_up_date > date.today() - timedelta(days=7)]
     past_seven_days = [calendar.day_name[(date.today() - timedelta(days=i)).weekday()] for i in range(6, -1, -1)]
     registered_each_days = [sum([i.course_fee for i in registered_lead_ids_past_seven_days if i.lead_remarks.last().next_follow_up_date == date.today() - timedelta(days=j)]) for j in range(6, -1, -1)]
     total_col = 0
@@ -80,6 +83,10 @@ def dashboard(request):
     emp_record_categories = ['mails', 'messages', 'calls', 'online_submissions', 'follow_ups']
     emp_records_by_category = [total_mails_monthly, total_messages_monthly, total_calls_monthly, total_online_submissions_monthly, total_follow_ups_monthly]
     emp_targets_by_category = [target_mails_monthly, target_messages_monthly, target_calls_monthly, target_online_submissions_monthly, target_follow_ups_monthly]
+    
+    max_records_by_category = max(emp_records_by_category + emp_targets_by_category) + 100
+    min_records_by_category = 0
+    
     print('targets are: ', emp_targets_by_category)
 
 
@@ -113,22 +120,26 @@ def dashboard(request):
     # all_lead = Lead.objects.all()
     # latest_lead_remark = [i.lead_remarks.last() for i in all_lead]
     for data in latest_lead_remark:
-        print('This the what i looking for: ',data.next_follow_up_date)
+        if hasattr(data, 'next_follow_up_date'):
+            print('This the what i looking for: ',data.next_follow_up_date)
     # unregistered_leads = [l.lead.id for l in follow_lead if l.status !='walkinreg' or l.status !='leadreg']
     # print(unregistered_leads)
     # follow_leads = Lead.objects.filter(id__in=unregistered_leads)
 
     # total_new = len(new_leads)
-    morning_report = DTS.objects.all().filter(dated=date.today()).filter(employee=request.user.profile)
+    try:
+        morning_report = DTS.objects.all().filter(dated=date.today()).filter(employee=request.user.profile)
+    except:
+        morning_report = DTS.objects.none()
 
-    leadclose = [i.lead for i in latest_lead_remark if i.status == 'leadclose']
-    leadwalkin = [i.lead for i in latest_lead_remark if i.status == 'leadwalkin']
-    leadfollowup = [i.lead for i in latest_lead_remark if i.status == 'leadfollowup']
-    leadreg = [i.lead for i in latest_lead_remark if i.status == 'leadreg']
-    walkinfollowup = [i.lead for i in latest_lead_remark if i.status == 'walkinfollowup']
-    walkinreg = [i.lead for i in latest_lead_remark if i.status == 'walkinreg']
-    walkindeclaration = [i.lead for i in latest_lead_remark if i.status == 'walkindeclaration']
-    walkinclose = [i.lead for i in latest_lead_remark if i.status == 'walkinclose']
+    leadclose = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'leadclose']
+    leadwalkin = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'leadwalkin']
+    leadfollowup = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'leadfollowup']
+    leadreg = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'leadreg']
+    walkinfollowup = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinfollowup']
+    walkinreg = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinreg']
+    walkindeclaration = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkindeclaration']
+    walkinclose = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinclose']
 
     category_data = [leadclose,
     leadwalkin,
@@ -139,10 +150,14 @@ def dashboard(request):
     walkindeclaration,
     walkinclose]
 
+    
+
     category_names = ['leadclose', 'leadwalkin', 'leadfollowup', 'leadreg', 'walkinfollowup', 'walkinreg', 'walkindeclaration', 'walkinclose']
 
     category_count = [len(i) if any(i) else 0 for i in category_data]
 
+    max_cat_data = max(category_count) + 5
+    # min_cat_data = min(category_count) 
     print('Number of student in by category',category_count)
 
 
@@ -163,6 +178,8 @@ def dashboard(request):
         'morning_report': morning_report,
         'category_names': category_names,
         'category_count': category_count,
+        'max_cat_data': max_cat_data,
+        # 'min_cat_data': min_cat_data,
         'month_targets': month_targets,
         'target_mails_monthly': target_mails_monthly,
         'target_messages_monthly': target_messages_monthly,
@@ -170,6 +187,8 @@ def dashboard(request):
         'target_online_submissions_monthly': target_online_submissions_monthly,
         'target_follow_ups_monthly': target_follow_ups_monthly,
         'emp_monthly_records': emp_monthly_records,
+        'max_records_by_category': max_records_by_category,
+        'min_records_by_category': min_records_by_category,
         'total_mails_monthly': total_mails_monthly,
         'total_messages_monthly': total_messages_monthly,
         'total_calls_monthly': total_calls_monthly,
@@ -211,11 +230,17 @@ def profile(request):
 @login_required(login_url='admin:login')
 def my_reports(request):
     emp = request.user
-    emps = emp.profile.get_descendants(include_self=True)
     try:
-        registered_leads = Lead.objects.order_by('-generation_at').filter(~Q(registration_date=None)).filter(assigned_to__in=emps)
+        emps = emp.profile.get_descendants(include_self=True)
     except:
-        registered_leads = Lead.objects.none()
+        emps = Employee.objects.none()
+    leads = Lead.objects.all()
+    latest_lead_remark = [i.lead_remarks.last() for i in leads]
+    registered_lead_ids = [i.lead.id for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinreg']
+    # try:
+    registered_leads = Lead.objects.all().filter(id__in=registered_lead_ids).filter(assigned_to__in=emps)
+    # except:
+    #     registered_leads = Lead.objects.none()
     context = {
         'registered_leads': registered_leads,
     }

@@ -1,22 +1,33 @@
-{% extends 'dash_base.html' %}
+<!DOCTYPE html>
+<html lang="en">
 {% load static %}
-{% block content %}
+{% load mathfilters %}
 
-<div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-8">
-              <div id="page-wrap">
+<head>
+	<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+	
+	<title>Red18Tech Invoice</title>
+	
+	<link rel='stylesheet' type='text/css' href="{% static 'css/invoice/style.css' %}" />
+	<link rel='stylesheet' type='text/css' href="{% static 'css/invoice/print.css' %}" media="print" />
+	
+
+</head>
+
+<body>
+
+	<div id="page-wrap">
 
 		<div id="header">INVOICE</div>
 		
 		<div id="identity">
 		
             <div id="address">Red18Tech<br>
-RT Nagar<br>
-Appleville, WI 53719<br>
+                            RT Nagar<br>
+                            Bangalore - 560032<br>
 
-Phone: (555) 555-5555</div>
+                            Phone: (968) 606-4539
+            </div>
 
             <div id="logo">
 
@@ -43,7 +54,7 @@ Phone: (555) 555-5555</div>
             <table id="meta">
                 <tr>
                     <td class="meta-head">Invoice #</td>
-                    <td><textarea> {{invoice.id}} </textarea></td>
+                    <td>{{invoice.id}}</td>
                 </tr>
                 <tr>
 
@@ -59,54 +70,101 @@ Phone: (555) 555-5555</div>
 		
 		</div>
 		
-		<table id="items">
+		<table id="items" style="text-align:right;">
 		
 		  <tr>
-		      <th>Item</th>
+		      <th>{{invoice.lead.enquired_for | capfirst }}</th>
 		      <th>Description</th>
 		      
 		      <th>Price</th>
 		  </tr>
 		  {% for bill in bills %}
+
+          <tr class="item-row" style="background-color:#ccc">
+		      <td class="item-name" ><div class="delete-wpr">{{invoice.lead.technology_based | capfirst }}<a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
+		      <td class="description"></td>
+		      <td><span class="price"></span></td>
+		  </tr>
 		  <tr class="item-row">
-		      <td class="item-name"><div class="delete-wpr"><textarea>{{invoice.enquired_for}}</textarea><a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
-		      <td class="description"><textarea>Admission Fee</textarea></td>
-		      <td><span class="price">{{bill.add_fee}}</span></td>
+		      <td class="item-name"><div class="delete-wpr"><a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
+		      <td class="description">Admission Fee</td>
+		      <td><span class="price"> ₹{{invoice.add_fee}}</span></td>
 		  </tr>
 		  
 		  <tr class="item-row">
-		      <td class="item-name"><div class="delete-wpr"><textarea>  </textarea><a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
+		      <td class="item-name"><div class="delete-wpr"><a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
 
-		      <td class="description"><textarea>Course Ware Fee </textarea></td>
-		      <td><span class="price"> {{bill.course_ware_fee }} </span></td>
+		      <td class="description">Course Ware Fee</td>
+		      <td><span class="price"> ₹{{invoice.course_ware_fee }} </span></td>
+		  </tr>
+
+          <tr class="item-row">
+		      <td class="item-name"><div class="delete-wpr"><a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
+
+		      <td class="description">Tution Fee</td>
+		      <td><span class="price"> ₹{{invoice.tution_fee }} </span></td>
+		  </tr>
+
+          <tr class="item-row">
+		      <td class="item-name"><div class="delete-wpr"><a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
+
+		      <td class="description">Project Fee</td>
+		      <td><span class="price"> ₹{{invoice.project_fee }} </span></td>
+		  </tr>
+
+          <tr class="item-row">
+		      <td class="item-name"><div class="delete-wpr"><a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
+
+		      <td class="description">Late Fee</td>
+		      <td><span class="price"> ₹{{invoice.late_fee }} </span></td>
+		  </tr>
+
+          <tr class="item-row">
+		      <td class="item-name"><div class="delete-wpr"><a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
+
+		      <td class="description">Exam Fee</td>
+		      <td><span class="price"> ₹{{invoice.exam_fee }} </span></td>
+		  </tr>
+
+          <tr class="item-row">
+		      <td class="item-name"><div class="delete-wpr"><a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
+
+		      <td class="description">Other</td>
+		      <td><span class="price">₹ {{invoice.other }} </span></td>
 		  </tr>
 		  
 		  <tr id="hiderow">
-		    <td colspan="5"><a id="addrow" href="javascript:;" title="Add a row">Add a row</a></td>
+		    <td colspan="5"><a id="addrow" href="javascript:;" title="Add a row"></a></td>
 		  </tr>
 		  
 		  <tr>
 		      <td colspan="1" class="blank"> </td>
 		      <td colspan="1" class="total-line">Subtotal</td>
-		      <td class="total-value"><div id="subtotal">$875.00</div></td>
+		      <td class="total-value"><div id="subtotal">₹ {{invoice.sub_total}}</div></td>
+		  </tr>
+          <tr>
+
+		      <td colspan="1" class="blank"> </td>
+		      <td colspan="1" class="total-line">GST</td>
+		      <td class="total-value"><div id="total">₹ {{invoice.gst}}</div></td>
 		  </tr>
 		  <tr>
 
 		      <td colspan="1" class="blank"> </td>
 		      <td colspan="1" class="total-line">Total</td>
-		      <td class="total-value"><div id="total">$875.00</div></td>
+		      <td class="total-value"><div id="total">₹ {{invoice.g_total}}</div></td>
 		  </tr>
 		  <tr>
 		      <td colspan="1" class="blank"> </td>
-		      <td colspan="1" class="total-line">Amount Paid</td>
+		      <td colspan="1" class="total-line">Amount in words</td>
 
-		      <td class="total-value"><textarea id="paid">$0.00</textarea></td>
+		      <td class="total-value">{{invoice.amount_words}}</td>
 		  </tr>
-		  <tr>
+		  {% comment %} <tr>
 		      <td colspan="1" class="blank"> </td>
 		      <td colspan="1" class="total-line balance">Balance Due</td>
 		      <td class="total-value balance"><div class="due">$875.00</div></td>
-		  </tr>
+		  </tr> {% endcomment %}
 		{% endfor %}
 		</table>
 		
@@ -133,62 +191,6 @@ Phone: (555) 555-5555</div>
 	</div>
 	<script type='text/javascript' src="{% static 'js/invoice/jquery-1.3.2.min.js' %}"></script>
 	<script type='text/javascript' src="{% static 'js/invoice/example.js' %}"></script>
-              </div>
+</body>
 
-          </div>
-
-    </div>
-</div>
-
-<script>
-
-    $(document).ready(function(){
-    
-    $("#corp").click(function(){
-    
-                        $("#corpfield").removeAttr("disabled","");
-    
-                      });
-    
-                      $("#coll").click(function(){
-    
-                      $("#corpfield").attr("disabled","");
-    
-                      });
-    
-                      $("#newreg").click(function(){
-                      $("#corpfield").attr("disabled","");
-                      });
-    
-
-    
-    $(".vl").keyup(function(){
-      var gt=0;
-      var ngt=0;
-      $(".vl").each(function(){
-    
-    
-          gt += Math.round(Number($(this).val()));
-          ngt = Math.round(gt/1.18);
-          $("#gt").val(gt);
-          $("#subt").val(ngt);
-          $("#gst").val(gt-ngt);
-    
-    
-    
-      });
-    
-    });
-    
-    
-    
-    $("#print").click(function(){
-      alert("Hello")
-      window.print();
-    });
-    
-    });
-    </script>
-
-
-{% endblock %}
+</html>

@@ -4,6 +4,8 @@
 {% block content %}
 {% load mathfilters %}
 
+{% if user.profile %}
+
 <div class="content">
         <div class="container-fluid">
           <div class="row">
@@ -715,7 +717,7 @@
             lineSmooth: Chartist.Interpolation.cardinal({
               tension: 0
             }),
-            low: min_value,
+            low: 0,
             high: max_value, // set the high sa the biggest value + something for a better look
             chartPadding: {
               top: 0,
@@ -797,7 +799,7 @@
             tension: 0
           }),
           low: 0,
-          high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          high: {{max_cat_data}}, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
             right: 0,
@@ -829,7 +831,7 @@
             tension: 0
           }),
           low: 0,
-          high: 10000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          high: {{max_records_by_category}}, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
           chartPadding: {
             top: 0,
             right: 0,
@@ -873,6 +875,8 @@
 
          
       </script>
+
+      {% endif %}
 
       {% endblock %}
 

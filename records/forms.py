@@ -1,4 +1,5 @@
 from django import forms
+from datetime import date
 from .models import *
 from django.forms.models import inlineformset_factory
 from crispy_forms.helper import FormHelper
@@ -7,10 +8,15 @@ from .custom_layout_object import Formset
 
 
 class EmpRecordForm(forms.ModelForm):
-    
+    def clean(self):
+        self.instance.submitted_on = date.today()
+        return super(EmpRecordForm, self).clean()
+
     class Meta:
         model = EmpRecord
         fields = '__all__'
+        exclude = ('submitted_on',)
+
 
 class DTSTitleForm(forms.ModelForm):
     

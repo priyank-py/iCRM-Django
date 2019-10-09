@@ -5,17 +5,25 @@ from .models import Invoice, Bill
 # Register your models here.
 
 
-class BillsAdmin(admin.StackedInline):
+class BillsInline(admin.StackedInline):
     model = Bill
     extra = 1
-    fields = ['invoice', 'amount_words', 'client', 'payment_option', 'ct_fee' , 'late_fee', 'exam_fee', 'other', 'coorporate_gst', 'sub_total', 'gst','g_total', 'crdno', 'ddno', 'checkno', 'on']
+    fields = ['invoice', 'recieve_amount', 'payment_option', 'credit_card_no', 'dd_no', 'cheque_no', 'drawn_on', 'amount_in_word']
+
+
+@admin.register(Bill)
+class BillAdmin(admin.ModelAdmin):
+    class Meta:
+        model = Invoice
+        fields = '__all__'
+        # exclude = ('sub_total', 'gst', 'g_total')
 
 
 class InvoiceAdmin(admin.ModelAdmin):
     class Meta:
         model = Invoice
         fields = '__all__'
-    inlines = (BillsAdmin,)
+    inlines = (BillsInline,)
 
 # admin.site.register(Bill, BillsAdmin)
 admin.site.register(Invoice, InvoiceAdmin)

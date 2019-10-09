@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import *
-from datetime import datetime
+from datetime import datetime, date
 from .models import *
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
@@ -17,16 +17,18 @@ def daily_record(request):
         return redirect('/')
     else:
         form = EmpRecordForm()
-    dt = datetime.now()
+    dt = date.today()
     current_user = request.user
     try:
         targets = MonthlyTarget.objects.all().filter(position=current_user.profile.postion).filter(month=datetime.now().strftime('%B'))
     
     except:
-        targets = MonthlyTarget()
+        targets = MonthlyTarget.objects.none()
     # print(target)
 
-    return render(request, 'pages/records.html', {'form':form, 'dt':dt, 'targets': targets})
+    context = {'form':form, 'dt':dt, 'targets': targets}
+
+    return render(request, 'pages/records.html', context)
 
 class DTSCreate(CreateView):
     model = DTS
