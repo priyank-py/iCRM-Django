@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.http import HttpResponse
-from .models import Lead, LeadRemarks, CorporateAndInstitutionLead, CorporateAndInstitutionLeadRemark
+from .models import Lead, LeadRemarks, CorporateAndInstitutionLead, CorporateAndInstitutionLeadRemark, Quotation
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from admin_numeric_filter.admin import NumericFilterModelAdmin, SingleNumericFilter, RangeNumericFilter, SliderNumericFilter
 import csv
@@ -12,6 +12,7 @@ class LeadRemarksTabularInline(admin.TabularInline):
 
 
 # Register your models here.
+
 class LeadAdmin(NumericFilterModelAdmin):
 
     def latest_followup_date(self, instance):
@@ -65,13 +66,24 @@ class CorporateAndInstitutionLeadRemarkTabularInline(admin.TabularInline):
     extra = 1
 
 class CorporateAndInstitutionLeadAdmin(NumericFilterModelAdmin):
-
+    list_display = ('id', 'name', 'contact_person','quotation' )
+    list_filter = ('bde_name', 'enquired_for',('billing_amount', SliderNumericFilter), )
+    search_fields = ('name', 'cp_phone', 'cp_email', 'bde_name' )
     class Meta:
         model = CorporateAndInstitutionLead
         fields = '__all__'
     
     inlines = (CorporateAndInstitutionLeadRemarkTabularInline, )
 
+@admin.register(Quotation)
+class QuotationAdmin(admin.ModelAdmin):
+    def get_invoice(self, quote):
+        return quote.quote.name
+    list_display = ('id', 'get_invoice' )
+
+    class Meta:
+        model = Quotation
+        fields = '__all__'
 
 
  

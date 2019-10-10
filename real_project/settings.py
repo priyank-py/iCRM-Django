@@ -161,3 +161,10 @@ MEDIA_URL = '/media/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 TAGGIT_CASE_INSENSITIVE = True  
+
+#email details.
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'factscred@gmail.com'
+EMAIL_HOST_PASSWORD = "Alpha&Omega'sKingdom1"

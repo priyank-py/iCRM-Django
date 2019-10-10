@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Invoice, Bill, InstallmentData
+from leads.models import CorporateAndInstitutionLead, Quotation
+from django.core.mail import send_mail
+from django.http import HttpResponse
 
 # Create your views here.
 def invoices(request):
@@ -30,8 +33,22 @@ def each_bill(request, id):
     return render(request, 'commerce/bill.html', context)
 
 
-def quotation(request):
+def all_quotation(request):
+    quotes = Quotation.objects.all()
+    context = {
+        'quotes': quotes,
+    }
+    return render(request, 'pages/quotes.html')
 
-    context = {}
 
-    return render(request, 'pages/quotation.html', context)
+def quotation(request, id):
+    quote = get_object_or_404(Quotation, pk=id)
+
+    context = {'quote': quote}
+
+    return render(request, 'commerce/quote.html', context)
+
+
+# def sendRecieptEmail(request,emailto):
+#    res = send_mail("hello paul", "comment tu vas?", "factscred@gmail.com", [emailto])
+#    return HttpResponse('%s'%res)
