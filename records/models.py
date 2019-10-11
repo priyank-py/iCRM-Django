@@ -36,11 +36,11 @@ from django.utils import timezone
 class EmpRecord(models.Model):
     
     employee = models.ForeignKey(User, related_name='user_profile', on_delete=models.DO_NOTHING, blank=True, null=True)
-    mails = models.IntegerField(blank=True, null=True, default=0)
-    messages = models.IntegerField(blank=True, null=True, default=0)
-    calls = models.IntegerField(blank=True, null=True, default=0)
-    online_submissions = models.IntegerField(blank=True, null=True, default=0)
-    follow_ups = models.IntegerField(blank=True, null=True, default=0)
+    # mails = models.IntegerField(blank=True, null=True, default=0)
+    # messages = models.IntegerField(blank=True, null=True, default=0)
+    # calls = models.IntegerField(blank=True, null=True, default=0)
+    # online_submissions = models.IntegerField(blank=True, null=True, default=0)
+    # follow_ups = models.IntegerField(blank=True, null=True, default=0)
     submitted_on = models.DateField(default=date.today, primary_key=True)
     submitted_at = models.TimeField(blank=True, null=True, auto_now=True, auto_now_add=False)
 
@@ -73,12 +73,12 @@ class MonthlyTarget(models.Model):
     month = models.CharField(default=datetime.now().strftime('%B'), max_length=50)
 
     submitted_on = models.DateTimeField(blank=True, null=True, default=datetime.now, verbose_name="Created On")
-    mails = models.IntegerField(default=0)
-    messages = models.IntegerField(default=0)
-    calls = models.IntegerField(default=0)
-    online_submissions = models.IntegerField(default=0)
-    follow_ups = models.IntegerField(default=0)
-    employee =  models.ForeignKey(EmpRecord, on_delete=models.CASCADE, blank=True, null=True)
+    # mails = models.IntegerField(default=0)
+    # messages = models.IntegerField(default=0)
+    # calls = models.IntegerField(default=0)
+    # online_submissions = models.IntegerField(default=0)
+    # follow_ups = models.IntegerField(default=0)
+    # employee =  models.ForeignKey(EmpRecord, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f'{self.position} <{self.month}>'

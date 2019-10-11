@@ -33,7 +33,7 @@ class EmpCustomRecordAdmin(admin.TabularInline):
 
 
 class EmpRecordAdmin(admin.ModelAdmin):
-    list_display = ('employee', 'mails', 'messages', 'calls', 'online_submissions', 'follow_ups', 'submitted_on')
+    list_display = ('employee', 'submitted_on')
     # list_display_links = ('lead_id', 'lead_name', 'enquired_for')
     list_filter = (('employee'), ('submitted_on', DateTimeRangeFilter))
     # # list_editable = ('is_counseled', 'next_follow_up_date',)

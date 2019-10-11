@@ -68,7 +68,7 @@ class CorporateAndInstitutionLeadRemarkTabularInline(admin.TabularInline):
 class CorporateAndInstitutionLeadAdmin(NumericFilterModelAdmin):
     list_display = ('id', 'name', 'contact_person','quotation' )
     list_filter = ('bde_name', 'enquired_for',('billing_amount', SliderNumericFilter), )
-    search_fields = ('name', 'cp_phone', 'cp_email', 'bde_name' )
+    search_fields = ('name', 'cp_phone', 'cp_email',  )
     class Meta:
         model = CorporateAndInstitutionLead
         fields = '__all__'
