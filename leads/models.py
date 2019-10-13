@@ -68,13 +68,6 @@ class LeadRemarks(models.Model):
     def __str__(self):
         return self.lead.lead_name
 
-class Quotation(models.Model):
-    date = models.DateField(_("Dated"), auto_now=False, auto_now_add=False)
-    client_address = models.TextField(_("Client Address"), blank=True, null=True)
-    company_terms = models.TextField(_("Company Terms & Conditions"))
-    client_terms = models.TextField(_("Client's Terms & Conditions"))
-    signature = models.ImageField(_("Upload Authorised Signator"), upload_to=None, height_field=None, width_field=None, blank=True, null=True, max_length=None)
-
 
 class CorporateAndInstitutionLead(models.Model):
 
@@ -90,8 +83,8 @@ class CorporateAndInstitutionLead(models.Model):
     enquired_for = models.CharField(max_length=50)
     billing_amount = models.IntegerField(_("Collections Amount"), blank=True, null=True)
     agreement_signed = models.BooleanField(choices=agreement_status, default="", blank=True, null=True)
-    agreement_copy = models.FileField(_("Agreement Copy"), upload_to='docs/%Y/%m/%d/', max_length=100, blank=True, null=True)
-    quotation = models.ForeignKey(Quotation, verbose_name=_("Create Quotation"), related_name='quote', on_delete=models.CASCADE, blank=True, null=True)
+    agreement_copy = models.FileField(_("Agreement Copy"), upload_to='agreements/%Y/%m/%d/', max_length=100, blank=True, null=True)
+    quotation = models.FileField(_("Quotation Copy"), upload_to='quotations/%Y/%m/%d/', max_length=100)
     quotation_dated = models.DateField(_("Quotation preperation date"), auto_now=False, auto_now_add=False)
     bde_name = models.ForeignKey(Employee, verbose_name=_("BDE Name"), on_delete=models.CASCADE)
 

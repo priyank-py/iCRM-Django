@@ -16,8 +16,8 @@ class Invoice(models.Model):
     batchstartdate = models.DateField(_("Batch Start Date"), blank=True, null=True, default=None)
     counselor = models.ForeignKey(Employee, verbose_name=_("Counseled by"), on_delete=models.CASCADE)
     
-    bal_amount = models.IntegerField(_("Due Amount"), blank=True, null=True)
-    due_date = models.DateField(_("Dues pay date"), blank=True, null=True)
+    # bal_amount = models.IntegerField(_("Due Amount"), blank=True, null=True)
+    # due_date = models.DateField(_("Dues pay date"), blank=True, null=True)
     add_fee = models.IntegerField(_("Admission Fee"), blank=True,null=True)
     course_ware_fee = models.IntegerField(blank=True,null=True)
     tution_fee = models.IntegerField(blank=True,null=True)
@@ -63,11 +63,11 @@ class Invoice(models.Model):
 
 
 class InstallmentData(models.Model):
-    payment_status = ((True, 'Paid'), (False, 'Unpaid'))
+    
     invoice = models.ForeignKey(Invoice, verbose_name=_(""), on_delete=models.CASCADE)
     installment_date = models.DateField(_("Date"), auto_now=False, auto_now_add=False, blank=True, null=True)
     installment_amount = models.IntegerField(_("Amount"), blank=True, null=True)
-    paid = models.BooleanField(_("Payment Status"), choices=payment_status, default=False, blank=True, null=True)
+    
 
 
 class Bill(models.Model):
@@ -210,8 +210,8 @@ class ClientBill(models.Model):
     drawn_on = models.CharField(blank=True, null=True, max_length=20, default=None)
 
     class Meta:
-        verbose_name = _("Bill")
-        verbose_name_plural = _("Bills")
+        verbose_name = _("Client Bill")
+        verbose_name_plural = _("Client Bills")
 
     
     def save(self, *args, **kwargs):
@@ -236,3 +236,35 @@ class ClientBill(models.Model):
 
     def __str__(self):
         return f'{self.invoice.id}'
+
+class Quotation(models.Model):
+    date = models.DateField(_("Dated"), auto_now=False, auto_now_add=False, default=timezone.now)
+    client_name = models.CharField(_("Client Name"), max_length=50)
+    client_address = models.TextField(_("To"), blank=True, null=True)
+
+    subject = models.CharField(_("Subject"), max_length=140, null=True, blank=True)
+    reference = models.CharField(_("Ref"), max_length=80, null=True, blank=True)
+    total_amount = models.PositiveIntegerField(_("Total Amount"), blank=True, null=True)
+    amount_in_word = models.CharField(_("Amount in Words"), max_length=50, blank=True, null=True)
+    company_terms = models.TextField(_("Company Terms & Conditions"), null=True, blank=True)
+    client_terms = models.TextField(_("Client's Terms & Conditions"), null=True, blank=True)
+    signature = models.ImageField(_("Upload Authorised Signator"), upload_to=None, height_field=None, width_field=None, blank=True, null=True, max_length=None)
+    
+    def __str__(self):
+        return f'{self.client_name}'
+
+
+class QuotationRatesAndTerms(models.Model):
+
+    quotation = models.ForeignKey(Quotation, verbose_name=_("Quotation"), related_name="quote_details", on_delete=models.CASCADE)
+    item_description = models.CharField(_("Item Description"), max_length=80, null=True, blank=True)
+    price = models.DecimalField(_("Price"), max_digits=10, decimal_places=2, null=True, blank=True)
+    tax = models.DecimalField(_("Tax (18%)"), max_digits=10, decimal_places=2, null=True, blank=True)
+    total = models.DecimalField(_("Total Price"), max_digits=10, decimal_places=2, null=True, blank=True)
+
+    class Meta:
+        verbose_name = _("QuotationRatesAndTerms")
+        verbose_name_plural = _("QuotationRatesAndTermss")
+
+    def __str__(self):
+        return self.quotation.client_name

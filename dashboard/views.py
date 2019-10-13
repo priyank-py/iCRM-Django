@@ -97,7 +97,7 @@ def dashboard(request):
     last_month = datetime.now() - timedelta(days=30)
     tech_data = Lead.objects.filter(id__in=registered_lead_ids).extra(select={'tech': 'enquired_for'}).values('tech').annotate(sum=Sum('course_fee'))
     
-  
+
     min_col = 0
     max_col = 1000
     month_course = [i['tech'] for i in tech_data]

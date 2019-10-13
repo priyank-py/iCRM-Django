@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Invoice, Bill, InstallmentData, ClientInvoice, ClientBill, ClientInstallmentData
+from .models import Invoice, Bill, InstallmentData, ClientInvoice, ClientBill, ClientInstallmentData, Quotation, QuotationRatesAndTerms
 # from admin_numeric_filter.admin import NumericFilterModelAdmin, SingleNumericFilter, RangeNumericFilter, SliderNumericFilter
 
 # Register your models here.
@@ -7,7 +7,7 @@ from .models import Invoice, Bill, InstallmentData, ClientInvoice, ClientBill, C
 class InstallmentDataInline(admin.StackedInline):
     model = InstallmentData
     extra = 1
-    fields = ('installment_date', 'installment_amount', 'paid')
+    fields = ('installment_date', 'installment_amount',)
 
 
 class BillsInline(admin.StackedInline):
@@ -47,6 +47,9 @@ class ClientBillAdmin(admin.ModelAdmin):
 
 
 class InvoiceAdmin(admin.ModelAdmin):
+
+    list_display = ['id', 'lead', 'enquired_for', 'g_total', 'counselor']
+
     class Meta:
         model = Invoice
         fields = '__all__'
@@ -62,6 +65,21 @@ class ClientInvoiceAdmin(admin.ModelAdmin):
         exclude = ('sub_total', 'gst', 'g_total')
 
     inlines = (ClientInstallmentDataInline, ClientBillsInline,)
+
+class QuotationRatesAndTermsInline(admin.StackedInline):
+    model = QuotationRatesAndTerms
+    extra = 1
+
+
+@admin.register(Quotation)
+class QuotationAdmin(admin.ModelAdmin):
+    
+    list_display = ('id', 'client_name' )
+
+    class Meta:
+        model = Quotation
+        fields = '__all__'
+    inlines = (QuotationRatesAndTermsInline,)
 
 
 # admin.site.register(Bill, BillsAdmin)

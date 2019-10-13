@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.http import HttpResponse
-from .models import Lead, LeadRemarks, CorporateAndInstitutionLead, CorporateAndInstitutionLeadRemark, Quotation
+from .models import Lead, LeadRemarks, CorporateAndInstitutionLead, CorporateAndInstitutionLeadRemark
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from admin_numeric_filter.admin import NumericFilterModelAdmin, SingleNumericFilter, RangeNumericFilter, SliderNumericFilter
 import csv
@@ -75,15 +75,7 @@ class CorporateAndInstitutionLeadAdmin(NumericFilterModelAdmin):
     
     inlines = (CorporateAndInstitutionLeadRemarkTabularInline, )
 
-@admin.register(Quotation)
-class QuotationAdmin(admin.ModelAdmin):
-    def get_invoice(self, quote):
-        return quote.quote.name
-    list_display = ('id', 'get_invoice' )
 
-    class Meta:
-        model = Quotation
-        fields = '__all__'
 
 
  
