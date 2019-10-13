@@ -75,7 +75,7 @@ class Bill(models.Model):
     pay_options = (('cash', 'Cash'), ('cheque', 'Cheque'), ('card', 'Card'), ('online', 'Online'))
 
     invoice = models.ForeignKey(Invoice, related_name='source_invoice', on_delete=models.CASCADE)
-    bill_number = models.PositiveSmallIntegerField(_("Bill#"), blank=True, null=True)
+    # bill_number = models.PositiveSmallIntegerField(_("Bill#"), blank=True, null=True)
     bill_date = models.DateField(blank=True, null=True, default=timezone.now)
     # client = models.CharField(max_length=30,blank=True,null=True)
     payment_option = models.CharField(_("Pay Option"), max_length=30, choices=pay_options)
@@ -86,7 +86,17 @@ class Bill(models.Model):
     credit_card_no = models.CharField(_("Credit/Debit Card No."), blank=True, null=True, default=None, max_length=20)
     dd_no = models.CharField(_("DD No."), blank=True, null=True, max_length=20, default=None)
     cheque_no = models.CharField(blank=True, null=True, max_length=20, default=None)
-    drawn_on = models.CharField(blank=True, null=True, max_length=20, default=None)
+    drawn_on = models.DateField(_("Drawn on"), auto_now=False, auto_now_add=False, blank=True, null=True, default=timezone.now)
+    bank_name = models.CharField(_("Bank name"), max_length=50, blank=True, null=True)
+    bank_branch = models.CharField(_("Bank Branch Name"), max_length=50, blank=True, null=True)
+
+    tens = models.IntegerField(_("Rs. 10 notes"), blank=True, null=True)
+    twenties = models.IntegerField(_("Rs. 20 notes"), blank=True, null=True)
+    fiftys = models.IntegerField(_("Rs. 50 notes"), blank=True, null=True)
+    hundreds = models.IntegerField(_("Rs. 100 notes"), blank=True, null=True)
+    two_hundreds = models.IntegerField(_("Rs. 200 notes"), blank=True, null=True)
+    five_hundreds = models.IntegerField(_("Rs. 500 notes"), blank=True, null=True)
+    two_thousands = models.IntegerField(_("Rs. 2000 notes"), blank=True, null=True)
 
     class Meta:
         verbose_name = _("Bill")
@@ -196,7 +206,7 @@ class ClientBill(models.Model):
     pay_options = (('cash', 'Cash'), ('cheque', 'Cheque'), ('card', 'Card'), ('online', 'Online'))
     
     invoice = models.ForeignKey(ClientInvoice, verbose_name=_(""), on_delete=models.CASCADE)
-    bill_number = models.PositiveSmallIntegerField(_("Bill#"), blank=True, null=True)
+    # bill_number = models.PositiveSmallIntegerField(_("Bill#"), blank=True, null=True)
     bill_date = models.DateField(blank=True, null=True, default=timezone.now)
     # client = models.CharField(max_length=30,blank=True,null=True)
     payment_option = models.CharField(_("Pay Option"), max_length=30, choices=pay_options)

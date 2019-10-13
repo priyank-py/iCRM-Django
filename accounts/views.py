@@ -37,7 +37,20 @@ def lead_invoice(request, id):
 
 def each_bill(request, id):
     bill = get_object_or_404(Bill, pk=id)
-    context = {'bill': bill}
+    pay_method = bill.payment_option
+    if pay_method == 'cash':
+        cash = True
+    else:
+        cash = False
+    if pay_method == 'cheque':
+        cheque = True
+    else:
+        cheque = False
+    context = {
+        'bill': bill,
+        'cash': cash,
+        'cheque': cheque,
+    }
     return render(request, 'commerce/bill.html', context)
 
 

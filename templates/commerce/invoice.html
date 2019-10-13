@@ -150,10 +150,10 @@
                     <td class="meta-head">Date</td>
                     <td><textarea id="date"> {{ invoice.dated }} </textarea></td>
                 </tr>
-                <tr>
+                {% comment %} <tr>
                     <td class="meta-head">Amount Due</td>
                     <td><div class="due">₹{{invoice.bal_amount}} </div></td>
-                </tr>
+                </tr> {% endcomment %}
 				<tr>
 				<td colspan="2" style="text-align: center;">All Installments</td>
 				</tr>

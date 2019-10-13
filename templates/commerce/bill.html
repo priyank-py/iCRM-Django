@@ -150,10 +150,10 @@
                     <td class="meta-head">Date</td>
                     <td><textarea id="date"> {{ bill.bill_date }} </textarea></td>
                 </tr>
-                <tr>
+                {% comment %} <tr>
                     <td class="meta-head">Amount Due</td>
                     <td><div class="due">₹{{ bill.invoice.bal_amount}} </div></td>
-                </tr>
+                </tr> {% endcomment %}
 
             </table>
 		
@@ -180,11 +180,7 @@
 		  <tr><td colspan="3" class="blank"> </td></tr>
 
 
-		  <tr class="item-row">
-		      <td class="item-name"><div class="delete-wpr"><a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
-		      <td class="description">Amount Recieved</td>
-		      <td><span class="price"> ₹{{bill.recieve_amount}}</span></td>
-		  </tr>
+		 
 		  
 		  {% comment %} <tr class="item-row">
 		      <td class="item-name"><div class="delete-wpr"><a class="delete" href="javascript:;" title="Remove row">X</a></div></td>
@@ -244,7 +240,48 @@
 		      <td colspan="1" class="total-line">Amount in words</td>
 
 		      <td class="total-value">{{bill.amount_in_word}}</td>
+			  
 		  </tr>
+			{% if cash %}
+				<tr>
+		      <td colspan="1" class="blank"> </td>
+		      <td colspan="1" class="total-line">Amount Denominations</td>
+
+		      <td class="total-value">
+			  {% if bill.two_thousands %}
+			  2000 x {{bill.two_thousands}} {% endif %}
+			  {% if bill.five_hundreds %}
+			  500 x {{bill.five_hundreds}} {% endif %}
+			  {% if bill.two_hundreds %}
+			  200 x {{bill.two_hundreds}} {% endif %}
+			  {% if bill.hundreds %}
+			  100 x {{bill.hundreds}} {% endif %}
+			  {% if bill.fiftys %}
+			  50 x {{bill.fiftys}} {% endif %}
+			  {% if bill.twenties %}
+			  20 x {{bill.twenties}} {% endif %}
+			  {% if bill.tens %}
+			  10 x {{bill.tens}} {% endif %}
+			  
+
+			  
+			  
+			  </td>
+			  
+		  </tr>
+			{% endif %}
+
+			{% if cheque %}
+
+			<tr>
+		      <td colspan="1" class="blank"> </td>
+		      <td colspan="1" class="total-line">Bank Name/Branch</td>
+
+		      <td class="total-value">{{bill.bank_name}}/{{bill.bank_branch}}</td>
+			  
+		  </tr>
+
+			{% endif %}
 		  {% comment %} <tr>
 		      <td colspan="1" class="blank"> </td>
 		      <td colspan="1" class="total-line balance">Balance Due</td>
