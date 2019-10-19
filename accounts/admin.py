@@ -13,7 +13,7 @@ class InstallmentDataInline(admin.StackedInline):
 class BillsInline(admin.StackedInline):
     model = Bill
     extra = 1
-    fields = ['invoice', 'recieve_amount', 'payment_option', 'credit_card_no', 'dd_no', 'cheque_no', 'drawn_on', 'amount_in_word']
+    fields = ['invoice', 'bill_date', 'payment_option', 'recieve_amount', 'credit_card_no', 'dd_no', 'cheque_no', 'cheque_status','drawn_on', 'bank_name', 'bank_branch', ('change','tens', 'twenties', 'fiftys', 'hundreds', 'two_hundreds', 'five_hundreds', 'two_thousands')]
 
 class ClientBillsInline(admin.StackedInline):
     model = ClientBill

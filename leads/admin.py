@@ -27,7 +27,7 @@ class LeadAdmin(NumericFilterModelAdmin):
     list_display_links = ('id', 'lead_name', 'enquired_for', 'latest_followup_date')
     list_filter = ('assigned_to', ('course_fee', SliderNumericFilter), ('marks_UG', SliderNumericFilter), ('marks_PG', SliderNumericFilter), ('year_of_passing_UG', SliderNumericFilter), ('year_of_passing_PG', SliderNumericFilter))
     list_editable = ('is_counseled', )
-    search_fields = ('id', 'lead_name', 'enquired_for', 'technology_based', 'counselor_name', 'year_of_passing_UG')
+    search_fields = ('id', 'lead_name', 'lead_phone', 'enquired_for', 'technology_based', 'counselor_name', 'year_of_passing_UG')
 
     # def get_next_follow_up(self, lead):
     #     follow_date = lead.lead_remarks.next_follow_up_date

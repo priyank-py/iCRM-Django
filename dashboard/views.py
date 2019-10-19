@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from employees.models import Employee
 from leads.models import Lead, LeadRemarks
-from records.models import MonthlyTarget, EmpRecord
+from records.models import MonthlyTarget, EmpRecord, EmpCustomRecord, MonthlyCustomTarget
 # import datetime
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
@@ -25,7 +25,7 @@ def dashboard(request):
     # seven = Lead.objects.order_by('-registration_date').filter(~Q(registration_date=None))[:7]
 
     latest_lead_remark = [i.lead_remarks.last() for i in leads]
-    registered_lead_ids = [i.lead.id for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinreg']
+    registered_lead_ids = [i.lead.id for i in latest_lead_remark if hasattr(i, 'status') and (i.status == 'walkinreg' or i.status=='leadreg')]
     registered_lead_ids_past_seven_days = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinreg' and i.next_follow_up_date > date.today() - timedelta(days=7)]
     past_seven_days = [calendar.day_name[(date.today() - timedelta(days=i)).weekday()] for i in range(6, -1, -1)]
     registered_each_days = [sum([i.course_fee for i in registered_lead_ids_past_seven_days if i.lead_remarks.last().next_follow_up_date == date.today() - timedelta(days=j)]) for j in range(6, -1, -1)]
@@ -53,41 +53,58 @@ def dashboard(request):
     start_month_date = datetime.today().replace(day=1)
     end_month_date = datetime.today().replace(day=last_day)
 
+    current_month_in_word = datetime.now().strftime('%B')
+
     seven_days = [i[:3] for i in past_seven_days]
     seven_data = registered_each_days
 
     try:
-        month_targets = MonthlyTarget.objects.all().filter(month=datetime.now().strftime('%B')).filter(position=emp.profile.postion)
+        emp_monthly_targets = MonthlyTarget.objects.all().filter(month=datetime.now().strftime('%B')).filter(position=emp.profile.postion).last()
     except:
-        month_targets = MonthlyTarget.objects.none()
+        emp_monthly_targets = MonthlyTarget.objects.none()
         print('Targets Not Added Yet!')
 
-    emp_monthly_records = EmpRecord.objects.all().filter(submitted_on__gte=start_month_date).filter(submitted_on__lte=end_month_date).filter(employee=emp)
-    # print('these are emp records', emp_monthly_records)
+    month_targets = MonthlyCustomTarget.objects.all().filter(monthly_target=emp_monthly_targets)
 
-    # total_mails_monthly = [i.mails for i in emp_monthly_records]
+    try:
+        emp_monthly_records = EmpRecord.objects.all().filter(report_for=f'{current_year}-{current_month_in_word}').filter(employee=emp)
+    except:
+        emp_monthly_records = EmpRecord.objects.none()
 
-    target_mails_monthly = sum([i.mails for i in month_targets])
-    target_messages_monthly = sum([i.messages for i in month_targets])
-    target_calls_monthly = sum([i.calls for i in month_targets])
-    target_online_submissions_monthly = sum([i.online_submissions for i in month_targets])
-    target_follow_ups_monthly = sum([i.follow_ups for i in month_targets])
-    
-    total_mails_monthly = sum([i.mails for i in emp_monthly_records])
-    total_messages_monthly = sum([i.messages for i in emp_monthly_records])
-    total_calls_monthly = sum([i.calls for i in emp_monthly_records])
-    total_online_submissions_monthly = sum([i.online_submissions for i in emp_monthly_records])
-    total_follow_ups_monthly = sum([i.follow_ups for i in emp_monthly_records])
-    # print('total mails sent are: ', total_mails_monthly)
+    month_records = EmpCustomRecord.objects.all().filter(emp_record__in=emp_monthly_records)
+    if len(month_records) > 7:
+        month_records = month_records[:7]
 
-    emp_record_categories = ['mails', 'messages', 'calls', 'online_submissions', 'follow_ups']
-    emp_records_by_category = [total_mails_monthly, total_messages_monthly, total_calls_monthly, total_online_submissions_monthly, total_follow_ups_monthly]
-    emp_targets_by_category = [target_mails_monthly, target_messages_monthly, target_calls_monthly, target_online_submissions_monthly, target_follow_ups_monthly]
+    # target_and_record = [(i, j) for i in month_records for j in month_targets if i.field_name==j.field_name]
     
-    max_records_by_category = max(emp_records_by_category + emp_targets_by_category) + 100
-    min_records_by_category = 0
+    # target_and_record = []
+    target_record = [[(i, j) for j in month_targets if set(i.field_name).issubset(j.field_name) or set(j.field_name).issubset(i.field_name)] for i in month_records]
+    records_and_targets = [tuple(i)[0] for i in target_record if i != []]
+    print(records_and_targets)
+    # print(target_and_record)
+
+
+    # target_mails_monthly = sum([i.mails for i in month_targets])
+    # target_messages_monthly = sum([i.messages for i in month_targets])
+    # target_calls_monthly = sum([i.calls for i in month_targets])
+    # target_online_submissions_monthly = sum([i.online_submissions for i in month_targets])
+    # target_follow_ups_monthly = sum([i.follow_ups for i in month_targets])
     
-    print('targets are: ', emp_targets_by_category)
+    # total_mails_monthly = sum([i.mails for i in emp_monthly_records])
+    # total_messages_monthly = sum([i.messages for i in emp_monthly_records])
+    # total_calls_monthly = sum([i.calls for i in emp_monthly_records])
+    # total_online_submissions_monthly = sum([i.online_submissions for i in emp_monthly_records])
+    # total_follow_ups_monthly = sum([i.follow_ups for i in emp_monthly_records])
+    
+
+    # emp_record_categories = ['mails', 'messages', 'calls', 'online_submissions', 'follow_ups']
+    # emp_records_by_category = [total_mails_monthly, total_messages_monthly, total_calls_monthly, total_online_submissions_monthly, total_follow_ups_monthly]
+    # emp_targets_by_category = [target_mails_monthly, target_messages_monthly, target_calls_monthly, target_online_submissions_monthly, target_follow_ups_monthly]
+    
+    # max_records_by_category = max(emp_records_by_category + emp_targets_by_category) + 100
+    # min_records_by_category = 0
+    
+    # print('targets are: ', emp_targets_by_category)
 
 
     if any(seven_data):
@@ -179,24 +196,26 @@ def dashboard(request):
         'category_names': category_names,
         'category_count': category_count,
         'max_cat_data': max_cat_data,
+        'month_records': month_records,
+        'records_and_targets': records_and_targets,
         # 'min_cat_data': min_cat_data,
-        'month_targets': month_targets,
-        'target_mails_monthly': target_mails_monthly,
-        'target_messages_monthly': target_messages_monthly,
-        'target_calls_monthly': target_calls_monthly,
-        'target_online_submissions_monthly': target_online_submissions_monthly,
-        'target_follow_ups_monthly': target_follow_ups_monthly,
-        'emp_monthly_records': emp_monthly_records,
-        'max_records_by_category': max_records_by_category,
-        'min_records_by_category': min_records_by_category,
-        'total_mails_monthly': total_mails_monthly,
-        'total_messages_monthly': total_messages_monthly,
-        'total_calls_monthly': total_calls_monthly,
-        'total_online_submissions_monthly': total_online_submissions_monthly,
-        'total_follow_ups_monthly': total_follow_ups_monthly,
-        'emp_record_categories': emp_record_categories,
-        'emp_records_by_category': emp_records_by_category,
-        'emp_targets_by_category':emp_targets_by_category,
+        # 'month_targets': month_targets,
+        # 'target_mails_monthly': target_mails_monthly,
+        # 'target_messages_monthly': target_messages_monthly,
+        # 'target_calls_monthly': target_calls_monthly,
+        # 'target_online_submissions_monthly': target_online_submissions_monthly,
+        # 'target_follow_ups_monthly': target_follow_ups_monthly,
+        # 'emp_monthly_records': emp_monthly_records,
+        # 'max_records_by_category': max_records_by_category,
+        # 'min_records_by_category': min_records_by_category,
+        # 'total_mails_monthly': total_mails_monthly,
+        # 'total_messages_monthly': total_messages_monthly,
+        # 'total_calls_monthly': total_calls_monthly,
+        # 'total_online_submissions_monthly': total_online_submissions_monthly,
+        # 'total_follow_ups_monthly': total_follow_ups_monthly,
+        # 'emp_record_categories': emp_record_categories,
+        # 'emp_records_by_category': emp_records_by_category,
+        # 'emp_targets_by_category':emp_targets_by_category,
     }
     # if any(follow_leads):
     #     context['follow_leads'] = follow_leads

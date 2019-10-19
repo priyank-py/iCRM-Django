@@ -157,8 +157,9 @@
 				<tr>
 				<td colspan="2" style="text-align: center;">All Installments</td>
 				</tr>
+
 				{% for installment in installments %}
-                  <tr>
+                  <tr id="installments">
                     <td class="meta-head">{{installment.installment_date}}</td>
                     <td><div class="due">₹{{installment.installment_amount}} </div></td>
                 </tr>
@@ -291,6 +292,29 @@
 	</div>
 	<script type='text/javascript' src="{% static 'js/invoice/jquery-1.3.2.min.js' %}"></script>
 	<script type='text/javascript' src="{% static 'js/invoice/example.js' %}"></script>
+	<script>
+	let value = 0
+	const installments = document.querySelectorAll('#installments')
+	{% for installment in installments %}
+		value += Number({{installment.installment_amount | safe}})
+		console.log(value)
+	{% endfor %}
+	let grand_total = Number({{invoice.g_total | safe}})
+
+	if (value == grand_total){
+		alert('Installment matches')
+		installments.forEach(installment => {
+			installment.style.color = 'green'
+		})
+	} else {
+		alert("Installments doesn't match");
+		installments.forEach(installment => {
+			installment.style.color = 'red'
+		})
+	}
+
+	</script>
+
 </body>
 
 </html>

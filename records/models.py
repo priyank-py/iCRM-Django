@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime, date
+from django.utils.translation import gettext as _
 
 from django.contrib.auth.models import User
 from employees.models import Employee
@@ -34,15 +35,20 @@ from django.utils import timezone
 
 
 class EmpRecord(models.Model):
-    
-    employee = models.ForeignKey(User, related_name='user_profile', on_delete=models.DO_NOTHING, blank=True, null=True)
-    mails = models.IntegerField(blank=True, null=True, default=0)
-    messages = models.IntegerField(blank=True, null=True, default=0)
-    calls = models.IntegerField(blank=True, null=True, default=0)
-    online_submissions = models.IntegerField(blank=True, null=True, default=0)
-    follow_ups = models.IntegerField(blank=True, null=True, default=0)
-    submitted_on = models.DateField(default=date.today, primary_key=True)
-    submitted_at = models.TimeField(blank=True, null=True, auto_now=True, auto_now_add=False)
+
+    months = [(date(2019,i,1).strftime('%m'), date(2019,i,1).strftime('%B')) for i in range(1,13)]
+    this_month = date.today().strftime('%B')
+    this_year = date.today().strftime('%Y')
+    employee = models.ForeignKey(User, related_name='user_profile', on_delete=models.CASCADE, blank=True, null=True)
+    # mails = models.IntegerField(blank=True, null=True, default=0)
+    # messages = models.IntegerField(blank=True, null=True, default=0)
+    # calls = models.IntegerField(blank=True, null=True, default=0)
+    # online_submissions = models.IntegerField(blank=True, null=True, default=0)
+    # follow_ups = models.IntegerField(blank=True, null=True, default=0)
+    submitted_on = models.DateTimeField(auto_now=False, auto_now_add=True)
+    report_for = models.CharField(_("Report For"), default=f'{this_year}-{this_month}' , max_length=50, primary_key=True)
+    month = models.CharField(_("Month"), max_length=50, choices=months, default=this_month, blank=True, null=True)
+    # submitted_at = models.TimeField(blank=True, null=True, auto_now=True, auto_now_add=False)
 
     
 
@@ -50,11 +56,11 @@ class EmpRecord(models.Model):
     #     verbose_name = _("EmpRecord")
     #     verbose_name_plural = _("EmpRecords")
 
-    def __str__(self):
-        return self.employee.username
+    # def __str__(self):
+    #     return self.employee.username
 
 class EmpCustomRecord(models.Model):
-    emp_record = models.ForeignKey(EmpRecord, related_name="custom_record", on_delete=models.DO_NOTHING)
+    emp_record = models.ForeignKey(EmpRecord, related_name="custom_record", on_delete=models.CASCADE)
     field_name = models.CharField(max_length=60, blank=True, null=True, verbose_name="Custom Records")
     value = models.IntegerField(blank=True, null=True, default=0, help_text="Integers only, no decimals")
 
@@ -73,12 +79,12 @@ class MonthlyTarget(models.Model):
     month = models.CharField(default=datetime.now().strftime('%B'), max_length=50)
 
     submitted_on = models.DateTimeField(blank=True, null=True, default=datetime.now, verbose_name="Created On")
-    mails = models.IntegerField(default=0)
-    messages = models.IntegerField(default=0)
-    calls = models.IntegerField(default=0)
-    online_submissions = models.IntegerField(default=0)
-    follow_ups = models.IntegerField(default=0)
-    employee =  models.ForeignKey(EmpRecord, on_delete=models.CASCADE, blank=True, null=True)
+    # mails = models.IntegerField(default=0)
+    # messages = models.IntegerField(default=0)
+    # calls = models.IntegerField(default=0)
+    # online_submissions = models.IntegerField(default=0)
+    # follow_ups = models.IntegerField(default=0)
+    employee =  models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f'{self.position} <{self.month}>'

@@ -8,8 +8,21 @@ from math import ceil
 # Create your models here.
 
 
+def increment_invoice_number():
+  last_invoice = Invoice.objects.all().order_by('id').last()
+  if not last_invoice:
+    return last_invoice.counselor.branch_city[:3] + "{0:0=6d}".format(1)
+  invoice_number = last_invoice.invoice_number
+  booking_int = int(invoice_number[3:])
+  new_booking_int = booking_int + 1
+  new_booking_id = last_invoice.counselor.branch_city[:3] + "{0:0=6d}".format(new_booking_int)
+  return new_booking_id
+
+
+
 class Invoice(models.Model):
     CHOICES = (('Java','Java'),('Python','Python'),('Php','Php'))
+    invoice_number = models.CharField(_("Invoice#"), max_length=50, default = increment_invoice_number, editable=False)
     lead = models.ForeignKey(Lead, verbose_name=_("Lead"), related_name='lead_invoice', on_delete=models.CASCADE)
     # dated = models.DateField(blank=True, null=True)
     enquired_for = models.CharField(_("Service Taken"), max_length=50, blank=True, null=True)
@@ -32,6 +45,8 @@ class Invoice(models.Model):
     amount_words = models.CharField(_("Amount in word"), max_length=200, blank=True, null=True)
 
     def save(self, *args, **kwargs):
+        # test  = self.counselor.branch_city[:3].upper() 
+
         def num2words(num):
             under_20 = ['Zero','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen']
             tens = ['Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety']
@@ -52,6 +67,7 @@ class Invoice(models.Model):
         self.gst = self.sub_total * 0.18
         self.g_total = ceil(self.sub_total + self.gst)
         self.amount_words = num2words(self.g_total)
+        # self.bill_number = self.invoice.invoice_number + 
         super(Invoice, self).save(*args, **kwargs)
 
     @property
@@ -59,8 +75,11 @@ class Invoice(models.Model):
         return self.lead.lead_name
 
     def __str__(self):
-        return f'{self.lead}'
-
+        if self.invoice_number:
+            return f'{self.lead} {self.invoice_number}'
+        else:
+            return f'{self.lead}'
+ 
 
 class InstallmentData(models.Model):
     
@@ -69,16 +88,29 @@ class InstallmentData(models.Model):
     installment_amount = models.IntegerField(_("Amount"), blank=True, null=True)
     
 
+def increment_bill_number():
+  last_bill = Bill.objects.all().order_by('id').last()
+  if not last_bill:
+    return last_bill.invoice.invoice_number + "{0:0=2d}".format(1) 
+  bill_number = last_bill.bill_number
+  booking_int = int(bill_number[-2:])
+  new_booking_int = booking_int + 1
+  new_booking_id = last_bill.invoice.invoice_number + "{0:0=2d}".format(new_booking_int)
+  return new_booking_id
+
+
 
 class Bill(models.Model):
     
     pay_options = (('cash', 'Cash'), ('cheque', 'Cheque'), ('card', 'Card'), ('online', 'Online'))
-
-    invoice = models.ForeignKey(Invoice, related_name='source_invoice', on_delete=models.CASCADE)
+    bill_number = models.CharField(_("Bill#"), max_length=50, default=increment_bill_number, editable=False)
+    
+    cheque_status_options = (('cleared', 'Cleared'), ('pending', 'Pending'), ('failed', 'Failed'))
+    invoice = models.ForeignKey(Invoice, related_name='source_invoice', on_delete=models.CASCADE, blank=True, null=True)
     # bill_number = models.PositiveSmallIntegerField(_("Bill#"), blank=True, null=True)
     bill_date = models.DateField(blank=True, null=True, default=timezone.now)
     # client = models.CharField(max_length=30,blank=True,null=True)
-    payment_option = models.CharField(_("Pay Option"), max_length=30, choices=pay_options)
+    payment_option = models.CharField(_("Pay Option"), max_length=30, choices=pay_options, blank=True, null=True)
     recieve_amount = models.IntegerField(_("Recieved Amount"), blank=True, null=True)
     amount_in_word = models.CharField(_("Amount in Words"), max_length=50, blank=True, null=True)    
 
@@ -89,7 +121,8 @@ class Bill(models.Model):
     drawn_on = models.DateField(_("Drawn on"), auto_now=False, auto_now_add=False, blank=True, null=True, default=timezone.now)
     bank_name = models.CharField(_("Bank name"), max_length=50, blank=True, null=True)
     bank_branch = models.CharField(_("Bank Branch Name"), max_length=50, blank=True, null=True)
-
+    cheque_status = models.CharField(_("Cheque Status"), max_length=10, choices=cheque_status_options, blank=True, null=True)
+    change = models.IntegerField(_("Change amount"), blank=True, null=True)
     tens = models.IntegerField(_("Rs. 10 notes"), blank=True, null=True)
     twenties = models.IntegerField(_("Rs. 20 notes"), blank=True, null=True)
     fiftys = models.IntegerField(_("Rs. 50 notes"), blank=True, null=True)
@@ -104,6 +137,10 @@ class Bill(models.Model):
 
     
     def save(self, *args, **kwargs):
+        # if not self.id:
+        #     m = Bill.objects.all().order_by("-id")[0]
+            # self.id = self.invoice.invoice_number + "{0:0=2d}".format(m if m is not None else 1)
+
         def num2words(num):
             under_20 = ['Zero','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen']
             tens = ['Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety']
@@ -119,12 +156,18 @@ class Bill(models.Model):
             pivot = max([key for key in above_100.keys() if key <= num])
         
             return num2words((int)(num/pivot)) + ' ' + above_100[pivot] + ('' if num%pivot==0 else ' ' + num2words(num%pivot))
-        self.amount_in_word = num2words(ceil(self.recieve_amount))
+        try:
+            self.amount_in_word = num2words(ceil(self.recieve_amount))
+        except:
+            self.amount_in_word = 0
         super(Bill, self).save(*args, **kwargs)
 
 
     def __str__(self):
-        return f'{self.invoice.id}'
+        if self.bill_number:
+            return f'{self.id} {self.bill_number}'
+        else:
+            return f'{self.id}'
 
     # def get_absolute_url(self):
     #     return reverse("Bill_detail", kwargs={"pk": self.pk})
@@ -136,10 +179,8 @@ class ClientInvoice(models.Model):
     lead = models.ForeignKey(CorporateAndInstitutionLead, verbose_name=_("Client"), on_delete=models.CASCADE)
     enquired_for = models.CharField(_("Service Taken"), max_length=50, blank=True, null=True)
     batchstartdate = models.DateField(_("Batch Start Date"), blank=True, null=True, default=None)
-    counselor = models.ForeignKey(Employee, verbose_name=_("Counseled by"), on_delete=models.CASCADE)
+    counselor = models.ForeignKey(Employee, verbose_name=_("BDE Name"), on_delete=models.CASCADE)
     
-    bal_amount = models.IntegerField(_("Due Amount"), blank=True, null=True)
-    due_date = models.DateField(_("Dues pay date"), blank=True, null=True)
     add_fee = models.IntegerField(_("Admission Fee"), blank=True,null=True)
     course_ware_fee = models.IntegerField(blank=True,null=True)
     tution_fee = models.IntegerField(blank=True,null=True)
@@ -204,9 +245,8 @@ class ClientInstallmentData(models.Model):
 class ClientBill(models.Model):
  
     pay_options = (('cash', 'Cash'), ('cheque', 'Cheque'), ('card', 'Card'), ('online', 'Online'))
-    
+    cheque_status_options = (('cleared', 'Cleared'), ('pending', 'Pending'), ('failed', 'Failed'))
     invoice = models.ForeignKey(ClientInvoice, verbose_name=_(""), on_delete=models.CASCADE)
-    # bill_number = models.PositiveSmallIntegerField(_("Bill#"), blank=True, null=True)
     bill_date = models.DateField(blank=True, null=True, default=timezone.now)
     # client = models.CharField(max_length=30,blank=True,null=True)
     payment_option = models.CharField(_("Pay Option"), max_length=30, choices=pay_options)
@@ -217,7 +257,17 @@ class ClientBill(models.Model):
     credit_card_no = models.CharField(_("Credit/Debit Card No."), blank=True, null=True, default=None, max_length=20)
     dd_no = models.CharField(_("DD No."), blank=True, null=True, max_length=20, default=None)
     cheque_no = models.CharField(blank=True, null=True, max_length=20, default=None)
-    drawn_on = models.CharField(blank=True, null=True, max_length=20, default=None)
+    drawn_on = models.DateField(_("Drawn on"), auto_now=False, auto_now_add=False, blank=True, null=True, default=timezone.now)
+    bank_name = models.CharField(_("Bank name"), max_length=50, blank=True, null=True)
+    bank_branch = models.CharField(_("Bank Branch Name"), max_length=50, blank=True, null=True)
+    cheque_status = models.CharField(_("Cheque Status"), max_length=10, choices=cheque_status_options, blank=True, null=True)
+    tens = models.IntegerField(_("Rs. 10 notes"), blank=True, null=True)
+    twenties = models.IntegerField(_("Rs. 20 notes"), blank=True, null=True)
+    fiftys = models.IntegerField(_("Rs. 50 notes"), blank=True, null=True)
+    hundreds = models.IntegerField(_("Rs. 100 notes"), blank=True, null=True)
+    two_hundreds = models.IntegerField(_("Rs. 200 notes"), blank=True, null=True)
+    five_hundreds = models.IntegerField(_("Rs. 500 notes"), blank=True, null=True)
+    two_thousands = models.IntegerField(_("Rs. 2000 notes"), blank=True, null=True)
 
     class Meta:
         verbose_name = _("Client Bill")
@@ -262,6 +312,25 @@ class Quotation(models.Model):
     
     def __str__(self):
         return f'{self.client_name}'
+
+    def save(self, *args, **kwargs):
+        def num2words(num):
+            under_20 = ['Zero','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen']
+            tens = ['Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety']
+            above_100 = {100: 'Hundred',1000:'Thousand', 1000000:'Million', 1000000000:'Billion'}
+        
+            if num < 20:
+                return under_20[num]
+            
+            if num < 100:
+                return tens[(int)(num/10)-2] + ('' if num%10==0 else ' ' + under_20[num%10])
+        
+            # find the appropriate pivot - 'Million' in 3,603,550, or 'Thousand' in 603,550
+            pivot = max([key for key in above_100.keys() if key <= num])
+        
+            return num2words((int)(num/pivot)) + ' ' + above_100[pivot] + ('' if num%pivot==0 else ' ' + num2words(num%pivot))
+        self.amount_in_word = num2words(ceil(self.total_amount))
+        super(Quotation, self).save(*args, **kwargs)
 
 
 class QuotationRatesAndTerms(models.Model):

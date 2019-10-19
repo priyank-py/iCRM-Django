@@ -65,7 +65,7 @@ def all_quotation(request):
 def quotation(request, id):
     quote = get_object_or_404(Quotation, pk=id)
     rates = QuotationRatesAndTerms.objects.all().filter(quotation=quote)
-
+    rates = enumerate(rates)
     context = {
         'quote': quote,
         'rates': rates,
@@ -142,10 +142,14 @@ def bill_to_pdf_view(request, id):
 def quotation_to_pdf_view(request, id):
 
     quote = get_object_or_404(Quotation, pk=id)
+    rates = QuotationRatesAndTerms.objects.all().filter(quotation=quote)
+    rates = enumerate(rates)
+    context = {
+        'quote': quote,
+        'rates': rates,
+    }
 
-    context = {'quote': quote}
-
-    html_string = render_to_string('commerce/quotation.html', context)
+    html_string = render_to_string('commerce/quote.html', context)
     html = HTML(string=html_string)
     html.write_pdf(target=f'media/Quotations/pdf-{id}.pdf')
 

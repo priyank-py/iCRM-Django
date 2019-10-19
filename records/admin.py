@@ -5,14 +5,16 @@ import csv
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 
 
-class EmployeeTargetInline(admin.StackedInline):
-    model = EmpRecord
+class EmployeeTargetInline(admin.TabularInline):
+    model = MonthlyCustomTarget
     
     can_delete = False
-    fk_name='employee'
+    fk_name='monthly_target'
     extra = 1
-    max_num = 1
+    # max_num = 1
     min_num = 1
+
+
 
 class MonthlyTargetAdmin(admin.ModelAdmin):
     list_display = ('position', 'month')
@@ -20,16 +22,16 @@ class MonthlyTargetAdmin(admin.ModelAdmin):
     list_filter = ('position',)
     readonly_fields = ('month',)
 
-    # class Meta:
-    #     model = MonthlyTarget
-    #     fields = '__all__'
-        # exclude = 'submitted_on'
+    class Meta:
+        model = MonthlyTarget
+        fields = '__all__'
+
+    inlines = (EmployeeTargetInline, )
     
 
 class EmpCustomRecordAdmin(admin.TabularInline):
     model = EmpCustomRecord
     extra = 1
-
 
 
 class EmpRecordAdmin(admin.ModelAdmin):

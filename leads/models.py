@@ -97,5 +97,3 @@ class CorporateAndInstitutionLeadRemark(models.Model):
     follow_up_date = models.DateField(_("Follow-up Date"), default='', null=True, blank=True)
     lead_status = models.CharField(_("lead status"), max_length=50, choices=statuses, blank=True, null=True)
 
-
-

@@ -12,7 +12,7 @@
 
           
             <!-- 1st one -->
-            <div class="col-lg-3 col-md-6 col-sm-6">
+            {% comment %} <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
                 <div class="card-header card-header-warning card-header-icon">
                   <div class="card-icon">
@@ -30,7 +30,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> {% endcomment %}
 
             <!-- 2nd one -->
             <div class="col-lg-3 col-md-6 col-sm-6">
@@ -51,19 +51,20 @@
             </div>
 
             <!-- 3rd one -->
-            <div class="col-lg-3 col-md-6 col-sm-6">
+            {% comment %} <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
                 <div class="card-header card-header-info card-header-icon">
                   <div class="card-icon">
                     Mails
                   </div>
                   <p class="card-category">More to go</p>
-                  <p class="card-category"  style="position:absolute;left:3px;bottom:0;display:inline-block;padding: 0 10px;">Achived {{ total_mails_monthly|intcomma }}</h4>   
-              <h3 class="card-title">{{ target_mails_monthly|sub:total_mails_monthly|intcomma }}</h3>
+                  <p class="card-category"  style="position:absolute;left:3px;bottom:0;display:inline-block;padding: 0 10px;">Achived  {#   {{ total_mails_monthly|intcomma }} #}</h4>   
+              <h3 class="card-title"> {#   {{ target_mails_monthly|sub:total_mails_monthly|intcomma }} #}</h3>
                 </div>
                 <div class="card-footer">
-                  <div class="stats"
-                  {% if target_mails_monthly >= total_mails_monthly %}
+                
+          <div class="stats"
+                {% if target_mails_monthly >= total_mails_monthly %}
                   style="color:red;"
                   {% else %}
                   style="color:green;"
@@ -72,7 +73,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> {% endcomment %}
 
             <!-- 4th one -->
             <div class="col-lg-3 col-md-6 col-sm-6">
@@ -93,18 +94,48 @@
               </div>
             </div>
 
+
+
+            <!--employee record dynammic cards -->
+      {% for emp_record, emp_target in records_and_targets %}
+             <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-info card-header-icon">
+                  <div class="card-icon">
+                    {{emp_target.field_name}}
+                  </div>
+                  <p class="card-category">More to go</p>
+                  
+                  <h3 class="card-title">{{emp_target.value|sub:emp_record.value}} </h3>
+                </div>
+             <div class="card-footer">
+                    <div class="stats"
+                   {% if emp_target.value >= emp_record.value %}
+                    style="color:red;"
+                    {% else %}
+                    style="color:green;"
+                    {% endif %} >
+                    <i class="material-icons fa fa-bullseye"></i>{{emp_target.value}}
+                  
+                  <h5 class="card-category"  style="position:absolute;right:3px;bottom:0;display:inline-block;padding: 10px;color:#333">Achived: {{emp_record.value}}</h5> 
+                  
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
             <!-- 5th one -->
-            <div class="col-lg-3 col-md-6 col-sm-6">
+            {% comment %} <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
                 <div class="card-header card-header-info card-header-icon">
                   <div class="card-icon">
                     Calls
                   </div>
                   <p class="card-category">More to go</p>
-                  <p class="card-category"  style="position:absolute;left:3px;bottom:0;display:inline-block;padding: 0 10px;">Achived {{ total_calls_monthly | intcomma }}</h3>
-                  <h3 class="card-title"> {{ target_calls_monthly|sub:total_calls_monthly | intcomma }} </h4>
+                  <p class="card-category"  style="position:absolute;left:3px;bottom:0;display:inline-block;padding: 0 10px;">Achived {#  {{ total_calls_monthly | intcomma }} #}</h3>
+                  <h3 class="card-title"> {# {{ target_calls_monthly|sub:total_calls_monthly | intcomma }}  #}</h4>
                 </div>
-                <div class="card-footer">
+             <div class="card-footer">
                     <div class="stats"
                     {% if target_calls_monthly >= total_calls_monthly %}
                     style="color:red;"
@@ -117,84 +148,13 @@
               </div>
             </div>
 
-            <!-- 6th one -->
-            <div class="col-lg-3 col-md-6 col-sm-6">
-              <div class="card card-stats">
-                <div class="card-header card-header-info card-header-icon">
-                  <div class="card-icon">
-                    Messages
-                  </div>
-                  <p class="card-category">More to go</p>
-                  <p class="card-category"  style="position:absolute;left:3px;bottom:0;display:inline-block;padding: 0 10px;">Achived {{ total_messages_monthly | intcomma }}</h4>
-                  <h3 class="card-title"> {{ target_messages_monthly|sub:total_messages_monthly | intcomma }} </h3>
-                </div>
-                <div class="card-footer">
-                    <div class="stats"
-                    {% if target_messages_monthly >= total_messages_monthly %}
-                    style="color:red;"
-                    {% else %}
-                    style="color:green;"
-                    {% endif %} >
-                    <i class="material-icons fa fa-bullseye"></i> {{ target_messages_monthly | intcomma }}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 7th one -->
-            <div class="col-lg-3 col-md-6 col-sm-6">
-              <div class="card card-stats">
-                <div class="card-header card-header-info card-header-icon">
-                  <div class="card-icon">
-                    online subs
-                  </div>
-                  <p class="card-category">More to go</p>
-                  <p class="card-category"  style="position:absolute;left:3px;bottom:0;display:inline-block;padding: 0 10px;">Achived {{ total_online_submissions_monthly | intcomma }}</h4>
-                  <h3 class="card-title" style="display:inline-block;"> {{ target_online_submissions_monthly|sub:total_online_submissions_monthly | intcomma }} </h3>
-                </div>
-                <div class="card-footer">
-                    <div class="stats"
-                    {% if target_online_submissions_monthly >= total_online_submissions_monthly %}
-                    style="color:red;"
-                    {% else %}
-                    style="color:green;"
-                    {% endif %} >
-                    <i class="material-icons fa fa-bullseye"></i> {{ target_online_submissions_monthly | intcomma }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- 8th one -->
-            <div class="col-lg-3 col-md-6 col-sm-6">
-              <div class="card card-stats">
-                <div class="card-header card-header-info card-header-icon">
-                  <div class="card-icon">
-                    Follow ups
-                  </div>
-                  <p class="card-category">More to go. </p>
-                  <p class="card-category"  style="position:absolute;left:3px;bottom:0;display:inline-block;padding: 0 10px;">Achived {{ total_follow_ups_monthly | intcomma }}</p>
-                  <h3 class="card-title"  style="display:inline-block;"> {{ target_follow_ups_monthly|sub:total_follow_ups_monthly | intcomma }} </h3>
-                  
-                </div>
-                <div class="card-footer">
-                    <div class="stats"
-                    {% if target_follow_ups_monthly >= total_follow_ups_monthly %}
-                    style="color:red;"
-                    {% else %}
-                    style="color:green;"
-                    {% endif %} >
-                    <i class="material-icons fa fa-bullseye"></i> {{ target_follow_ups_monthly | intcomma }}
-                    
-                  </div>
-                </div>
-              </div>
-            </div>
+            {% endcomment %}
       
             
 
           </div>
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <div class="card card-chart">
                 <div class="card-header card-header-success">
                   <div class="container">
@@ -203,17 +163,17 @@
                 </div>
                 <div class="card-body">
                   <h4 class="card-title">Daily Sales</h4>
-                  <p class="card-category">
-                    <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.</p>
+                   <p class="card-category">
+                    <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.</p> 
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons">access_time</i> updated 4 minutes ago
+                    <i class="material-icons">access_time</i> Past seven days records
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
               <div class="card card-chart">
                 <div class="card-header card-header-warning">
  
@@ -226,12 +186,12 @@
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons">access_time</i> campaign sent 2 days ago
+                    <i class="material-icons">access_time</i> Lead registered in past 7 days
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
               <div class="card card-chart">
                 <div class="card-header card-header-danger">
                   <div class="ct-chart" id="completedTasksChart"></div>
@@ -246,7 +206,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
 
 <!-- graph for lead by category -->
@@ -275,7 +235,7 @@
 
 
 <!-- graph of employees by their records      -->
-<div class="row">
+{% comment %} <div class="row">
     <div class="col-lg-12 col-md-12">
 
         <div class="card card-chart">
@@ -296,7 +256,7 @@
           </div>
 
     </div>
-  </div>
+  </div> {% endcomment %}
   <!-- end of emp record graph -->
 
 
@@ -627,7 +587,7 @@
   
       <script>
        window.addEventListener("load", myInit, true); function myInit(){
-            graphs();
+          //  graphs();
             graph2();
             graph3();
             graph4()
@@ -817,7 +777,7 @@
 
         //emp records graph
 
-        emprecordbycategory= {
+     /*   emprecordbycategory= {
           labels: {{emp_record_categories|safe}},
           series: [ 
               
@@ -825,6 +785,14 @@
           {{emp_targets_by_category|safe}}                   
           ]
         };
+        
+        emprecordbycategory={
+          labels: ['one', 'two'],
+          series:[
+            [1,2],
+            [4,6]
+          ]
+        }
   
         optionsrecordbycategory = {
           lineSmooth: Chartist.Interpolation.cardinal({
@@ -841,7 +809,7 @@
         };
   
         var monthlyrecordschart = Chartist.Bar('#emprecordbycategory', emprecordbycategory, optionsrecordbycategory);
-
+*/
 
         function graphs(){
           
@@ -869,11 +837,11 @@
             md.startAnimationForLineChart(leadsregchart);
           }
 
-          function graph5(){
+        /*  function graph5(){
             md.startAnimationForLineChart(monthlyrecordschart);
           }
 
-         
+        */ 
       </script>
 
       {% endif %}
