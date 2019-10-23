@@ -101,9 +101,9 @@ WSGI_APPLICATION = 'real_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pgtestcrmdb',
-        'USER': 'postgres',
-        'PASSWORD': 'password123',
+        'NAME': 'YOUR_POSTGRES_DATABASE_NAME',
+        'USER': 'USER_NAME',
+        'PASSWORD': 'YOUR_PASSWORD',
         'HOST': 'localhost',
     }
 }
