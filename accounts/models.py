@@ -7,27 +7,24 @@ from math import ceil
 
 # Create your models here.
 
-
 def increment_invoice_number():
-  last_invoice = Invoice.objects.all().order_by('id').last()
-  if not last_invoice:
-    return last_invoice.counselor.branch_city[:3] + "{0:0=6d}".format(1)
-  invoice_number = last_invoice.invoice_number
-  booking_int = int(invoice_number[3:])
-  new_booking_int = booking_int + 1
-  new_booking_id = last_invoice.counselor.branch_city[:3] + "{0:0=6d}".format(new_booking_int)
-  return new_booking_id
-
-
+    last_invoice = Invoice.objects.all().order_by('-id').last()
+    if not last_invoice:
+        return "{0:0=6d}".format(1)
+    invoice_number = last_invoice.invoice_number
+    booking_int = int(invoice_number[3:])
+    new_booking_int = booking_int + 1
+    new_booking_id = "{0:0=6d}".format(new_booking_int)
+    return new_booking_id
 
 class Invoice(models.Model):
     CHOICES = (('Java','Java'),('Python','Python'),('Php','Php'))
-    invoice_number = models.CharField(_("Invoice#"), max_length=50, default = increment_invoice_number, editable=False)
     lead = models.ForeignKey(Lead, verbose_name=_("Lead"), related_name='lead_invoice', on_delete=models.CASCADE)
     # dated = models.DateField(blank=True, null=True)
     enquired_for = models.CharField(_("Service Taken"), max_length=50, blank=True, null=True)
     batchstartdate = models.DateField(_("Batch Start Date"), blank=True, null=True, default=None)
     counselor = models.ForeignKey(Employee, verbose_name=_("Counseled by"), on_delete=models.CASCADE)
+    invoice_number = models.CharField(_("Invoice#"), max_length=50, default=increment_invoice_number, editable=False, unique=True)
     
     # bal_amount = models.IntegerField(_("Due Amount"), blank=True, null=True)
     # due_date = models.DateField(_("Dues pay date"), blank=True, null=True)
@@ -46,6 +43,10 @@ class Invoice(models.Model):
 
     def save(self, *args, **kwargs):
         # test  = self.counselor.branch_city[:3].upper() 
+        
+        if not self.invoice_number[:3] == self.counselor.branch_city[:3].upper():
+            self.invoice_number = self.counselor.branch_city[:3].upper() + self.invoice_number
+
 
         def num2words(num):
             under_20 = ['Zero','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen']
@@ -76,7 +77,7 @@ class Invoice(models.Model):
 
     def __str__(self):
         if self.invoice_number:
-            return f'{self.lead} {self.invoice_number}'
+            return f'{self.invoice_number}'
         else:
             return f'{self.lead}'
  
@@ -89,24 +90,25 @@ class InstallmentData(models.Model):
     
 
 def increment_bill_number():
-  last_bill = Bill.objects.all().order_by('id').last()
-  if not last_bill:
-    return last_bill.invoice.invoice_number + "{0:0=2d}".format(1) 
-  bill_number = last_bill.bill_number
-  booking_int = int(bill_number[-2:])
-  new_booking_int = booking_int + 1
-  new_booking_id = last_bill.invoice.invoice_number + "{0:0=2d}".format(new_booking_int)
-  return new_booking_id
-
+    
+    last_bill = Bill.objects.all().order_by('-id').last()
+    if not last_bill:
+        return "{0:0=2d}".format(1) 
+    bill_number = last_bill.bill_number
+    booking_int = int(bill_number[-2:])
+    new_booking_int = booking_int + 1
+    new_booking_id = "{0:0=2d}".format(new_booking_int)
+    return new_booking_id
 
 
 class Bill(models.Model):
     
     pay_options = (('cash', 'Cash'), ('cheque', 'Cheque'), ('card', 'Card'), ('online', 'Online'))
-    bill_number = models.CharField(_("Bill#"), max_length=50, default=increment_bill_number, editable=False)
     
     cheque_status_options = (('cleared', 'Cleared'), ('pending', 'Pending'), ('failed', 'Failed'))
     invoice = models.ForeignKey(Invoice, related_name='source_invoice', on_delete=models.CASCADE, blank=True, null=True)
+    bill_number = models.CharField(_("Bill#"), max_length=50, default=increment_bill_number, editable=False, null=True, blank=True, unique=True)
+    
     # bill_number = models.PositiveSmallIntegerField(_("Bill#"), blank=True, null=True)
     bill_date = models.DateField(blank=True, null=True, default=timezone.now)
     # client = models.CharField(max_length=30,blank=True,null=True)
@@ -141,6 +143,21 @@ class Bill(models.Model):
         #     m = Bill.objects.all().order_by("-id")[0]
             # self.id = self.invoice.invoice_number + "{0:0=2d}".format(m if m is not None else 1)
 
+        def increase_bill_number():      
+            last_bill = Bill.objects.all().order_by('-id').filter(bill_number__contains=self.invoice.invoice_number).last()
+            if not last_bill:
+                return "{0:0=2d}".format(1) 
+            bill_number = last_bill.bill_number
+            booking_int = int(bill_number[-2:])
+            new_booking_int = booking_int + 1
+            new_booking_id = "{0:0=2d}".format(new_booking_int)
+            return new_booking_id
+
+
+
+        if self.recieve_amount and self.invoice.invoice_number != self.bill_number[:-2]:
+            self.bill_number = self.invoice.invoice_number + increase_bill_number()
+
         def num2words(num):
             under_20 = ['Zero','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen']
             tens = ['Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety']
@@ -165,7 +182,7 @@ class Bill(models.Model):
 
     def __str__(self):
         if self.bill_number:
-            return f'{self.id} {self.bill_number}'
+            return f'{self.bill_number}'
         else:
             return f'{self.id}'
 

@@ -8,25 +8,42 @@
             Tip 2: you can also add an image using data-image tag
         -->
           <div class="logo">
-            <a href="http://www.evolettechnologies.com" class="simple-text logo-normal">
-              Evolet CRM
+            <a href="{% url 'dashboard' %}" class="simple-text logo-normal">
+              <img src="{% static 'img/logo.png' %}" alt="RED18TECH CRM">
             </a>
           </div>
           <div class="sidebar-wrapper">
             <ul class="nav">
-              <li class="nav-item active  ">
-                <a class="nav-link" href="{% url 'dashboard' %}">
+              <li 
+                  {% if 'dashboard' in request.path %}
+                class="nav-item active  "
+                  {% else %}
+                class="nav-item"
+                  {% endif %}>
+                
+
+                <a class="nav-link" href="{% url 'dash' %}">
                   <i class="material-icons">dashboard</i>
                   <p>Dashboard</p>
                 </a>
               </li>
-              <li class="nav-item ">
+              <li 
+                  {% if 'profile' in request.path %}
+                class="nav-item active  "
+                  {% else %}
+                class="nav-item"
+                  {% endif %}>
                 <a class="nav-link" href="{% url 'myprofile' %}">
                   <i class="material-icons">person</i>
                   <p>User Profile</p>
                 </a>
               </li>
-              <li class="nav-item ">
+              <li 
+                  {% if 'reports' in request.path %}
+                class="nav-item active  "
+                  {% else %}
+                class="nav-item"
+                  {% endif %}>
                 <a class="nav-link" href="{% url 'reports' %}">
                   <i class="material-icons">content_paste</i>
                   <p>My Reports</p>
@@ -38,7 +55,12 @@
                   <p>My Records</p>
                 </a>
               </li> {% endcomment %}
-              <li class="nav-item ">
+              <li 
+                  {% if 'invoices' in request.path %}
+                class="nav-item active  "
+                  {% else %}
+                class="nav-item"
+                  {% endif %}>
                 <a class="nav-link" href="{% url 'invoices' %}">
                   <i class="fa fa-archive" aria-hidden="true"></i>
                   <p>Invoices</p>
@@ -57,7 +79,12 @@
                   <p>Maps</p>
                 </a>
               </li>-->
-              <li class="nav-item ">
+              <li 
+                  {% if 'notifications' in request.path %}
+                class="nav-item active  "
+                  {% else %}
+                class="nav-item"
+                  {% endif %}>
                 <a class="nav-link" href=" {% url 'notifications' %} ">
                   <i class="material-icons">notifications</i>
                   <p>Notifications</p>

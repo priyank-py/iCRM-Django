@@ -10,10 +10,10 @@ class InstallmentDataInline(admin.StackedInline):
     fields = ('installment_date', 'installment_amount',)
 
 
-class BillsInline(admin.StackedInline):
-    model = Bill
-    extra = 1
-    fields = ['invoice', 'bill_date', 'payment_option', 'recieve_amount', 'credit_card_no', 'dd_no', 'cheque_no', 'cheque_status','drawn_on', 'bank_name', 'bank_branch', ('change','tens', 'twenties', 'fiftys', 'hundreds', 'two_hundreds', 'five_hundreds', 'two_thousands')]
+# class BillsInline(admin.StackedInline):
+#     model = Bill
+#     extra = 1
+#     fields = ['invoice', 'bill_date', 'payment_option', 'recieve_amount', 'credit_card_no', 'dd_no', 'cheque_no', 'cheque_status','drawn_on', 'bank_name', 'bank_branch', ('change','tens', 'twenties', 'fiftys', 'hundreds', 'two_hundreds', 'five_hundreds', 'two_thousands')]
 
 class ClientBillsInline(admin.StackedInline):
     model = ClientBill
@@ -48,13 +48,13 @@ class ClientBillAdmin(admin.ModelAdmin):
 
 class InvoiceAdmin(admin.ModelAdmin):
 
-    list_display = ['id', 'lead', 'enquired_for', 'g_total', 'counselor']
+    list_display = [ 'invoice_number','lead', 'enquired_for', 'g_total', 'counselor']
 
     class Meta:
         model = Invoice
         fields = '__all__'
         exclude = ('sub_total', 'gst', 'g_total')
-    inlines = (InstallmentDataInline, BillsInline,)
+    inlines = (InstallmentDataInline,)
 
 
 @admin.register(ClientInvoice)

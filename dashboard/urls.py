@@ -3,6 +3,7 @@ from . import views
 # from records.views import daily_record
 
 urlpatterns = [
+    path('dashboard', views.dashboard, name='dash'),
     path('', views.dashboard, name='dashboard'),
     path('profile', views.profile, name='myprofile'),
     path('reports', views.my_reports, name='reports'),

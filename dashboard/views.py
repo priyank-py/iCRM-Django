@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_list_or_404
 from employees.models import Employee
 from leads.models import Lead, LeadRemarks
 from records.models import MonthlyTarget, EmpRecord, EmpCustomRecord, MonthlyCustomTarget
@@ -11,6 +11,7 @@ from django.db.models import Sum
 from datetime import datetime, timedelta, date
 import calendar
 from records.models import DTS
+from accounts.models import Bill
 
 @login_required(login_url='admin:login')
 def dashboard(request):
@@ -26,9 +27,9 @@ def dashboard(request):
 
     latest_lead_remark = [i.lead_remarks.last() for i in leads]
     registered_lead_ids = [i.lead.id for i in latest_lead_remark if hasattr(i, 'status') and (i.status == 'walkinreg' or i.status=='leadreg')]
-    registered_lead_ids_past_seven_days = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinreg' and i.next_follow_up_date > date.today() - timedelta(days=7)]
+    registered_lead_ids_past_seven_days = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and (i.status == 'walkinreg' or i.status == 'leadreg') and i.next_follow_up_date > date.today() - timedelta(days=7)]
     past_seven_days = [calendar.day_name[(date.today() - timedelta(days=i)).weekday()] for i in range(6, -1, -1)]
-    registered_each_days = [sum([i.course_fee for i in registered_lead_ids_past_seven_days if i.lead_remarks.last().next_follow_up_date == date.today() - timedelta(days=j)]) for j in range(6, -1, -1)]
+    registered_each_days = [sum([i.course_fee if i.lead_remarks.last().next_follow_up_date == date.today() - timedelta(days=j) else 0 for i in registered_lead_ids_past_seven_days]) for j in range(6, -1, -1)]
     total_col = 0
     last_week = datetime.now() - timedelta(days=7)
 
@@ -55,8 +56,25 @@ def dashboard(request):
 
     current_month_in_word = datetime.now().strftime('%B')
 
+    try:
+        seven_days_bills = Bill.objects.all().filter(bill_date__lte=date.today()).filter(bill_date__gte=date.today() - timedelta(days=7))
+    except:
+        seven_days_bills = Bill.objects.none()
+
     seven_days = [i[:3] for i in past_seven_days]
-    seven_data = registered_each_days
+    # seven_data = registered_each_days
+    
+
+    
+
+    # if any(seven_days_bills):
+    bill_each_day = [sum([i.recieve_amount if i.bill_date==(date.today() - timedelta(days=j)) else 0 for i in seven_days_bills ]) for j in range(6, -1, -1)]
+    seven_data = bill_each_day
+    print('BILL EACH DAY',bill_each_day)
+
+       
+
+    
 
     try:
         emp_monthly_targets = MonthlyTarget.objects.all().filter(month=datetime.now().strftime('%B')).filter(position=emp.profile.postion).last()
@@ -65,23 +83,51 @@ def dashboard(request):
         print('Targets Not Added Yet!')
 
     month_targets = MonthlyCustomTarget.objects.all().filter(monthly_target=emp_monthly_targets)
-
+    
     try:
         emp_monthly_records = EmpRecord.objects.all().filter(report_for=f'{current_year}-{current_month_in_word}').filter(employee=emp)
     except:
         emp_monthly_records = EmpRecord.objects.none()
+        
 
     month_records = EmpCustomRecord.objects.all().filter(emp_record__in=emp_monthly_records)
     if len(month_records) > 7:
         month_records = month_records[:7]
+    
+
+    if len(month_records) < len(month_targets):
+        t = len(month_targets) - len(month_records)
+        new_month_records = [i for i in month_records]
+        for i in range(t):
+            new_month_records.append(EmpCustomRecord.objects.none())
+
+    
 
     # target_and_record = [(i, j) for i in month_records for j in month_targets if i.field_name==j.field_name]
     
     # target_and_record = []
-    target_record = [[(i, j) for j in month_targets if set(i.field_name).issubset(j.field_name) or set(j.field_name).issubset(i.field_name)] for i in month_records]
-    records_and_targets = [tuple(i)[0] for i in target_record if i != []]
-    print(records_and_targets)
-    # print(target_and_record)
+    # target_record = [[(i, j) for j in month_targets if set(i.field_name).issubset(j.field_name) or set(j.field_name).issubset(i.field_name)] for i in month_records]
+    # records_and_targets = [tuple(i)[0] for i in target_record if i != []]
+    
+
+    def eithers_subset(s1, s2):
+        if s1 and hasattr(i, 'field_name'):
+            if (set(s1).issubset(s2) or set(s2).issubset(s1)):
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    
+    e = EmpCustomRecord.objects.none()
+    print('my empty set', dir(e))
+    record_for_targets = [[(j, i) if eithers_subset(j, i) else ({'field_name': i.field_name, 'value': 0}, i) for j in new_month_records] for i in month_targets]
+    
+    print('testing my queryset',record_for_targets)
+    records_and_targets = [tuple(i)[0] for i in record_for_targets if i != []]
+    print('the record for target',records_and_targets)
+
 
 
     # target_mails_monthly = sum([i.mails for i in month_targets])
@@ -118,8 +164,8 @@ def dashboard(request):
     min_col = 0
     max_col = 1000
     month_course = [i['tech'] for i in tech_data]
-    month_course = [''.join([i[0] for i in j.split()]) if len(j.split())>1 else j for j in month_course]
-    month_collection = [j['sum'] for j in tech_data]
+    month_course = [''.join([i[0]  for i in j.split()]) if len(j.split())>1 else j for j in month_course]
+    month_collection = [j['sum'] if not j['sum'] == None else 0 for j in tech_data]
     if any(month_collection):
         min_col = min(month_collection) - 1000
         max_col = max(month_collection) + 1000
@@ -149,14 +195,14 @@ def dashboard(request):
     except:
         morning_report = DTS.objects.none()
 
-    leadclose = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'leadclose']
-    leadwalkin = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'leadwalkin']
-    leadfollowup = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'leadfollowup']
-    leadreg = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'leadreg']
-    walkinfollowup = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinfollowup']
-    walkinreg = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinreg']
-    walkindeclaration = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkindeclaration']
-    walkinclose = [i.lead for i in latest_lead_remark if hasattr(i, 'status') and i.status == 'walkinclose']
+    leadclose = [i.lead if hasattr(i, 'status') and i.status == 'leadclose' else 0 for i in latest_lead_remark]
+    leadwalkin = [i.lead if hasattr(i, 'status') and i.status == 'leadwalkin' else 0 for i in latest_lead_remark]
+    leadfollowup = [i.lead if hasattr(i, 'status') and i.status == 'leadfollowup' else 0 for i in latest_lead_remark]
+    leadreg = [i.lead if hasattr(i, 'status') and i.status == 'leadreg' else 0 for i in latest_lead_remark]
+    walkinfollowup = [i.lead if hasattr(i, 'status') and i.status == 'walkinfollowup' else 0 for i in latest_lead_remark]
+    walkinreg = [i.lead if hasattr(i, 'status') and i.status == 'walkinreg' else 0 for i in latest_lead_remark]
+    walkindeclaration = [i.lead if hasattr(i, 'status') and i.status == 'walkindeclaration' else 0 for i in latest_lead_remark]
+    walkinclose = [i.lead if hasattr(i, 'status') and i.status == 'walkinclose' else 0 for i in latest_lead_remark]
 
     category_data = [leadclose,
     leadwalkin,

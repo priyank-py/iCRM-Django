@@ -25,9 +25,9 @@ class LeadAdmin(NumericFilterModelAdmin):
     SliderNumericFilter.MAX_DECIMALS = 2
     list_display = ('id', 'lead_name', 'enquired_for', 'is_counseled', 'latest_followup_date', )
     list_display_links = ('id', 'lead_name', 'enquired_for', 'latest_followup_date')
-    list_filter = ('assigned_to', ('course_fee', SliderNumericFilter), ('marks_UG', SliderNumericFilter), ('marks_PG', SliderNumericFilter), ('year_of_passing_UG', SliderNumericFilter), ('year_of_passing_PG', SliderNumericFilter))
+    list_filter = ('assigned_to',  ('lead_remarks__next_follow_up_date', DateRangeFilter), ('course_fee', SliderNumericFilter), ('marks_UG', SliderNumericFilter), ('marks_PG', SliderNumericFilter), ('year_of_passing_UG', SliderNumericFilter), ('year_of_passing_PG', SliderNumericFilter),)
     list_editable = ('is_counseled', )
-    search_fields = ('id', 'lead_name', 'lead_phone', 'enquired_for', 'technology_based', 'counselor_name', 'year_of_passing_UG')
+    search_fields = ('id', 'lead_name', 'lead_remarks__remarks','lead_phone', 'enquired_for', 'technology_based', 'counselor_name', 'year_of_passing_UG')
 
     # def get_next_follow_up(self, lead):
     #     follow_date = lead.lead_remarks.next_follow_up_date
@@ -38,9 +38,9 @@ class LeadAdmin(NumericFilterModelAdmin):
     def export_as_csv(self, request, queryset):
 
         meta = self.model._meta
-        # print(self.model.lead_remarks._meta)
+        
         self.save_as = True
-        field_names = [field.name for field in meta.fields]
+        field_names = [field.name for field in meta.fields] + ['lead_remarks.remarks', 'lead_remarks.status']
         print(field_names)
 
         response = HttpResponse(content_type='text/csv')
