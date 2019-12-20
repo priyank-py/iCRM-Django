@@ -70,7 +70,7 @@ def dashboard(request):
     # if any(seven_days_bills):
     bill_each_day = [sum([i.recieve_amount if i.bill_date==(date.today() - timedelta(days=j)) else 0 for i in seven_days_bills ]) for j in range(6, -1, -1)]
     seven_data = bill_each_day
-    print('BILL EACH DAY',bill_each_day)
+    # print('BILL EACH DAY',bill_each_day)
 
        
 
@@ -121,12 +121,12 @@ def dashboard(request):
 
     
     e = EmpCustomRecord.objects.none()
-    print('my empty set', dir(e))
+    # print('my empty set', dir(e))
     record_for_targets = [[(j, i) if eithers_subset(j, i) else ({'field_name': i.field_name, 'value': 0}, i) for j in new_month_records] for i in month_targets]
     
-    print('testing my queryset',record_for_targets)
+    # print('testing my queryset',record_for_targets)
     records_and_targets = [tuple(i)[0] for i in record_for_targets if i != []]
-    print('the record for target',records_and_targets)
+    # print('the record for target',records_and_targets)
 
 
 
@@ -169,7 +169,7 @@ def dashboard(request):
     if any(month_collection):
         min_col = min(month_collection) - 1000
         max_col = max(month_collection) + 1000
-    print(weekly_data)
+    # print(weekly_data)
 
     for i in leads:
         if i.course_fee:
@@ -182,9 +182,7 @@ def dashboard(request):
 
     # all_lead = Lead.objects.all()
     # latest_lead_remark = [i.lead_remarks.last() for i in all_lead]
-    for data in latest_lead_remark:
-        if hasattr(data, 'next_follow_up_date'):
-            print('This the what i looking for: ',data.next_follow_up_date)
+    
     # unregistered_leads = [l.lead.id for l in follow_lead if l.status !='walkinreg' or l.status !='leadreg']
     # print(unregistered_leads)
     # follow_leads = Lead.objects.filter(id__in=unregistered_leads)
@@ -221,7 +219,7 @@ def dashboard(request):
 
     max_cat_data = max(category_count) + 5
     # min_cat_data = min(category_count) 
-    print('Number of student in by category',category_count)
+    # print('Number of student in by category',category_count)
 
 
     context = {

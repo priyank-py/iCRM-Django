@@ -40,7 +40,7 @@ class LeadAdmin(NumericFilterModelAdmin):
         meta = self.model._meta
         
         self.save_as = True
-        field_names = [field.name for field in meta.fields] + ['lead_remarks.remarks', 'lead_remarks.status']
+        field_names = [field.name for field in meta.fields] + ['lead_remarks__remarks__last', 'lead_remarks__status']
         print(field_names)
 
         response = HttpResponse(content_type='text/csv')

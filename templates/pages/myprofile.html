@@ -96,6 +96,9 @@
                   <a href="#pablo">
                   {% if user.profile.photo %}
                     <img class="img" src="{{user.profile.photo.url}}" />
+                  {% else %}
+
+                    <img class="img" src="https://bowerbird-app.s3.amazonaws.com/production/uploads/publication/image/1330/small_default_profile.png" alt="">
                   {% endif %}
                   </a>
                 </div>
@@ -105,7 +108,7 @@
                   <p class="card-description">
                     All kinds of development using Python.
                   </p>
-                  <a href="#pablo" class="btn btn-primary btn-round">{{user.profile.hire_date | timesince }}</a>
+                  <a href="#pablo" class="btn btn-primary btn-round">{{user.profile.hire_date|timesince}}</a>
                 </div>
               </div>
             </div>

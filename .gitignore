@@ -9,7 +9,8 @@ __pycache__/
 local_settings.py
 db.sqlite3
 /media
-/djangovenv
+djangovenv/
+projectenv/
 /migrations
 /static
 /unrefined_resources

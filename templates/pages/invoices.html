@@ -48,7 +48,7 @@
                         <tr class="breakrow">                     
                           <td>
                           <a href=" {% url 'invoice' invoice.id %} ">
-                            {{invoice.id}}
+                            {{invoice.invoice_number}}
                              </a>
                           </td>
                           <td>
@@ -77,7 +77,7 @@
                             <tr class="datarow" style="display:none;background:#ccc;">                    
                           <td>
                           <a href=" {% url 'lead_bill' bill.id %} ">
-                            {{bill.id}}
+                            {{bill.bill_number}}
                              </a>
                           </td>
                           <td>
