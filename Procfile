@@ -1,1 +1,1 @@
-web: gunicorn myproject.wsgi
+web: gunicorn iCRM-Django-master.wsgi

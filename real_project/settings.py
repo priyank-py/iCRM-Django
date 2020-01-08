@@ -173,3 +173,4 @@ EMAIL_HOST_PASSWORD = "Alpha&Omega'sKingdom1"
 # Configure Django App for Heroku.
 import django_heroku
 django_heroku.settings(locals())
+TEST_RUNNER = 'django_heroku.HerokuDiscoverRunner'
