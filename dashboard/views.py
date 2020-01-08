@@ -82,7 +82,12 @@ def dashboard(request):
         emp_monthly_targets = MonthlyTarget.objects.none()
         print('Targets Not Added Yet!')
 
-    month_targets = MonthlyCustomTarget.objects.all().filter(monthly_target=emp_monthly_targets)
+    try:
+        if request.user.profile:
+            month_targets = MonthlyCustomTarget.objects.all().filter(monthly_target=emp_monthly_targets)
+    except:
+        month_targets = MonthlyCustomTarget.objects.all().filter(monthly_target__in=emp_monthly_targets)
+
     
     try:
         emp_monthly_records = EmpRecord.objects.all().filter(report_for=f'{current_year}-{current_month_in_word}').filter(employee=emp)
@@ -93,7 +98,7 @@ def dashboard(request):
     month_records = EmpCustomRecord.objects.all().filter(emp_record__in=emp_monthly_records)
     if len(month_records) > 7:
         month_records = month_records[:7]
-    
+    # print(len(month_targets)) 
 
     if len(month_records) < len(month_targets):
         t = len(month_targets) - len(month_records)
